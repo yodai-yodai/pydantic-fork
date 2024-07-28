@@ -29,7 +29,7 @@ theme:
     - content.tabs.link
     - content.code.annotate
     - content.code.copy
-    - announce.dismiss
+    # - announce.dismiss
     - navigation.tabs
     - navigation.instant
     - navigation.instant.prefetch
@@ -80,11 +80,11 @@ extra_javascript:
   - 'https://samuelcolvin.github.io/mkdocs-run-code/run_code_main.js'
 
 nav:
-- Get Started:
-  - Welcome to Pydantic: index.md
-  - Why use Pydantic: why.md
-  - Help with Pydantic: help_with_pydantic.md
-  - Installation: install.md
+- Pydanticを始めよう:
+  - Pydanticへようこそ: index.md
+  - Pydanticを使う理由: why.md
+  - Pydanticヘルプ: help_with_pydantic.md
+  - インストール: install.md
   - Migration Guide: migration.md
   - Version Policy: version-policy.md
   - Contributing: contributing.md
@@ -194,13 +194,14 @@ watch:
 - pydantic
 
 plugins:
+- include-markdown:
 - mike:
     alias_type: symlink
     canonical_version: latest
 - search
 - exclude:
     glob:
-    - theme/announce.html
+    # - theme/announce.html
     - plugins/*
     - __pycache__/*
 - mkdocstrings:
