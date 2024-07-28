@@ -1,3 +1,5 @@
+{% include-markdown "./warning.md" %}
+
 ??? api "API Documentation"
     [`pydantic.main.BaseModel`][pydantic.main.BaseModel]<br>
 
