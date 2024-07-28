@@ -722,7 +722,7 @@ print(repr(bad_user))
 例えば、上の例では、`_fields_set`が与えられなかった場合、`new_user.model_fields_set`は`{'id','age','name'}`になります。
 
 <!-- Note that for subclasses of [`RootModel`](#rootmodel-and-custom-root-types), the root value can be passed to [`model_construct()`][pydantic.main.BaseModel.model_construct]positionally, instead of using a keyword argument. -->
-[`RootModel`](#RootModel-and-custom-root-types)のサブクラスでは、キーワード引数を使用する代わりに、ルートの値を[`model_construct()`][pydantic.main.BaseModel.model_construct]に位置的に渡すことができることに注意してください。
+[`RootModel`](#rootmodel-and-custom-root-types)サブクラスでは、キーワード引数を使用する代わりに、ルートの値を[`model_construct()`][pydantic.main.BaseModel.model_construct]に位置的に渡すことができることに注意してください。
 
 <!-- Here are some additional notes on the behavior of [`model_construct()`][pydantic.main.BaseModel.model_construct]: -->
 [`model_construct()`][pydantic.main.BaseModel.model_construct]の動作に関する追加の注意事項を以下に示します。
@@ -1227,6 +1227,9 @@ print(ItemHolder[IntItem](**loaded_data).model_dump())  # (2)!
 2. この場合、実行時の型情報は一般的なパラメータ化によって明示的に提供されるため、入力データは`IntItem`クラスに対して検証され、シリアライゼーションの出力は期待されたものと一致します。
 
 ## Dynamic model creation
+
+??? api "API Documentation"
+    [`pydantic.main.create_model`][pydantic.main.create_model]<br>
 ## ダイナミックモデルの作成
 
 ??? api "API Documentation"
@@ -1358,7 +1361,8 @@ except ValidationError as e:
 
 
 <!-- ## `RootModel` and custom root types -->
-## `RootModel`とカスタムルート型
+<!-- ## `RootModel`とカスタムルート型 -->
+## `RootModel` and custom root types
 
 ??? api "API Documentation"
     [`pydantic.root_model.RootModel`][pydantic.root_model.RootModel]<br>
@@ -1693,8 +1697,8 @@ print(Model.y)
 #> 1
 ```
 
-<!-- ### Private model attributes -->
-### プライベートモデル属性
+### Private model attributes
+<!-- ### プライベートモデル属性 -->
 
 ??? api "API Documentation"
     [`pydantic.fields.PrivateAttr`][pydantic.fields.PrivateAttr]<br>
