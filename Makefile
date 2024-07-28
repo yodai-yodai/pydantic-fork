@@ -125,6 +125,10 @@ clean:
 docs:
 	pdm run mkdocs build --strict
 
+.PHONY: docs-ja  ## Generate the docs
+docs-ja:
+	cd docs/ja;	pdm run mkdocs build --no-strict --site-dir '../../site' --verbose
+
 .PHONY: help  ## Display this message
 help:
 	@grep -E \
