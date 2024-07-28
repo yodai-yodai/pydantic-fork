@@ -1,0 +1,8 @@
+INHERIT: ../../mkdocs.yml
+
+site_name: Pydantic - 非公式日本語化(翻訳元Pydantic Version:v2.8.2)
+site_description: Data validation using Python type hints
+site_url: https://docs.pydantic.dev/
+
+watch:
+- ../../pydantic
