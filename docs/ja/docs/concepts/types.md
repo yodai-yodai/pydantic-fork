@@ -502,7 +502,7 @@ assert Model(name='ABC').name == 'abc'  # (2)!
 ```
 
 <!-- 1. The `frozen=True` specification makes `MyAfterValidator` hashable. Without this, a union such as `Username | None` will raise an error. -->
-1. `frozen=True`の指定は`MyAfterValidator`をハッシュ可能にします。これがないと、`Username None`のような共用体でエラーが発生します。
+1. `frozen=True`の指定は`MyAfterValidator`をハッシュ可能にします。これがないと、`Username None`のようなUnionでエラーが発生します。
 <!-- 2. Notice that type checkers will not complain about assigning `'ABC'` to `Username` like they did in the previous example because they do not consider `Username` to be a distinct type from `str`. -->
 2. 型チェッカーは、前の例のように`Username`に`'ABC'`を割り当てることについて文句を言わないことに注意してください。なぜなら、彼らは`Username`を`str`とは別の型と見なしていないからです。
 

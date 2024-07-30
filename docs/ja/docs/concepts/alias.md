@@ -24,7 +24,7 @@ You can specify an alias in the following ways:
     * 、[`AliasGenerator`][pydantic.aliases.AliasGenerator]の呼び出し可能オブジェクトまたはインスタンスです。
 
 <!-- For examples of how to use `alias`, `validation_alias`, and `serialization_alias`, see [Field aliases](../concepts/fields.md#field-aliases). -->
-`alias`、`validation_alias`、および`serialization_alias`の使用例については、[Field aliases](./concepts/fields.md#field-aliases)を参照してください。
+`alias`、`validation_alias`、および`serialization_alias`の使用例については、[Field aliases](../concepts/fields.md#field-aliases)を参照してください。
 
 ## `AliasPath` and `AliasChoices`
 

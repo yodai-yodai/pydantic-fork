@@ -32,7 +32,7 @@
 
 !!! note
     <!-- You can use [computed fields](../api/fields.md#pydantic.fields.computed_field) to include `property` and `cached_property` data in the `model.model_dump(...)` output. -->
-    [computed fields](./api/fields.md#pydantic.fields.computed_field)を使用して、`property`および`cached_property`データを`model.model_dump(...)`出力に含めることができます。
+    [computed fields](../api/fields.md#pydantic.fields.computed_field)を使用して、`property`および`cached_property`データを`model.model_dump(...)`出力に含めることができます。
 
 <!-- Example: -->
 次に例を示します。
@@ -183,7 +183,7 @@ for name, value in m:
 ## Custom serializers
 
 <!-- Pydantic provides several [functional serializers][pydantic.functional_serializers] to customise how a model is serialized to a dictionary or JSON. -->
-Pydanticには、モデルを辞書やJSONにシリアライズする方法をカスタマイズするための[functional serializer][pydantic.functional_serializer]がいくつか用意されています。
+Pydanticには、モデルを辞書やJSONにシリアライズする方法をカスタマイズするための[functional serializer][pydantic.functional_serializers]がいくつか用意されています。
 
 - [`@field_serializer`][pydantic.functional_serializers.field_serializer]
 - [`@model_serializer`][pydantic.functional_serializers.model_serializer]
@@ -235,7 +235,7 @@ print(Model(x='test value').model_dump_json())
     [`@field_serializer`][pydantic.functional_serializers.field_serializer]デコレータに特別な値'*'を渡すことで、すべてのフィールドで単一のシリアライザを呼び出すこともできます。
 
 <!-- In addition, [`PlainSerializer`][pydantic.functional_serializers.PlainSerializer] and [`WrapSerializer`][pydantic.functional_serializers.WrapSerializer] enable you to use a function to modify the output of serialization. -->
-さらに、[`PlainSerializer`][pydantic.functional_serializer.PlainSerializer]と[`WrapSerializer`][pydantic.functional_serializer.WrapSerializer]では、シリアライゼーションの出力を変更する関数を使うことができます。
+さらに、[`PlainSerializer`][pydantic.functional_serializers.PlainSerializer]と[`WrapSerializer`][pydantic.functional_serializers.WrapSerializer]では、シリアライゼーションの出力を変更する関数を使うことができます。
 
 <!-- Both serializers accept optional arguments including: -->
 どちらのシリアライザも、以下のようなオプションの引数を受け付けます。
