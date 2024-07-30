@@ -3,7 +3,7 @@
 <!-- An alias is an alternative name for a field, used when serializing and deserializing data. -->
 エイリアスはフィールドの別名で、データのシリアライズおよびデシリアライズ時に使用されます。
 
-You can specify an alias in the following ways:
+<!-- You can specify an alias in the following ways: -->
 エイリアスは次の方法で指定できます。
 
 <!-- * `alias` on the [`Field`][pydantic.fields.Field] -->

@@ -10,7 +10,7 @@
 
     <!-- Outside of Pydantic, the word "serialize" usually refers to converting in-memory data into a string or bytes. -->
     Pydantic以外では、「シリアライズ」という言葉は通常、メモリ内のデータを文字列やバイトに変換することを意味します。
-    However, in the context of Pydantic, there is a very close relationship between converting an object from a more structured form &mdash; such as a Pydantic model, a dataclass, etc. &mdash; into a less structured form comprised of Python built-ins such as dict.
+    <!-- However, in the context of Pydantic, there is a very close relationship between converting an object from a more structured form &mdash; such as a Pydantic model, a dataclass, etc. &mdash; into a less structured form comprised of Python built-ins such as dict. -->
     しかし、Pydanticのコンテキストでは、オブジェクトをPydanticモデルやデータクラスなどのより構造化された形式から、dictなどのPython組み込みで構成されたより構造化されていない形式に変換することには、非常に密接な関係があります。
 
     <!-- While we could (and on occasion, do) distinguish between these scenarios by using the word "dump" when converting to primitives and "serialize" when converting to string, for practical purposes, we frequently use the word "serialize" to refer to both of these situations, even though it does not always imply conversion to a string or bytes. -->
@@ -451,7 +451,7 @@ print(m.model_dump())  # note: the password field is not included
     <!-- This means that when an object is serialized, fields present in a subclass, but not in the original schema, will be included in the serialized output. -->
     つまり、オブジェクトがシリアライズされると、サブクラスに存在するが元のスキーマには存在しないフィールドが、シリアライズされた出力に含まれます。
 
-    This behavior was the default in Pydantic V1, but was changed in V2 to help ensure that you know precisely which fields would be included when serializing, even if subclasses get passed when instantiating the object.
+    <!-- This behavior was the default in Pydantic V1, but was changed in V2 to help ensure that you know precisely which fields would be included when serializing, even if subclasses get passed when instantiating the object. -->
     この動作はPydantic V1ではデフォルトでしたが、V2では、オブジェクトのインスタンス化時にサブクラスが渡された場合でも、シリアライズ時にどのフィールドが含まれるかを正確に把握できるように変更されました。
     <!-- This helps prevent security risks when serializing subclasses with sensitive information, for example. -->
     これにより、たとえば機密情報を含むサブクラスをシリアライズする際のセキュリティリスクを防ぐことができます。
@@ -858,7 +858,7 @@ print(user.model_dump(exclude={'hobbies': {'__all__': {'info'}}}))
 <!-- In addition to the explicit arguments `exclude` and `include` passed to `model_dump` and `model_dump_json` methods, we can also pass the `exclude: bool` arguments directly to the `Field` constructor: -->
 `model_dump`および`model_dump_json`メソッドに渡される明示的な引数`exclude`および`include`に加えて、`exclude:bool`引数を`Field`コンストラクタに直接渡すこともできます。
 
-Setting `exclude` on the field constructor (`Field(..., exclude=True)`) takes priority over the `exclude`/`include` on `model_dump` and `model_dump_json`:
+<!-- Setting `exclude` on the field constructor (`Field(..., exclude=True)`) takes priority over the `exclude`/`include` on `model_dump` and `model_dump_json`: -->
 フィールドコンストラクタ(`Field(... ,exclude=True)`)に`exclude`を設定すると、`model_dump`と`model_dump_json`の`exclude`/`include`よりも優先されます。
 
 ```py
@@ -931,8 +931,8 @@ print(person.model_dump(exclude_defaults=True))  # (3)!
 デコレートされたシリアライザ関数への`info`引数からアクセスできるシリアライゼーションメソッドにコンテキストオブジェクトを渡すことができます。
 <!-- This is useful when you need to dynamically update the serialization behavior during runtime. -->
 これは、実行時にシリアル化の動作を動的に更新する必要がある場合に便利です。
-For example, if you wanted a field to be dumped depending on a dynamically controllable set of allowed values, this could be done by passing the allowed values by context:
-<!-- たとえば、動的に制御可能な許可された値のセットに応じてフィールドをダンプする場合は、コンテキスト別に許可された値を渡すことで実行できます。 -->
+<!-- For example, if you wanted a field to be dumped depending on a dynamically controllable set of allowed values, this could be done by passing the allowed values by context: -->
+たとえば、動的に制御可能な許可された値のセットに応じてフィールドをダンプする場合は、コンテキスト別に許可された値を渡すことで実行できます。
 
 ```python
 from pydantic import BaseModel, SerializationInfo, field_serializer

@@ -1,9 +1,9 @@
 {% include-markdown "../warning.md" %}
 
-Unions are fundamentally different to all other types Pydantic validates - instead of requiring all fields/items/values to be valid, unions require only one member to be valid.
+<!-- Unions are fundamentally different to all other types Pydantic validates - instead of requiring all fields/items/values to be valid, unions require only one member to be valid. -->
 Unionは、Pydanticが検証する他のすべてのタイプとは根本的に異なります。すべてのフィールド/アイテム/値が有効であることを要求するのではなく、Unionは1つのメンバーのみが有効であることを要求します。
 
-This leads to some nuance around how to validate unions:
+<!-- This leads to some nuance around how to validate unions: -->
 これは、Unionの検証方法に関するいくつかのニュアンスにつながります。
 
 <!--
@@ -248,7 +248,7 @@ Unionに識別子を追加することは、生成されたJSONスキーマが[a
 <!-- Frequently, in the case of a `Union` with multiple models, there is a common field to all members of the union that can be used to distinguish which union case the data should be validated against; this is referred to as the "discriminator" in [OpenAPI](https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/). -->
 多くの場合、複数のモデルを持つ`Union`の場合、Unionのすべてのメンバーに共通のフィールドがあり、どのUnionケースに対してデータを検証すべきかを区別するために使用できます。これは、[OpenAPI](https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/)では「識別子」と呼ばれています。
 
-To validate models based on that information you can set the same field - let's call it `my_discriminator` - in each of the models with a discriminated value, which is one (or many) `Literal` value(s).
+<!-- To validate models based on that information you can set the same field - let's call it `my_discriminator` - in each of the models with a discriminated value, which is one (or many) `Literal` value(s). -->
 その情報に基づいてモデルを検証するには、同じフィールド(`my_discriminator`と呼びましょう)を、1つ(または複数)の`Literal`値である識別された値を持つ各モデルに設定します。
 <!-- For your `Union`, you can set the discriminator in its value: `Field(discriminator='my_discriminator')`. -->
 `Union`では、`Field(discriminator='my_discriminator')`の値に識別子を設定することができます。
@@ -362,7 +362,7 @@ ThanksgivingDinner(dessert=PumpkinPie(time_to_cook=40, num_ingredients=6, fillin
 """
 ```
 
-`Discriminator`s can also be used to validate `Union` types with combinations of models and primitive types.
+<!-- `Discriminator`s can also be used to validate `Union` types with combinations of models and primitive types. -->
 `Discriminator`は、モデルとプリミティブ型の組み合わせで`Union`型を検証するためにも使用できます。
 
 For example:
@@ -426,16 +426,14 @@ except ValidationError as e:
 `None`が返された場合、この`union_tag_not_found`エラーが発生します。
 
 !!! note
-    Using the [[`typing.Annotated`][] fields syntax](../concepts/types.md#composing-types-via-annotated) can be handy to regroup
-    the `Union` and `discriminator` information. See the next example for more details.
-    [[`typing.Annotated`][] fields syntax](../concepts/types.md#composing-types-via-annotated)を使用すると、グループを再編成するのに便利です。
-    `Union`と`discriminator`の情報です。詳細は次の例を参照してください。
+    <!-- Using the [[`typing.Annotated`][] fields syntax](../concepts/types.md#composing-types-via-annotated) can be handy to regroup the `Union` and `discriminator` information. See the next example for more details. -->
+    [[`typing.Annotated`][]fields syntax](./concepts/types.md#composing-types-via-annotated)を使用すると、`Union`および`discriminator`情報を簡単に再グループ化できます。詳細については、次の例を参照してください。
 
     <!-- There are a few ways to set a discriminator for a field, all varying slightly in syntax. -->
     フィールドに識別子を設定する方法はいくつかありますが、構文はわずかに異なります。
 
-    For `str` discriminators:
-    `str` discriminatorsの場合:
+    <!-- For `str` discriminators: -->
+    `str` 識別子の場合:
     ```
     some_field: Union[...] = Field(discriminator='my_discriminator'
     some_field: Annotated[Union[...], Field(discriminator='my_discriminator')]
@@ -526,7 +524,8 @@ except ValidationError as e:
     <!-- If you want to validate data against a union, and solely a union, you can use pydantic's [`TypeAdapter`](../concepts/type_adapter.md) construct instead of inheriting from the standard `BaseModel`. -->
     Unionのみに対してデータを検証したい場合は、標準の`BaseModel`から継承する代わりに、pydanticの[`TypeAdapter`](../concepts/type_adapter.md)構文を使用できます。
 
-    In the context of the previous example, we have the following:
+    <!-- In the context of the previous example, we have the following: -->
+    前の例では、次のようになります。
 
     ```python lint="skip" test="skip"
     type_adapter = TypeAdapter(Pet)

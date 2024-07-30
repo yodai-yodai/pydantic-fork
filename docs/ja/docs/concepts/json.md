@@ -236,7 +236,7 @@ print(repr(dog))
 !!! note "String Caching Details"
 
     <!-- 1. Strings are cached using a fully associative cache with a size of [16,384](https://github.com/pydantic/jiter/blob/5bbdcfd22882b7b286416b22f74abd549c7b2fd7/src/py_string_cache.rs#L113). -->
-    1. 文字列は、サイズ[16,384]のフルアソシアティブ方式を使用してキャッシュされます(https://github.com/pydantic/jiter/blob/5bbdcfd22882b7b286416b22f74abd549c7b2fd7/src/py_string_cache.rs#L113)。
+    1. 文字列は、サイズ[16,384](https://github.com/pydantic/jiter/blob/5bbdcfd22882b7b286416b22f74abd549c7b2fd7/src/py_string_cache.rs#L113)のフルアソシアティブ方式を使用してキャッシュされます。
     <!-- 2. Only strings where `len(string) < 64` are cached. -->
     2. `len(string)<64`の文字列のみがキャッシュされます。
     <!-- 3. There is some overhead to looking up the cache, which is normally worth it to avoid constructing strings. However, if you know there will be very few repeated strings in your data, you might get a performance boost by disabling this setting with `cache_strings=False`. -->

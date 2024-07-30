@@ -695,7 +695,7 @@ assert Model(y='ab').y == 'abab'
 <!-- You can use [Generic Classes](https://docs.python.org/3/library/typing.html#typing.Generic) as field types and perform custom validation based on the "type parameters" (or sub-types) with `__get_pydantic_core_schema__`. -->
 [Generic Classes](https://docs.python.org/3/library/typing.html#typing.Generic)をフィールド型として使用し、`__get_pydantic_core_schema__`で"型パラメータ"(またはサブ型)に基づいてカスタム検証を実行できます。
 
-If the Generic class that you are using as a sub-type has a classmethod `__get_pydantic_core_schema__`, you don't need to use [`arbitrary_types_allowed`][pydantic.config.ConfigDict.arbitrary_types_allowed] for it to work.
+<!-- If the Generic class that you are using as a sub-type has a classmethod `__get_pydantic_core_schema__`, you don't need to use [`arbitrary_types_allowed`][pydantic.config.ConfigDict.arbitrary_types_allowed] for it to work. -->
 サブタイプとして使用しているGenericクラスに`__get_pydantic_core_schema__`クラスメソッドがある場合、それが動作するために[`arbitrary_types_allowed`][pydantic.config.ConfigDict.arbitrary_types_allowed]を使用する必要はありません。
 
 <!-- Because the `source_type` parameter is not the same as the `cls` parameter, you can use `typing.get_args` (or `typing_extensions.get_args`) to extract the generic parameters. -->
