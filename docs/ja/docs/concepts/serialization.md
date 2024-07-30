@@ -6,15 +6,15 @@
 !!! tip "Serialize versus dump"
 
     <!-- Pydantic uses the terms "serialize" and "dump" interchangeably. Both refer to the process of converting a model to a dictionary or JSON-encoded string. -->
-    Pydanticでは、「serialize」と「dump」という用語を同じ意味で使用しています。どちらも、モデルを辞書またはJSONでエンコードされた文字列に変換するプロセスを指します。
+    Pydanticでは、"serialize"と"dump"という用語を同じ意味で使用しています。どちらも、モデルを辞書またはJSONでエンコードされた文字列に変換するプロセスを指します。
 
     <!-- Outside of Pydantic, the word "serialize" usually refers to converting in-memory data into a string or bytes. -->
-    Pydantic以外では、「シリアライズ」という言葉は通常、メモリ内のデータを文字列やバイトに変換することを意味します。
+    Pydantic以外では、"シリアライズ"という言葉は通常、メモリ内のデータを文字列やバイトに変換することを意味します。
     <!-- However, in the context of Pydantic, there is a very close relationship between converting an object from a more structured form &mdash; such as a Pydantic model, a dataclass, etc. &mdash; into a less structured form comprised of Python built-ins such as dict. -->
     しかし、Pydanticのコンテキストでは、オブジェクトをPydanticモデルやデータクラスなどのより構造化された形式から、dictなどのPython組み込みで構成されたより構造化されていない形式に変換することには、非常に密接な関係があります。
 
     <!-- While we could (and on occasion, do) distinguish between these scenarios by using the word "dump" when converting to primitives and "serialize" when converting to string, for practical purposes, we frequently use the word "serialize" to refer to both of these situations, even though it does not always imply conversion to a string or bytes. -->
-    プリミティブへの変換時には「dump」、文字列への変換時には「serialize」という単語を使用することで、これらのシナリオを区別することができます(場合によっては区別します)が、実際には、必ずしも文字列やバイトへの変換を意味するわけではありませんが、「serialize」という単語を両方の状況を指すためによく使用します。
+    プリミティブへの変換時には"dump"、文字列への変換時には"serialize"という単語を使用することで、これらのシナリオを区別することができます(場合によっては区別します)が、実際には、必ずしも文字列やバイトへの変換を意味するわけではありませんが、"serialize"という単語を両方の状況を指すためによく使用します。
 
 
 
@@ -505,7 +505,7 @@ print(OuterModel(as_any=user, as_user=user).model_dump())
 <!-- When a field is annotated as `SerializeAsAny[<SomeType>]`, the validation behavior will be the same as if it was annotated as `<SomeType>`, and type-checkers like mypy will treat the attribute as having the appropriate type as well. -->
 フィールドに`SerializeAsAny[<SomeType>]`という注釈が付けられた場合、検証の動作は`<SomeType>`という注釈が付けられた場合と同じになり、mypyのような型チェッカーも属性を適切な型として扱います。
 <!-- But when serializing, the field will be serialized as though the type hint for the field was `Any`, which is where the name comes from. -->
-しかし、シリアライズすると、フィールドの型ヒントが「Any」であるかのようにフィールドがシリアライズされます。これが名前の由来です。
+しかし、シリアライズすると、フィールドの型ヒントが"Any"であるかのようにフィールドがシリアライズされます。これが名前の由来です。
 
 #### `serialize_as_any` runtime setting
 
@@ -744,7 +744,7 @@ print(t.model_dump(include={'id': True, 'user': {'id'}}))
 
 <!-- The `True` indicates that we want to exclude or include an entire key, just as if we included it in a set.
 This can be done at any depth level. -->
-「True」は、キー全体をセットに含めたかのように、キー全体を除外または含めたいことを示します。
+"True"は、キー全体をセットに含めたかのように、キー全体を除外または含めたいことを示します。
 これは、任意の深さのレベルで実行できます。
 
 <!-- Special care must be taken when including or excluding fields from a list or tuple of submodels or dictionaries.
@@ -960,7 +960,7 @@ print(model.model_dump(context={'stopwords': ['document']}))
 ```
 
 <!-- Similarly, you can [use a context for validation](../concepts/validators.md#validation-context). -->
-同様に、[use a context for validation]することもできます。(../concepts/validators.md#validation-context)
+同様に、[use a context for validation](../concepts/validators.md#validation-context)することもできます。
 
 ## `model_copy(...)` <a name="model_copy">
 
