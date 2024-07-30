@@ -1,9 +1,9 @@
-{% include-markdown "../warning.md" %}
-
 !!! warning "🚧 Work in Progress"
     This page is a work in progress.
 
 # JSON
+
+{% include-markdown "../warning.md" %}
 
 ## Json Parsing
 
