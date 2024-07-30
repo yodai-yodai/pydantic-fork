@@ -1,4 +1,4 @@
-{% include-markdown "./warning.md" %}
+{% include-markdown "../warning.md" %}
 
 ??? api "API Documentation"
     [`pydantic.main.BaseModel`][pydantic.main.BaseModel]<br>
@@ -21,7 +21,7 @@ Pydanticでスキーマを定義する主な方法の1つは、モデルを使�
     ### TL;DR
 
     <!-- We use the term "validation" to refer to the process of instantiating a model (or other type) that adheres to specified types and constraints. This task, which Pydantic is well known for, is most widely recognized as "validation" in colloquial terms, even though in other contexts the term "validation" may be more restrictive. -->
-    "検証"という用語は、指定されたタイプと制約に従うモデル(または他のタイプ)をインスタンス化するプロセスを指すために使用します。Pydanticでよく知られているこのタスクは、口語では"検証"として最も広く認識されていますが、他の文脈では"検証"という用語はより限定的な可能性があります。
+    "バリデーション"という用語は、指定されたタイプと制約に従うモデル(または他のタイプ)をインスタンス化するプロセスを指すために使用します。Pydanticでよく知られているこのタスクは、口語では"バリデーション"として最も広く認識されていますが、他の文脈では"バリデーション"という用語はより限定的な可能性があります。
 
     ---
 
@@ -29,40 +29,38 @@ Pydanticでスキーマを定義する主な方法の1つは、モデルを使�
     ### 詳しい説明
 
     <!-- The potential confusion around the term "validation" arises from the fact that, strictly speaking, Pydantic's primary focus doesn't align precisely with the dictionary definition of "validation": -->
-    "検証"という用語をめぐる潜在的な混乱は、厳密に言えば、Pydanticの主な焦点が辞書の"検証"の定義と正確に一致していないという事実からきています。
+    "バリデーション"という用語をめぐる潜在的な混乱は、厳密に言えば、Pydanticの主な焦点が辞書の"バリデーション"の定義と正確に一致していないという事実からきています。
 
     <!--
     ### validation
     > _noun_
     > the action of checking or proving the validity or accuracy of something.
     -->
-    ### 検証
+    ### バリデーション
     > _名詞_
     > 何かの有効性または正確さをチェックまたは証明する行為。
 
     <!-- In Pydantic, the term "validation" refers to the process of instantiating a model (or other type) that adheres to specified types and constraints. Pydantic guarantees the types and constraints of the output, not the input data.
     This distinction becomes apparent when considering that Pydantic's `ValidationError` is raised when data cannot be successfully parsed into a model instance. -->
-    Pydanticでは、「検証」という用語は、指定された型と制約に従うモデル(または他の型)をインスタンス化するプロセスを指します。Pydanticは、入力データではなく、出力の型と制約を保証します。
+    Pydanticでは、"バリデーション'という用語は、指定された型と制約に従うモデル(または他の型)をインスタンス化するプロセスを指します。Pydanticは、入力データではなく、出力の型と制約を保証します。
     この区別は、データがモデルインスタンスに正常にパースできない場合にPydanticの`ValidationError`が発生することを考えると明らかになります。
 
     <!-- While this distinction may initially seem subtle, it holds practical significance.
     In some cases, "validation" goes beyond just model creation, and can include the copying and coercion of data.
     This can involve copying arguments passed to the constructor in order to perform coercion to a new type     without mutating the original input data. For a more in-depth understanding of the implications for your usage, refer to the [Data Conversion](#data-conversion) and [Attribute Copies](#attribute-copies) sections below. -->
     この区別は最初は微妙に見えるかもしれないが、実際には重要です。
-    場合によっては、"検証"は単なるモデルの作成にとどまらず、データのコピーや強制的な型変換を含むこともあります。
+    場合によっては、"バリデーション"は単なるモデルの作成にとどまらず、データのコピーや強制的な型変換を含むこともあります。
     これには、元の入力データを変更せずに新しい型への強制的な型変換を実行するために、コンストラクタに渡された引数をコピーすることが含まれます。使用方法への影響の詳細については、以下の[Data Conversion](#data-conversion)および[Attribute Copies](#attribute-copies)のセクションを参照してください。
 
     <!-- In essence, Pydantic's primary goal is to assure that the resulting structure post-processing (termed "validation") precisely conforms to the applied type hints. Given the widespread adoption of "validation" as the colloquial term for this process, we will consistently use it in our documentation. -->
-    本質的に、Pydanticの主な目標は、結果として得られる構造の後処理("検証"と呼ばれる)が、適用された型ヒントに正確に適合することを保証することです。このプロセスの口語として"検証"が広く採用されていることを考慮して、私たちのドキュメントでは一貫して"検証"を使用します。
+    本質的に、Pydanticの主な目標は、結果として得られる構造の後処理("バリデーション"と呼ばれる)が、適用された型ヒントに正確に適合することを保証することです。このプロセスの口語として"バリデーション"が広く採用されていることを考慮して、私たちのドキュメントでは一貫して"バリデーション"を使用します。
 
     <!-- While the terms "parse" and "validation" were previously used interchangeably, moving forward, we aim to exclusively employ "validate",
     with "parse" reserved specifically for discussions related to [JSON parsing](../concepts/json.md). -->
-    "パース"と"検証"という用語は以前は互換的に使用されていましたが、今後は"検証"のみを使用します。
-    "パース(parse)"は特に[JSON parsing](./concepts/json.md)に関連する議論のために予約されています。
+    "パース"と"バリデーション"という用語は以前は互換的に使用されていましたが、今後は"バリデーション"のみを使用します。
+    "パース"は特に[JSON parsing](../concepts/json.md)に関連する議論のために予約されています。
 
-<!-- ## Basic model usage -->
-## 基本的なモデルの使い方
-
+## Basic model usage
 
 ```py group="basic-model"
 from pydantic import BaseModel
@@ -103,7 +101,7 @@ assert isinstance(user.id, int)
 Fields of a model can be accessed as normal attributes of the `user` object.
 The string `'123'` has been converted into an int as per the field type. -->
 pydanticの強制型変換ロジックの詳細については、[Data Conversion](#data-conversion)を参照してください。
-モデルのフィールドは、「user」オブジェクトの通常の属性としてアクセスできます。
+モデルのフィールドは、"user"オブジェクトの通常の属性としてアクセスできます。
 文字列`'123'`はフィールド型に従ってintに変換されました。
 
 ```py group="basic-model"
@@ -138,6 +136,7 @@ assert user.id == 321
 
 ### Model methods and properties
 
+
 <!-- The example above only shows the tip of the iceberg of what models can do.
 Models possess the following methods and attributes: -->
 上の例は、モデルができることの氷山の一角を示しているにすぎません。
@@ -160,7 +159,7 @@ Models possess the following methods and attributes: -->
 <!-- * [`model_json_schema()`][pydantic.main.BaseModel.model_json_schema]: returns a jsonable dictionary representing the model as JSON Schema. See [JSON Schema](json_schema.md). -->
 * [`model_json_schema()`][pydantic.main.BaseModel.model_json_schema]: JSONスキーマとしてモデルを表すJSON化可能な辞書を返します。[JSON Schema](json_schema.md)を参照してください。
 <!-- * [`model_parametrized_name()`][pydantic.main.BaseModel.model_parametrized_name]: compute the class name for parametrizations of generic classes. -->
-* [`model_parameterized_name()`][pydantic.main.BaseModel.model_parameterized_name]: ジェネリッククラスのパラメータ化のクラス名を計算します。
+* [`model_parameterized_name()`][pydantic.main.BaseModel.model_parametrized_name]: ジェネリッククラスのパラメータ化のクラス名を計算します。
 <!-- * [`model_post_init()`][pydantic.main.BaseModel.model_post_init]: perform additional initialization after the model is initialized. -->
 * [`model_post_init()`][pydantic.main.BaseModel.model_post_init]:モデルが初期化された後に追加の初期化を実行します。
 <!-- * [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild]: rebuild the model schema, which also supports building recursive generic models. See [Rebuild model schema](#rebuild-model-schema). -->
@@ -179,10 +178,9 @@ Models possess the following methods and attributes: -->
 
 !!! tip
     <!-- See [Changes to `pydantic.BaseModel`](../migration.md#changes-to-pydanticbasemodel) in the [Migration Guide](../migration.md) for details on changes from Pydantic V1. -->
-    Pydantic V1からの変更の詳細については、[Migration Guide](./migration.md)の[Changes to`pydantic.BaseModel`](../migration.md#changes-to-pydanticbasemodel)を参照してください。
+    Pydantic V1からの変更の詳細については、[Migration Guide](../migration.md)の[Changes to `pydantic.BaseModel`](../migration.md#changes-to-pydanticbasemodel)を参照してください。
 
-<!-- ## Nested models -->
-## ネストされたモデル
+## Nested models
 
 <!-- More complex hierarchical data structures can be defined using models themselves as types in annotations. -->
 より複雑な階層データ構造は、モデル自体をアノテーションの型として使用して定義することができます。
@@ -223,7 +221,7 @@ print(m.model_dump())
 ```
 
 <!-- For self-referencing models, see [postponed annotations](postponed_annotations.md#self-referencing-or-recursive-models). -->
-自己参照モデルについては、[deferred annotations](deferred_annotations.md#self-referencing-or-recursive-models)を参照してください。
+自己参照モデルについては、[postponed annotations](postponed_annotations.md#self-referencing-or-recursive-models)を参照してください。
 
 !!! note
     <!-- When defining your models, watch out for naming collisions between your field name and its type, a previously defined model, or an imported library. -->
@@ -246,8 +244,7 @@ print(m.model_dump())
     <!-- An error occurs since the field  `int` is set to a default value of `None` and has the exact same name as its type, so both are interpreted to be `None`. -->
     `int`フィールドはデフォルト値`None`に設定されており、そのタイプとまったく同じ名前を持っているため、両方とも`None`と解釈され、エラーが発生します。
 
-<!-- ## Rebuild model schema -->
-## モデル・スキーマの再構築
+## Rebuild model schema
 
 <!-- The model schema can be rebuilt using [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild]. This is useful for building recursive generic models. -->
 モデルスキーマは[`model_rebuild()`][pydantic.main.BaseModel.model_rebuild]を使用して再構築できます。これは再帰的なジェネリックモデルを構築するのに便利です。
@@ -296,8 +293,7 @@ V2では、V1の`update_forward_refs()`が[`model_rebuild()`][pydantic.main.Base
 <!-- The biggest change is that when calling [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild] on the outermost model, it builds a core schema used for validation of the whole model (nested models and all), so all types at all levels need to be ready before [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild] is called. -->
 最大の変更点は、最も外側のモデルで[`model_rebuild()`][pydantic.main.BaseModel.model_rebuild]を呼び出すと、モデル全体(ネストされたモデルとすべて)の検証に使用されるコアスキーマが構築されるため、[`model_rebuild()`][pydantic.main.BaseModel.model_rebuild]が呼び出される前に、すべてのレベルのすべての型が準備されている必要があることです。
 
-<!-- ## Arbitrary class instances -->
-## 任意のクラスインスタンス
+## Arbitrary class instances
 
 <!-- (Formerly known as "ORM Mode"/`from_orm`.) -->
 (以前は"ORM Mode"/`from_orm`と呼ばれていました。)
@@ -359,8 +355,7 @@ id=123 public_key='foobar' name='Testing' domains=['example.com', 'foobar.com']
 """
 ```
 
-<!-- ### Reserved names -->
-### 予約語
+### Reserved names
 
 <!-- You may want to name a `Column` after a reserved SQLAlchemy field. In that case, `Field` aliases will be convenient: -->
 予約されたSQLAlchemyフィールドの後に`Column`という名前を付けたい場合があります。その場合は`Field`という別名が便利です。
@@ -404,8 +399,7 @@ print(pydantic_model.model_dump(by_alias=True))
     <!-- The example above works because aliases have priority over field names for field population. Accessing `SQLModel`'s `metadata` attribute would lead to a `ValidationError`. -->
     上記の例が機能するのは、エイリアスがフィールド入力のフィールド名よりも優先されるためです。`SQLModel`の`metadata`属性にアクセスすると`ValidationError`が発生します。
 
-<!-- ### Nested attributes -->
-### ネストされた属性
+### Nested attributes
 
 <!-- When using attributes to parse models, model instances will be created from both top-level attributes and deeper-nested attributes as appropriate. -->
 属性を使用してモデルをパースする場合、モデルインスタンスは、必要に応じて最上位の属性と下位にネストされた属性の両方から作成されます。
@@ -457,8 +451,7 @@ name='Anna' age=20.0 pets=[Pet(name='Bones', species='dog'), Pet(name='Orion', s
 """
 ```
 
-<!-- ## Error handling -->
-## エラーハンドリング
+## Error handling
 
 <!-- Pydantic will raise `ValidationError` whenever it finds an error in the data it's validating. -->
 Pydanticは、検証中のデータにエラーを検出するたびに`ValidationError`を発生させます。
@@ -467,7 +460,7 @@ Pydanticは、検証中のデータにエラーを検出するたびに`Validati
 検出されたエラーの数にかかわらず、タイプ`ValidationError`の単一の例外が発生し、`ValidationError`にはすべてのエラーとその発生方法に関する情報が含まれます。
 
 <!-- See [Error Handling](../errors/errors.md) for details on standard and custom errors. -->
-標準エラーとカスタムエラーの詳細については、[Error Handling](./errors/errors.md)を参照してください。
+標準エラーとカスタムエラーの詳細については、[Error Handling](../errors/errors.md)を参照してください。
 
 <!-- As a demonstration: -->
 デモンストレーション:
@@ -501,8 +494,7 @@ except ValidationError as e:
     """
 ```
 
-<!-- ## Helper functions -->
-## ヘルパー関数
+## Helper functions
 
 <!-- *Pydantic* provides three `classmethod` helper functions on models for parsing data: -->
 *Pydantic*は、データをパースするための3つの`classmethod`ヘルパー関数をモデルに提供します。
@@ -598,7 +590,7 @@ JSON以外のフォーマットでシリアライズされたデータを検証�
 
 !!! note
     <!-- Learn more about JSON parsing in the [JSON](../concepts/json.md) section of the docs. -->
-    JSONパースの詳細については、ドキュメントの[JSON](./concepts/json.md)セクションを参照してください。
+    JSONパースの詳細については、ドキュメントの[JSON](../concepts/json.md)セクションを参照してください。
 
 !!! note
     <!-- If you're passing in an instance of a model to [`model_validate`][pydantic.main.BaseModel.model_validate], you will want to consider setting [`revalidate_instances`](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.revalidate_instances) in the model's config. -->
@@ -651,8 +643,7 @@ JSON以外のフォーマットでシリアライズされたデータを検証�
         """
     ```
 
-<!-- ### Creating models without validation -->
-### 検証なしでモデルを作成する
+### Creating models without validation
 
 <!-- Pydantic also provides the [`model_construct()`][pydantic.main.BaseModel.model_construct] method, which allows models to be created **without validation**. This can be useful in at least a few cases: -->
 Pydanticには、[`model_construct()`][pydantic.main.BaseModel.model_construct]メソッドも用意されています。このメソッドを使用すると、**検証なしで**モデルを作成できます。これは、少なくとも次のような場合に便利です。
@@ -752,8 +743,7 @@ print(repr(bad_user))
 
 
 
-<!-- ## Generic models -->
-## ジェネリックモデル
+## Generic models
 
 <!-- Pydantic supports the creation of generic models to make it easier to reuse a common model structure. -->
 Pydanticは、一般的なモデル構造の再利用を容易にするために、ジェネリックモデルの作成をサポートしています。
@@ -1232,10 +1222,6 @@ print(ItemHolder[IntItem](**loaded_data).model_dump())  # (2)!
 
 ??? api "API Documentation"
     [`pydantic.main.create_model`][pydantic.main.create_model]<br>
-## ダイナミックモデルの作成
-
-??? api "API Documentation"
-    [`pydantic.main.create_model`][pydantic.main.create_model]<br>
 
 <!-- There are some occasions where it is desirable to create a model using runtime information to specify the fields. -->
 <!-- For this Pydantic provides the `create_model` function to allow models to be created on the fly: -->
@@ -1270,7 +1256,7 @@ class StaticFoobarModel(BaseModel):
 * `(<type>, Field(...))`
 * `typing.Annotated[<type>, Field(...)]`
 
-Using a `Field(...)` call as the second argument in the tuple (the default value) allows for more advanced field configuration. Thus, the following are analogous:
+<!-- Using a `Field(...)` call as the second argument in the tuple (the default value) allows for more advanced field configuration. Thus, the following are analogous: -->
 タプルの2番目の引数(デフォルト値)として`Field(...)`呼び出しを使用すると、より高度なフィールド設定が可能になります。したがって、次のように類似しています。
 
 ```py
@@ -1362,15 +1348,13 @@ except ValidationError as e:
 
 
 
-<!-- ## `RootModel` and custom root types -->
-<!-- ## `RootModel`とカスタムルート型 -->
 ## `RootModel` and custom root types
 
 ??? api "API Documentation"
     [`pydantic.root_model.RootModel`][pydantic.root_model.RootModel]<br>
 
 <!-- Pydantic models can be defined with a "custom root type" by subclassing [`pydantic.RootModel`][pydantic.RootModel]. -->
-Pydanticモデルは、[`pydantic.RootModel`][pydantic.RootModel]をサブクラス化することで、「カスタムルートタイプ」で定義できます。
+Pydanticモデルは、[`pydantic.RootModel`][pydantic.RootModel]をサブクラス化することで、"カスタムルートタイプ"で定義できます。
 
 <!-- The root type can be any type supported by Pydantic, and is specified by the generic parameter to `RootModel`.
 The root value can be passed to the model `__init__` or [`model_validate`][pydantic.main.BaseModel.model_validate] via the first and only argument. -->
@@ -1456,7 +1440,6 @@ print(my_pets.describe())
 
 
 ## Faux immutability
-## 疑似不変性
 
 <!-- Models can be configured to be immutable via `model_config['frozen'] = True`. When this is set, attempting to change the values of instance attributes will raise errors. See the [API reference][pydantic.config.ConfigDict.frozen] for more details. -->
 モデルは`model_config['frozen']=True`で不変に設定できます。これが設定されている場合、インスタンス属性の値を変更しようとするとエラーが発生します。詳細については、[API reference][pydantic.config.ConfigDict.frozen]を参照してください。
@@ -1506,8 +1489,7 @@ print(foobar.b)
 <!-- Trying to change `a` caused an error, and `a` remains unchanged. However, the dict `b` is mutable, and the immutability of `foobar` doesn't stop `b` from being changed. -->
 `a`を変更しようとするとエラーが発生し、`a`は変更されません。しかし、辞書`b`は変更可能であり、`foobar`の不変性は`b`の変更を止めるものではありません。
 
-<!-- ## Abstract base classes -->
-## 抽象基底クラス
+## Abstract base classes
 
 <!-- Pydantic models can be used alongside Python's[Abstract Base Classes](https://docs.python.org/3/library/abc.html) (ABCs). -->
 Pydanticモデルは、Pythonの[Abstract Base Classes](https://docs.python.org/3/library/abc.html)(ABC)と一緒に使用できます。
@@ -1527,8 +1509,7 @@ class FooBarModel(BaseModel, abc.ABC):
         pass
 ```
 
-<!-- ## Field ordering -->
-## フィールドの順序
+## Field ordering
 
 <!-- Field order affects models in the following ways: -->
 フィールドの順序は、モデルに次のような影響を与えます。
@@ -1539,7 +1520,7 @@ class FooBarModel(BaseModel, abc.ABC):
 * field order is preserved by [`.model_dump()` and `.model_dump_json()` etc.](serialization.md#model_dump)
 -->
 * フィールドの順序はモデル[schema](json_schema.md)で保持されます。
-* [検証エラー](#error-handling)でフィールドの順序が保持されます。
+* [validation errors](#error-handling)でフィールドの順序が保持されます。
 * フィールドの順序は、[`.model_dump()`および`.model_dump_json()`など](serialization.md#model_dump)によって保持されます。
 
 
@@ -1570,8 +1551,7 @@ print(error_locations)
 #> [('a',), ('b',), ('c',), ('d',), ('e',)]
 ```
 
-<!-- ## Required fields -->
-## 必須フィールド
+## Required fields
 
 <!-- To declare a field as required, you may declare it using an annotation, or an annotation in combination with a `Field` specification.
 You may also use `Ellipsis`/`...` to emphasize that a field is required, especially when using the `Field` constructor. -->
@@ -1596,17 +1576,16 @@ class Model(BaseModel):
 ```
 
 <!-- Here `a`, `b` and `c` are all required. However, this use of `b: int = ...` does not work properly with [mypy](../integrations/mypy.md), and as of **v1.0** should be avoided in most cases. -->
-ここで`a`、`b`、`c`はすべて必須です。しかし、この`b:int=...`の使用は[mypy](./integrations/mypy.md)では適切に動作せず、**v1.0**ではほとんどの場合避けるべきです。
+ここで`a`、`b`、`c`はすべて必須です。しかし、この`b:int=...`の使用は[mypy](../integrations/mypy.md)では適切に動作せず、**v1.0**ではほとんどの場合避けるべきです。
 
 !!! note
     <!-- In Pydantic V1, fields annotated with `Optional` or `Any` would be given an implicit default of `None` even if no default was explicitly specified. This behavior has changed in Pydantic V2, and there are no longer any type annotations that will result in a field having an implicit default value. -->
     Pydantic V1では、`Optional`または`Any`で注釈されたフィールドには、デフォルトが明示的に指定されていない場合でも、暗黙的なデフォルト`None`が与えられていました。この動作はPydantic V2で変更され、暗黙的なデフォルト値を持つフィールドを生成する型注釈はもはや存在しません。
 
     <!-- See [the migration guide](../migration.md#required-optional-and-nullable-fields) for more details on changes to required and nullable fields. -->
-    必須フィールドとnull許容フィールドの変更の詳細については、[the migration guide](./migration.md#required-optional-and-nullable-fields)を参照してください。
+    必須フィールドとnull許容フィールドの変更の詳細については、[the migration guide](../migration.md#required-optional-and-nullable-fields)を参照してください。
 
-<!-- ## Fields with non-hashable default values -->
-## ハッシュ不可能なデフォルト値を持つフィールド
+## Fields with non-hashable default values
 
 <!-- A common source of bugs in python is to use a mutable object as a default value for a function or method argument, as the same instance ends up being reused in each call. -->
 Pythonの一般的なバグの原因は、関数またはメソッドの引数のデフォルト値として可変オブジェクトを使用することです。これは、各呼び出しで同じインスタンスが再利用されるためです。
@@ -1637,8 +1616,7 @@ print(m2.item_counts)
 #> [{}]
 ```
 
-<!-- ## Fields with dynamic default values -->
-## 動的なデフォルト値を持つフィールド
+## Fields with dynamic default values
 
 <!-- When declaring a field with a default value, you may want it to be dynamic (i.e. different for each model).
 To do this, you may want to use a `default_factory`. -->
@@ -1670,13 +1648,11 @@ assert m1.uid != m2.uid
 ```
 
 <!-- You can find more information in the documentation of the [`Field` function](fields.md). -->
-詳細については、[`Field`関数](fields.md)のドキュメントを参照してください。
+詳細については、[`Field` function](fields.md)のドキュメントを参照してください。
 
-<!-- ## Automatically excluded attributes -->
-## 自動的に除外される属性
+## Automatically excluded attributes
 
-<!-- ### Class vars -->
-### クラス変数
+### Class vars
 
 <!-- Attributes annotated with `typing.ClassVar` are properly treated by Pydantic as class variables, and will not become fields on model instances: -->
 `typing.ClassVar`で注釈が付けられた属性は、Pydanticによってクラス変数として適切に扱われ、モデルインスタンスのフィールドにはなりません。
@@ -1700,13 +1676,12 @@ print(Model.y)
 ```
 
 ### Private model attributes
-<!-- ### プライベートモデル属性 -->
 
 ??? api "API Documentation"
     [`pydantic.fields.PrivateAttr`][pydantic.fields.PrivateAttr]<br>
 
 <!-- Attributes whose name has a leading underscore are not treated as fields by Pydantic, and are not included in the model schema. Instead, these are converted into a "private attribute" which is not validated or even set during calls to `__init__`, `model_validate`, etc. -->
-名前の先頭にアンダースコアが付いている属性は、Pydanticではフィールドとして扱われず、モデルスキーマにも含まれません。代わりに、これらは「プライベート属性」に変換されます。この属性は検証されず、`__init__`、`model_validate`などの呼び出し時にも設定されません。
+名前の先頭にアンダースコアが付いている属性は、Pydanticではフィールドとして扱われず、モデルスキーマにも含まれません。代わりに、これらは"プライベート属性"に変換されます。この属性は検証されず、`__init__`、`model_validate`などの呼び出し時にも設定されません。
 
 !!! note
     <!--
@@ -1746,8 +1721,7 @@ print(m._secret_value)
 <!-- Private attribute names must start with underscore to prevent conflicts with model fields. However, dunder names (such as `__attr__`) are not supported. -->
 モデルフィールドとの競合を避けるため、プライベート属性名はアンダースコアで始める必要があります。ただし、名前(`__attr__`など)はサポートされていません。
 
-<!-- ## Data conversion -->
-## データ変換
+## Data conversion
 
 <!-- Pydantic may cast input data to force it to conform to model field types, and in some cases this may result in a loss of information.
 For example: -->
@@ -1769,13 +1743,12 @@ print(Model(a=3.000, b='2.72', c=b'binary data').model_dump())
 ```
 
 <!-- This is a deliberate decision of Pydantic, and is frequently the most useful approach. See [here](https://github.com/pydantic/pydantic/issues/578) for a longer discussion on the subject. -->
-これはPydanticの意図的な決定であり、多くの場合、最も有用なアプローチである。このテーマに関するより長い議論については、[ここ](https://github.com/pydantic/pydantic/issues/578)を参照。
+これはPydanticの意図的な決定であり、多くの場合、最も有用なアプローチである。このテーマに関するより長い議論については、[ここ](https://github.com/pydantic/pydantic/issues/578)を参照してください。
 
 <!-- Nevertheless, [strict type checking](strict_mode.md) is also supported. -->
 ただし、[strict type checking](strict_mode.md)もサポートされています。
 
-<!-- ## Model signature -->
-## モデルのシグネチャ
+## Model signature
 
 <!-- All Pydantic models will have their signature generated based on their fields: -->
 すべてのPydanticモデルは、そのフィールドに基づいて生成されたシグネチャを持ちます。
@@ -1830,8 +1803,7 @@ Pydanticは、シグネチャを生成するときにフィールドの名前よ
 <!-- If a field's alias and name are _both_ not valid identifiers (which may be possible through exotic use of `create_model`), a `**data` argument will be added. In addition, the `**data` argument will always be present in the signature if `model_config['extra'] == 'allow'`. -->
 フィールドの別名と名前の両方が有効な識別子でない場合(これは`create_model`の特殊な使い方によって可能になるかもしれません)、`**data`引数が追加されます。さらに、`model_config['extra']=='allow'`の場合、`**data`引数は常にシグネチャに存在します。
 
-<!-- ## Structural pattern matching -->
-## 構造パターンマッチング
+## Structural pattern matching
 
 <!-- Pydantic supports structural pattern matching for models, as introduced by [PEP 636](https://peps.python.org/pep-0636/) in Python 3.10. -->
 Pydanticは、Python 3.10の[PEP 636](https://peps.python.org/pep-0636/)で導入されたモデルの構造パターンマッチングをサポートしています。
@@ -1863,8 +1835,7 @@ match a:
     match-case文は、新しいモデルを作成するように見えますが、騙されてはいけません。
     単にアトリビュートを取得して比較したり、宣言して初期化したりするための糖衣構文です。
 
-<!-- ## Attribute copies -->
-## 属性のコピー
+## Attribute copies
 
 In many cases, arguments passed to the constructor will be copied in order to perform validation and, where necessary, coercion.
 多くの場合、コンストラクタに渡された引数は、検証と、必要に応じて強制型変換を実行するためにコピーされます。
@@ -1900,10 +1871,9 @@ print('id(c1.arr) == id(c2.arr):', id(c1.arr) == id(c2.arr))
 
 !!! note
     <!-- There are some situations where Pydantic does not copy attributes, such as when passing models &mdash; we use the model as is. You can override this behaviour by setting [`model_config['revalidate_instances'] = 'always'`](../api/config.md#pydantic.config.ConfigDict). -->
-    モデルを渡すときなど、Pydanticが属性をコピーしない場合があります。モデルをそのまま使用します。この動作は、[`model_config['revalidate_instances']='always'`](../api/config.md#pydantic.config.ConfigDict)を設定することで上書きできます。
+    モデルを渡すときなど、Pydanticが属性をコピーしない場合があります。モデルをそのまま使用します。この動作は、[`model_config['revalidate_instances'] = 'always'`](../api/config.md#pydantic.config.ConfigDict)を設定することで上書きできます。
 
-<!-- ## Extra fields -->
-## その他のフィールド
+## Extra fields
 
 <!-- By default, Pydantic models won't error when you provide data for unrecognized fields, they will just be ignored: -->
 デフォルトでは、Pydanticモデルは、認識されないフィールドのデータを提供してもエラーにならず、単に無視されるだけです。

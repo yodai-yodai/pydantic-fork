@@ -53,8 +53,7 @@ print(m.dimensions)
     <!-- We’re aware of the irony that Pydantic V1 was not strict in its validation, so if we're being pedantic, "Pydantic" was a misnomer until V2 😉. -->
     私たちは、Pydantic V1がその検証において厳密ではなかったという皮肉を認識しているので、私たちは物知り顔で、「Pydantic」はV2が登場するまでは誤った名称であったと言えたはずです。
 
-<!-- ## Why use Pydantic? -->
-## Pydanticを使う理由
+## Why use Pydantic?
 
 <!-- - **Powered by type hints** &mdash; with Pydantic, schema validation and serialization are controlled by type annotations; less to learn, less code to write, and integration with your IDE and static analysis tools. [Learn more…](why.md#type-hints) -->
 - **型ヒントを使用** &mdash; Pydanticでは、スキーマの検証とシリアライゼーションは型アノテーションによって制御されます。学習するコードが少なくなり、作成するコードも少なくなり、IDEや静的解析ツールと統合されます。[詳細はこちら](why.md#type-hints)
@@ -80,8 +79,7 @@ _FastAPI_,_hugggingface_,_Django Ninja_,_SQLModel_,_LangChain_.[詳細はこち�
 [Installing Pydantic](install.md)とてもシンプルです: `pip install pydantic`
 
 
-<!-- ## Pydantic examples -->
-## Pydanticの例
+## Pydantic examples
 
 <!-- To see Pydantic at work, let's start with a simple example, creating a custom class that inherits from `BaseModel`: -->
 Pydanticの動作を確認するために、`BaseModel`から継承するカスタムクラスを作成する簡単な例から始めましょう。
@@ -195,8 +193,7 @@ except ValidationError as e:
 <!-- 2. `User(...)` will raise a `ValidationError` with a list of errors -->
 2. `User(...)`はエラーのリストと共に`ValidationError`を発生させます。
 
-<!-- ## Who is using Pydantic? -->
-## Pydanticユーザ
+## Who is using Pydantic?
 
 <!-- Hundreds of organisations and packages are using Pydantic. Some of the prominent companies and organizations around the world who are using Pydantic include: -->
 何百もの組織やパッケージがPydanticを使用しています。こちらがPydanticを使用している世界中の著名な企業や組織です。

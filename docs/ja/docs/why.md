@@ -1,4 +1,4 @@
-# Pydanticを使う理由 <!-- # Why use Pydantic? -->
+# Why use Pydantic?
 
 {% include-markdown "./warning.md" %}
 
@@ -9,8 +9,7 @@
 Pydanticが6年前に開始されて以来、なぜ多くの人がPydanticを採用しているのかを知るのは難しいですが、いくつか考えられることがあります。
 
 {% raw %}
-<!-- ## Type hints powering schema validation {#type-hints} -->
-##スキーマ検証を強化する型のヒント {#type-hints}
+## Type hints powering schema validation {#type-hints}
 {% endraw %}
 
 <!-- The schema that Pydantic validates against is generally defined by Python type hints. -->
@@ -58,8 +57,7 @@ Using type hints also means that Pydantic integrates well with static typing too
     <!-- See the [documentation on supported types](concepts/types.md)を参照してください。 -->
     [documentation on supported types](concepts/types.md)を参照してください。
 
-<!-- ## Performance -->
-## パフォーマンス
+## Performance
 
 <!-- Pydantic's core validation logic is implemented in a separate package [`pydantic-core`](https://github.com/pydantic/pydantic-core), where validation for most types is implemented in Rust. -->
 Pydanticのコア検証ロジックは、別のパッケージ[`pydantic-core`](https://github.com/pydantic/pydantic-core)に実装されており、ほとんどのタイプの検証はRustで実装されています。
@@ -136,8 +134,7 @@ Pydanticのコア検証ロジックは、別のパッケージ[`pydantic-core`](
     <!-- Samuel Colvin's [talk at PyCon 2023](https://youtu.be/pWZw7hYoRVU) explains how `pydantic-core` works and how it integrates with Pydantic. -->
     Samuel Colvinの[talk at PyCon 2023](https://youtu.be/pWZw7hYoRVU)は、`pydantic-core`がどのように機能し、どのようにPydanticと統合されているか解説しています。
 
-<!-- ## Serialization -->
-## シリアライゼーション
+## Serialization
 
 <!-- Pydantic provides functionality to serialize model in three ways: -->
 Pydanticは、次の3つの方法でモデルをシリアライズする機能を提供します。
@@ -180,8 +177,7 @@ Pydanticは、次の3つの方法でモデルをシリアライズする機能�
     <!-- See the [documentation on serialization](concepts/serialization.md). -->
     [documentation on serialization](concepts/serialization.md)を参照してください。
 
-<!-- ## JSON Schema -->
-## JSONスキーマ
+## JSON Schema
 
 <!-- [JSON Schema](https://json-schema.org/) can be generated for any Pydantic schema &mdash; allowing self-documenting APIs and integration with a wide variety of tools which support JSON Schema. -->
 [JSON Schema](https://json-schema.org/)は、任意のPydanticスキーマに対して生成することができ、APIの自己文書化と、JSONスキーマをサポートするさまざまなツールとの統合できます。
@@ -240,8 +236,7 @@ Pydanticは、[OpenAPI 3.1](https://www.openapis.org/blog/2021/02/18/openapi-spe
     [documentation on JSON Schema](concepts/json_schema.md)を参照ください。
 
 {% raw %}
-<!-- ## Strict mode and data coercion {#strict-lax} -->
-## strictモードとデータの強制 {#strict-lax}
+## Strict mode and data coercion {#strict-lax}
 {% endraw %}
 
 <!-- By default, Pydantic is tolerant to common incorrect types and coerces data to the right type &mdash; e.g. a numeric string passed to an `int` field will be parsed as an `int`. -->
@@ -297,8 +292,7 @@ Pydanticには"strict=True"モードもあります。これは"Strictモード"
     [documentation on strict mode](concepts/strict_mode.md)を参照してください。
 
 {% raw %}
-<!-- ## Dataclasses, TypedDicts, and more {#typeddict} -->
-## データクラス、TypedDicts、など {#typeddict}
+## Dataclasses, TypedDicts, and more {#typeddict}
 {% endraw %}
 
 <!-- Pydantic provides four ways to create schemas and perform validation and serialization: -->
@@ -361,8 +355,7 @@ Pydanticは、スキーマを作成し、検証とシリアライズを実行す
     2. `dump_python`は`TypedDict`をpythonオブジェクトにシリアライズしますが、`dump_json`でJSONにシリアライズすることもできます。
     3. `TypeAdapter`はJSONスキーマも生成できます。
 
-<!-- ## Customisation -->
-## カスタマイズ
+## Customisation
 
 <!-- Functional validators and serializers, as well as a powerful protocol for custom types, means the way Pydantic operates can be customized on a per-field or per-type basis. -->
 関数型バリデーターとシリアライザ、そしてカスタム型用の強力なプロトコルは、Pydanticの動作方法をフィールド単位または型単位でカスタマイズできます。
@@ -401,8 +394,7 @@ Pydanticは、スキーマを作成し、検証とシリアライズを実行す
     <!-- See the documentation on [validators](concepts/validators.md), [custom serializers](concepts/serialization.md#custom-serializers), and [custom types](concepts/types.md#custom-types). -->
     [validators](concepts/validators.md), [custom serializers](concepts/serialization.md#custom-serializers), and [custom types](concepts/types.md#custom-types)を参照ください。
 
-<!-- ## Ecosystem -->
-## エコシステム
+## Ecosystem
 
 <!-- At the time of writing there are 214,100 repositories on GitHub and 8,119 packages on PyPI that depend on Pydantic. -->
 この記事の執筆時点で、GitHubには214,100のリポジトリがあり、PyPIにはPydanticに依存する8,119のパッケージがあります。

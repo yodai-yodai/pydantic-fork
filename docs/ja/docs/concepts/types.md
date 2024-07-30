@@ -1,33 +1,43 @@
-Where possible Pydantic uses [standard library types](../api/standard_library_types.md) to define fields, thus smoothing
-the learning curve. For many useful applications, however, no standard library type exists,
-so Pydantic implements many commonly used types.
+{% include-markdown "../warning.md" %}
 
-There are also more complex types that can be found in the
-[Pydantic Extra Types](https://github.com/pydantic/pydantic-extra-types) package.
+<!-- Where possible Pydantic uses [standard library types](../api/standard_library_types.md) to define fields, thus smoothing the learning curve. For many useful applications, however, no standard library type exists, so Pydantic implements many commonly used types. -->
+可能な場合、Pydanticは[標準ライブラリ型](../api/standard_library_types.md)を使用してフィールドを定義し、学習曲線をなめらかにします。ただし、多くの便利なアプリケーションには標準ライブラリ型が存在しないため、Pydanticは一般的に使用される多くの型を実装しています。
 
-If no existing type suits your purpose you can also implement your [own Pydantic-compatible types](#custom-types) with custom properties and validation.
+<!-- There are also more complex types that can be found in the [Pydantic Extra Types](https://github.com/pydantic/pydantic-extra-types) package. -->
+[Pydantic Extra Types](https://github.com/pydantic/pydantic-extra-types)パッケージには、より複雑な型もあります。
 
-The following sections describe the types supported by Pydantic.
+<!-- If no existing type suits your purpose you can also implement your [own Pydantic-compatible types](#custom-types) with custom properties and validation. -->
+既存の型が目的に合わない場合は、カスタムプロパティと検証を使用して、[独自のPydantic互換型](#custom-types)を実装することもできます。
 
+<!-- The following sections describe the types supported by Pydantic. -->
+以下のセクションでは、Pydanticでサポートされている型について説明します。
 
+<!--
 * [Standard Library Types](../api/standard_library_types.md) &mdash; types from the Python standard library.
 * [Strict Types](#strict-types) &mdash; types that enable you to prevent coercion from compatible types.
 * [Custom Data Types](#custom-types) &mdash; create your own custom data types.
 * [Field Type Conversions](../concepts/conversion_table.md) &mdash; strict and lax conversion between different field types.
-
+ -->
+* [Standard Library Types](../api/standard_library_types.md) &mdash; Pythonの標準ライブラリのタイプ。
+* [Strict Types](#strict-types) &mdash; 互換性のあるタイプからの強制を防ぐことができるタイプ。
+* [Custom Data Types](#custom-types) &mdash; 独自のカスタムデータ型を作成します。
+* [Field Type Conversions](../concepts/conversion_table.md) &mdash; 異なるフィールドタイプ間の厳密および緩やかな変換を行います。
 
 ## Type conversion
 
-During validation, Pydantic can coerce data into expected types.
+<!-- During validation, Pydantic can coerce data into expected types. -->
+検証中、Pydanticはデータを期待される型に強制的に変換することができます。
 
-There are two modes of coercion: strict and lax. See [Conversion Table](../concepts/conversion_table.md) for more details on how Pydantic converts data in both strict and lax modes.
+<!-- There are two modes of coercion: strict and lax. See [Conversion Table](../concepts/conversion_table.md) for more details on how Pydantic converts data in both strict and lax modes. -->
+強制にはstrictとlaxという2つのモードがあります。strictモードとlaxモードの両方でPydanticがデータを変換する方法の詳細については、[Conversion Table](../concepts/conversion_table.md)を参照してください。
 
-See [Strict mode](../concepts/strict_mode.md) and [Strict Types](#strict-types) for details on enabling strict coercion.
-
+<!-- See [Strict mode](../concepts/strict_mode.md) and [Strict Types](#strict-types) for details on enabling strict coercion. -->
+厳密な強制を有効にする方法の詳細については、[Strict mode](../concepts/strict_mode.md)および[Strict Types](#strict-types)を参照してください。
 
 ## Strict Types
 
-Pydantic provides the following strict types:
+<!-- Pydantic provides the following strict types: -->
+Pydanticには次の厳密な型があります。
 
 - [`StrictBool`][pydantic.types.StrictBool]
 - [`StrictBytes`][pydantic.types.StrictBytes]
@@ -35,11 +45,13 @@ Pydantic provides the following strict types:
 - [`StrictInt`][pydantic.types.StrictInt]
 - [`StrictStr`][pydantic.types.StrictStr]
 
-These types will only pass validation when the validated value is of the respective type or is a subtype of that type.
+<!-- These types will only pass validation when the validated value is of the respective type or is a subtype of that type. -->
+これらの型は、検証された値がそれぞれの型であるか、またはその型のサブタイプである場合にのみ検証に合格します。
 
 ### Constrained types
 
-This behavior is also exposed via the `strict` field of the constrained types and can be combined with a multitude of complex validation rules. See the individual type signatures for supported arguments.
+<!-- This behavior is also exposed via the `strict` field of the constrained types and can be combined with a multitude of complex validation rules. See the individual type signatures for supported arguments. -->
+この動作は、制約された型の"strict"フィールドによっても公開され、多数の複雑な検証規則と組み合わせることができます。サポートされている引数については、個々の型のシグネチャを参照してください。
 
 - [`conbytes()`][pydantic.types.conbytes]
 - [`condate()`][pydantic.types.condate]
@@ -51,27 +63,35 @@ This behavior is also exposed via the `strict` field of the constrained types an
 - [`conset()`][pydantic.types.conset]
 - [`constr()`][pydantic.types.constr]
 
-The following caveats apply:
+<!-- The following caveats apply: -->
+次の注意事項が適用されます。
 
-- `StrictBytes` (and the `strict` option of `conbytes()`) will accept both `bytes`,
-   and `bytearray` types.
-- `StrictInt` (and the `strict` option of `conint()`) will not accept `bool` types,
-    even though `bool` is a subclass of `int` in Python. Other subclasses will work.
+<!--
+- `StrictBytes` (and the `strict` option of `conbytes()`) will accept both `bytes`, and `bytearray` types.
+- `StrictInt` (and the `strict` option of `conint()`) will not accept `bool` types, even though `bool` is a subclass of `int` in Python. Other subclasses will work.
 - `StrictFloat` (and the `strict` option of `confloat()`) will not accept `int`.
+-->
+- `StrictBytes`(および`conbytes()`の`strict`オプション)は`bytes`型と`bytearray`型の両方を受け付けます。
+- `StrictInt`(および`conint()`の`strict`オプション)は、`bool`がPythonの`int`のサブクラスであっても、`bool`型を受け入れません。他のサブクラスは動作します。
+- `StrictFloat`(および`confloat()`の`strict`オプション)は`int`を受け入れません。
 
-Besides the above, you can also have a [`FiniteFloat`][pydantic.types.FiniteFloat] type that will only accept finite values (i.e. not `inf`, `-inf` or `nan`).
-
+<!-- Besides the above, you can also have a [`FiniteFloat`][pydantic.types.FiniteFloat] type that will only accept finite values (i.e. not `inf`, `-inf` or `nan`). -->
+上記の他に、[`FiniteFloat`][pydantic.types.FiniteFloat]型を指定することもできます。これは有限の値のみを受け入れます(つまり`inf`、`-inf`、`nan`)。
 
 ## Custom Types
 
-You can also define your own custom data types. There are several ways to achieve it.
+<!-- You can also define your own custom data types. There are several ways to achieve it. -->
+また、独自のカスタム・データ型を定義することもできます。これを実現する方法はいくつかあります。
 
 ### Composing types via `Annotated`
 
-[PEP 593] introduced `Annotated` as a way to attach runtime metadata to types without changing how type checkers interpret them.
-Pydantic takes advantage of this to allow you to create types that are identical to the original type as far as type checkers are concerned, but add validation, serialize differently, etc.
+<!-- [PEP 593] introduced `Annotated` as a way to attach runtime metadata to types without changing how type checkers interpret them.
+Pydantic takes advantage of this to allow you to create types that are identical to the original type as far as type checkers are concerned, but add validation, serialize differently, etc. -->
+[PEP 593]では、型チェッカーが型を解釈する方法を変更せずに、実行時メタデータを型に付加する方法として`Annotated`が導入されました。
+Pydanticはこれを利用して、型チェッカーに関する限り、元の型と同じ型を作成できますが、検証を追加したり、別の方法でシリアライズしたりすることができます。
 
-For example, to create a type representing a positive int:
+<!-- For example, to create a type representing a positive int: -->
+たとえば、正のintを表す型を作成するには、次のようにします。
 
 ```py
 # or `from typing import Annotated` for Python 3.9+
@@ -96,8 +116,8 @@ except ValidationError as exc:
     """
 ```
 
-Note that you can also use constraints from [annotated-types](https://github.com/annotated-types/annotated-types)
-to make this Pydantic-agnostic:
+<!-- Note that you can also use constraints from [annotated-types](https://github.com/annotated-types/annotated-types) to make this Pydantic-agnostic: -->
+[annotated-types](https://github.com/annotated-types/annotated-types)の制約を使用して、これをPydanticに依存しないようにすることもできることに注意してください。
 
 ```py
 from annotated_types import Gt
@@ -124,8 +144,8 @@ except ValidationError as exc:
 
 #### Adding validation and serialization
 
-You can add or override validation, serialization, and JSON schemas to an arbitrary type using the markers that
-Pydantic exports:
+<!-- You can add or override validation, serialization, and JSON schemas to an arbitrary type using the markers that Pydantic exports: -->
+Pydanticがエクスポートするマーカーを使用して、任意の型に検証、シリアライゼーション、JSONスキーマを追加またはオーバーライドすることができる。
 
 ```py
 from typing_extensions import Annotated
@@ -160,7 +180,8 @@ assert ta.json_schema(mode='serialization') == {'type': 'string'}
 
 #### Generics
 
-You can use type variables within `Annotated` to make re-usable modifications to types:
+<!-- You can use type variables within `Annotated` to make re-usable modifications to types: -->
+`Annotated`内で型変数を使用して、型に再利用可能な変更を加えることができます。
 
 ```python
 from typing import Any, List, Sequence, TypeVar
@@ -215,10 +236,16 @@ except ValidationError as exc:
 
 ### Named type aliases
 
+<!--
 The above examples make use of implicit type aliases.
 This means that they will not be able to have a `title` in JSON schemas and their schema will be copied between fields.
 You can use [PEP 695]'s `TypeAliasType` via its [typing-extensions] backport to make named aliases, allowing you to define a new type without creating subclasses.
 This new type can be as simple as a name or have complex validation logic attached to it:
+ -->
+上記の例では、暗黙的な型エイリアスを使用しています。
+これは、JSONスキーマに`title`を持つことができず、スキーマがフィールド間でコピーされることを意味します。
+[PEP 695]の[typing-extensions]バックポート経由で`TypeAliasType`を使用して、名前付きエイリアスを作成できます。これにより、サブクラスを作成せずに新しい型を定義できます。
+この新しいタイプは、名前のように単純にすることも、複雑な検証ロジックを付加することもできます。
 
 ```py
 from typing import List
@@ -379,27 +406,32 @@ except ValidationError as exc:
 
 ### Customizing validation with `__get_pydantic_core_schema__` <a name="customizing_validation_with_get_pydantic_core_schema"></a>
 
-To do more extensive customization of how Pydantic handles custom classes, and in particular when you have access to the
-class or can subclass it, you can implement a special `__get_pydantic_core_schema__` to tell Pydantic how to generate the
-`pydantic-core` schema.
+<!-- To do more extensive customization of how Pydantic handles custom classes, and in particular when you have access to the class or can subclass it, you can implement a special `__get_pydantic_core_schema__` to tell Pydantic how to generate the `pydantic-core` schema. -->
+Pydanticがカスタムクラスを処理する方法をより広範にカスタマイズするために、特にクラスにアクセスできる場合やサブクラスを作成できる場合には、特別な`__get_pydantic_core_schema__`を実装して、`pydantic-core`スキーマの生成方法をPydanticに指示することができます。
 
-While `pydantic` uses `pydantic-core` internally to handle validation and serialization, it is a new API for Pydantic V2,
-thus it is one of the areas most likely to be tweaked in the future and you should try to stick to the built-in
-constructs like those provided by `annotated-types`, `pydantic.Field`, or `BeforeValidator` and so on.
+<!-- While `pydantic` uses `pydantic-core` internally to handle validation and serialization, it is a new API for Pydantic V2, thus it is one of the areas most likely to be tweaked in the future and you should try to stick to the built-in constructs like those provided by `annotated-types`, `pydantic.Field`, or `BeforeValidator` and so on. -->
+`pydantic`は内部で`pydantic-core`を使用して検証とシリアライゼーションを処理しますが、これはPydantic V2の新しいAPIであるため、将来微調整される可能性が最も高い領域の1つであり、`annotated-types`、`pydantic.Field`、`BeforeValidator`などで提供されているような組み込み構造に固執するようにしてください。
 
-You can implement `__get_pydantic_core_schema__` both on a custom type and on metadata intended to be put in `Annotated`.
-In both cases the API is middleware-like and similar to that of "wrap" validators: you get a `source_type` (which isn't
-necessarily the same as the class, in particular for generics) and a `handler` that you can call with a type to either
-call the next metadata in `Annotated` or call into Pydantic's internal schema generation.
+<!-- You can implement `__get_pydantic_core_schema__` both on a custom type and on metadata intended to be put in `Annotated`. -->
+`__get_pydantic_core_schema__`は、カスタム型と`Annotated`に入れることを意図したメタデータの両方に実装できます。
 
-The simplest no-op implementation calls the handler with the type you are given, then returns that as the result. You can
-also choose to modify the type before calling the handler, modify the core schema returned by the handler, or not call the
-handler at all.
+<!-- In both cases the API is middleware-like and similar to that of "wrap" validators: -->
+どちらの場合も、APIはミドルウェアに似ており、"ラップ"バリデータのAPIに似ています。
+
+<!-- you get a `source_type` (which isn't necessarily the same as the class, in particular for generics) and a `handler` that you can call with a type to either call the next metadata in `Annotated` or call into Pydantic's internal schema generation. -->
+`source_type`(特にジェネリックスの場合、クラスと同じである必要はありません)と`handler`を取得します。これらを型で呼び出すことで、`Annotated`内の次のメタデータを呼び出すか、Pydanticの内部スキーマ生成に呼び出すことができます。
+
+<!-- The simplest no-op implementation calls the handler with the type you are given, then returns that as the result. You can also choose to modify the type before calling the handler, modify the core schema returned by the handler, or not call the handler at all. -->
+最も単純なno-op実装は、指定された型でハンドラを呼び出し、それを結果として返します。また、ハンドラを呼び出す前に型を変更したり、ハンドラによって返されるコアスキーマを変更したり、ハンドラをまったく呼び出さないようにすることもできます。
 
 #### As a method on a custom type
 
+<!--
 The following is an example of a type that uses `__get_pydantic_core_schema__` to customize how it gets validated.
 This is equivalent to implementing `__get_validators__` in Pydantic V1.
+-->
+以下は、検証方法をカスタマイズするために`__get_pydantic_core_schema__`を使用する型の例です。
+これはPydantic V1で`__get_validators__`を実装するのと同じです。
 
 ```py
 from typing import Any
@@ -423,13 +455,19 @@ assert isinstance(res, Username)
 assert res == 'abc'
 ```
 
-See [JSON Schema](../concepts/json_schema.md) for more details on how to customize JSON schemas for custom types.
+<!-- See [JSON Schema](../concepts/json_schema.md) for more details on how to customize JSON schemas for custom types. -->
+カスタム型用にJSONスキーマをカスタマイズする方法の詳細については、[JSON Schema](../concepts/json_schema.md)を参照してください。
 
 #### As an annotation
 
-Often you'll want to parametrize your custom type by more than just generic type parameters (which you can do via the type system and will be discussed later). Or you may not actually care (or want to) make an instance of your subclass; you actually want the original type, just with some extra validation done.
+<!-- Often you'll want to parametrize your custom type by more than just generic type parameters (which you can do via the type system and will be discussed later). -->
+一般的な型パラメーター(型システムを介して行うことができ、後で説明します)だけではなく、カスタム型をパラメーター化することがよくあります。
 
-For example, if you were to implement `pydantic.AfterValidator` (see [Adding validation and serialization](#adding-validation-and-serialization)) yourself, you'd do something similar to the following:
+<!-- Or you may not actually care (or want to) make an instance of your subclass; you actually want the original type, just with some extra validation done. -->
+あるいは、実際にはサブクラスのインスタンスを作成する必要がない(または作成したい)場合もあります。実際には、追加の検証を行うだけで、元の型が必要になります。
+
+<!-- For example, if you were to implement `pydantic.AfterValidator` (see [Adding validation and serialization](#adding-validation-and-serialization)) yourself, you'd do something similar to the following: -->
+たとえば、`pydantic.AfterValidator`([Adding validation and serialization](#adding-validation-and-serialization)を参照)を自分で実装する場合は、次のようなことを行います。
 
 ```py
 from dataclasses import dataclass
@@ -463,12 +501,15 @@ class Model(BaseModel):
 assert Model(name='ABC').name == 'abc'  # (2)!
 ```
 
-1. The `frozen=True` specification makes `MyAfterValidator` hashable. Without this, a union such as `Username | None` will raise an error.
-2. Notice that type checkers will not complain about assigning `'ABC'` to `Username` like they did in the previous example because they do not consider `Username` to be a distinct type from `str`.
+<!-- 1. The `frozen=True` specification makes `MyAfterValidator` hashable. Without this, a union such as `Username | None` will raise an error. -->
+1. `frozen=True`の指定は`MyAfterValidator`をハッシュ可能にします。これがないと、`Username None`のような共用体でエラーが発生します。
+<!-- 2. Notice that type checkers will not complain about assigning `'ABC'` to `Username` like they did in the previous example because they do not consider `Username` to be a distinct type from `str`. -->
+2. 型チェッカーは、前の例のように`Username`に`'ABC'`を割り当てることについて文句を言わないことに注意してください。なぜなら、彼らは`Username`を`str`とは別の型と見なしていないからです。
 
 #### Handling third-party types
 
-Another use case for the pattern in the previous section is to handle third party types.
+<!-- Another use case for the pattern in the previous section is to handle third party types. -->
+前のセクションのパターンのもう1つの使用例は、サード・パーティーのタイプを処理することです。
 
 ```py
 from typing import Any
@@ -599,15 +640,18 @@ assert Model.model_json_schema() == {
 }
 ```
 
-You can use this approach to e.g. define behavior for Pandas or Numpy types.
+<!-- You can use this approach to e.g. define behavior for Pandas or Numpy types. -->
+このアプローチを使用して、たとえばPandasまたはNumpyタイプの動作を定義できます。
 
 #### Using `GetPydanticSchema` to reduce boilerplate
 
 ??? api "API Documentation"
     [`pydantic.types.GetPydanticSchema`][pydantic.types.GetPydanticSchema]<br>
 
-You may notice that the above examples where we create a marker class require a good amount of boilerplate.
-For many simple cases you can greatly minimize this by using `pydantic.GetPydanticSchema`:
+<!-- You may notice that the above examples where we create a marker class require a good amount of boilerplate.
+For many simple cases you can greatly minimize this by using `pydantic.GetPydanticSchema`: -->
+マーカー・クラスを作成する上記の例では、かなりの量の定型文が必要であることにお気付きかもしれません。
+多くの単純なケースでは、`pydantic.GetPydanticSchema`を使用することで、これを大幅に減らすことができます。
 
 ```py
 from pydantic_core import core_schema
@@ -632,32 +676,36 @@ assert Model(y='ab').y == 'abab'
 
 #### Summary
 
-Let's recap:
+<!-- Let's recap: -->
+まとめましょう。
 
-1. Pydantic provides high level hooks to customize types via `Annotated` like `AfterValidator` and `Field`. Use these when possible.
-2. Under the hood these use `pydantic-core` to customize validation, and you can hook into that directly using `GetPydanticSchema` or a marker class with `__get_pydantic_core_schema__`.
-3. If you really want a custom type you can implement `__get_pydantic_core_schema__` on the type itself.
+<!-- 1. Pydantic provides high level hooks to customize types via `Annotated` like `AfterValidator` and `Field`. Use these when possible. -->
+1. Pydanticは、`AfterValidator`や`Field`のような`Annotated`を介して型をカスタマイズするための高レベルのフックを提供しています。可能であればこれらを使用してください。
+<!-- 2. Under the hood these use `pydantic-core` to customize validation, and you can hook into that directly using `GetPydanticSchema` or a marker class with `__get_pydantic_core_schema__`. -->
+2. 内部では`pydantic-core`を使用して検証をカスタマイズし、`GetPydanticSchema`または`__get_pydantic_core_schema__`を使用してマーカークラスを直接フックすることができます。
+<!-- 3. If you really want a custom type you can implement `__get_pydantic_core_schema__` on the type itself. -->
+3. 本当にカスタム型が必要な場合は、型自体に`__get_pydantic_core_schema__`を実装することができます。
 
 ### Handling custom generic classes
 
 !!! warning
-    This is an advanced technique that you might not need in the beginning. In most of
-    the cases you will probably be fine with standard Pydantic models.
+    <!-- This is an advanced technique that you might not need in the beginning. In most of the cases you will probably be fine with standard Pydantic models. -->
+    これは、最初は必要のない高度なテクニックです。ほとんどの場合、標準のPydanticモデルで問題ありません。
 
-You can use
-[Generic Classes](https://docs.python.org/3/library/typing.html#typing.Generic) as
-field types and perform custom validation based on the "type parameters" (or sub-types)
-with `__get_pydantic_core_schema__`.
+<!-- You can use [Generic Classes](https://docs.python.org/3/library/typing.html#typing.Generic) as field types and perform custom validation based on the "type parameters" (or sub-types) with `__get_pydantic_core_schema__`. -->
+[Generic Classes](https://docs.python.org/3/library/typing.html#typing.Generic)をフィールド型として使用し、`__get_pydantic_core_schema__`で"型パラメータ"(またはサブ型)に基づいてカスタム検証を実行できます。
 
-If the Generic class that you are using as a sub-type has a classmethod
-`__get_pydantic_core_schema__`, you don't need to use
-[`arbitrary_types_allowed`][pydantic.config.ConfigDict.arbitrary_types_allowed] for it to work.
+If the Generic class that you are using as a sub-type has a classmethod `__get_pydantic_core_schema__`, you don't need to use [`arbitrary_types_allowed`][pydantic.config.ConfigDict.arbitrary_types_allowed] for it to work.
+サブタイプとして使用しているGenericクラスに`__get_pydantic_core_schema__`クラスメソッドがある場合、それが動作するために[`arbitrary_types_allowed`][pydantic.config.ConfigDict.arbitrary_types_allowed]を使用する必要はありません。
 
-Because the `source_type` parameter is not the same as the `cls` parameter, you can use `typing.get_args` (or `typing_extensions.get_args`) to extract the generic parameters.
-Then you can use the `handler` to generate a schema for them by calling `handler.generate_schema`.
-Note that we do not do something like `handler(get_args(source_type)[0])` because we want to generate an unrelated
-schema for that generic parameter, not one that is influenced by the current context of `Annotated` metadata and such.
-This is less important for custom types, but crucial for annotated metadata that modifies schema building.
+<!-- Because the `source_type` parameter is not the same as the `cls` parameter, you can use `typing.get_args` (or `typing_extensions.get_args`) to extract the generic parameters. -->
+`source_type`パラメータは`cls`パラメータと同じではないので、`typing.get_args`(または`typing_extensions.get_args`)を使用して汎用パラメータを抽出できます。
+<!-- Then you can use the `handler` to generate a schema for them by calling `handler.generate_schema`. -->
+次に、`handler.generate_schema`を呼び出して、`handler`を使用してスキーマを生成します。
+<!-- Note that we do not do something like `handler(get_args(source_type)[0])` because we want to generate an unrelated schema for that generic parameter, not one that is influenced by the current context of `Annotated` metadata and such. -->
+`handler(get_args(source_type)[0])`のようなことはしないことに注意してください。なぜなら、"注釈付き"メタデータなどの現在のコンテキストに影響されるものではなく、その汎用パラメータに対して無関係なスキーマを生成したいからです。
+<!-- This is less important for custom types, but crucial for annotated metadata that modifies schema building. -->
+これは、カスタム・タイプではそれほど重要ではありませんが、スキーマ構築を変更する注釈付きメタデータでは重要です。
 
 ```py
 from dataclasses import dataclass
@@ -804,7 +852,8 @@ except ValidationError as e:
 
 #### Generic containers
 
-The same idea can be applied to create generic container types, like a custom `Sequence` type:
+<!-- The same idea can be applied to create generic container types, like a custom `Sequence` type: -->
+同じ考え方を適用して、カスタムの`Sequence`型のような汎用コンテナ型を作成することもできます。
 
 ```python
 from typing import Any, Sequence, TypeVar
@@ -881,10 +930,11 @@ except ValidationError as exc:
 ### Access to field name
 
 !!!note
-    This was not possible with Pydantic V2 to V2.3, it was [re-added](https://github.com/pydantic/pydantic/pull/7542) in Pydantic V2.4.
+    <!-- This was not possible with Pydantic V2 to V2.3, it was [re-added](https://github.com/pydantic/pydantic/pull/7542) in Pydantic V2.4. -->
+    これはPydantic V2からV2.3では不可能でしたが、Pydantic V2.4で[再追加]されました。(https://github.com/pydantic/pydantic/pull/7542)
 
-As of Pydantic V2.4, you can access the field name via the `handler.field_name` within `__get_pydantic_core_schema__`
-and thereby set the field name which will be available from `info.field_name`.
+<!-- As of Pydantic V2.4, you can access the field name via the `handler.field_name` within `__get_pydantic_core_schema__` and thereby set the field name which will be available from `info.field_name`. -->
+Pydantic V2.4では、`__get_pydantic_core_schema__`内の`handler.field_name`を介してフィールド名にアクセスし、`info.field_name`から利用可能なフィールド名を設定することができます。
 
 ```python
 from typing import Any
@@ -926,7 +976,8 @@ print(m.my_field)
 #> CustomType<1 'my_field'>
 ```
 
-You can also access `field_name` from the markers used with `Annotated`, like [`AfterValidator`][pydantic.functional_validators.AfterValidator].
+<!-- You can also access `field_name` from the markers used with `Annotated`, like [`AfterValidator`][pydantic.functional_validators.AfterValidator]. -->
+[`AfterValidator`][pydantic.functional_validators.AfterValidator]のように、`Annotated`で使用されるマーカーから`field_name`にアクセスすることもできます。
 
 ```python
 from typing_extensions import Annotated

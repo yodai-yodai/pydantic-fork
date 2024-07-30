@@ -32,8 +32,7 @@ Pydanticは、[conda-forge](https://conda-forge.org)の下の[conda](https://www
 conda install pydantic -c conda-forge
 ```
 
-<!-- ## Optional dependencies -->
-## オプションの依存関係
+## Optional dependencies
 
 <!-- Pydantic has the following optional dependencies: -->
 Pydanticには、次のオプションの依存関係があります。
@@ -51,8 +50,7 @@ pip install pydantic[email]
 <!-- Of course, you can also install requirements manually with `pip install email-validator`. -->
 もちろん、`pip install email-validator`を使って手動で必要な依存関係をインストールすることもできます。
 
-<!-- ## Install from repository -->
-## リポジトリからのインストール
+## Install from repository
 
 <!-- And if you prefer to install Pydantic directly from the repository: -->
 また、リポジトリから直接Pydanticをインストールしたい場合は、次のようにします。
