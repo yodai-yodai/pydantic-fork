@@ -427,7 +427,7 @@ except ValidationError as e:
 
 !!! note
     <!-- Using the [[`typing.Annotated`][] fields syntax](../concepts/types.md#composing-types-via-annotated) can be handy to regroup the `Union` and `discriminator` information. See the next example for more details. -->
-    [[`typing.Annotated`][]fields syntax](./concepts/types.md#composing-types-via-annotated)を使用すると、`Union`および`discriminator`情報を簡単に再グループ化できます。詳細については、次の例を参照してください。
+    [[`typing.Annotated`][]fields syntax](../concepts/types.md#composing-types-via-annotated)を使用すると、`Union`および`discriminator`情報を簡単に再グループ化できます。詳細については、次の例を参照してください。
 
     <!-- There are a few ways to set a discriminator for a field, all varying slightly in syntax. -->
     フィールドに識別子を設定する方法はいくつかありますが、構文はわずかに異なります。

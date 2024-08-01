@@ -1,4 +1,7 @@
-Postponed annotations (as described in [PEP563](https://www.python.org/dev/peps/pep-0563/)) "just work".
+{% include-markdown "../warning.md" %}
+
+<!-- Postponed annotations (as described in [PEP563](https://www.python.org/dev/peps/pep-0563/)) "just work". -->
+遅延アノテーション([PEP563](https://www.python.org/dev/peps/pep-0563/)に記述されているように)は"機能します"。
 
 ```py requires="3.9"
 from __future__ import annotations
@@ -17,10 +20,11 @@ print(Model(a=('1', 2, 3), b='ok'))
 #> a=[1, 2, 3] b='ok'
 ```
 
-Internally, Pydantic will call a method similar to `typing.get_type_hints` to resolve annotations.
+<!-- Internally, Pydantic will call a method similar to `typing.get_type_hints` to resolve annotations. -->
+内部的には、Pydanticは`typing.get_type_hints`に似たメソッドを呼び出してアノテーションを解決します。
 
-Even without using `from __future__ import annotations`, in cases where the referenced type is not yet defined, a
-`ForwardRef` or string can be used:
+<!-- Even without using `from __future__ import annotations`, in cases where the referenced type is not yet defined, a `ForwardRef` or string can be used: -->
+`from__future__import annotations`を使用しなくても、参照される型がまだ定義されていない場合は、`ForwardRef`または文字列を使用できます。
 
 ```py
 from typing import ForwardRef
@@ -43,10 +47,11 @@ print(Foo(b={'a': '321'}))
 
 ## Self-referencing (or "Recursive") Models
 
-Models with self-referencing fields are also supported. Self-referencing fields will be automatically
-resolved after model creation.
+<!-- Models with self-referencing fields are also supported. Self-referencing fields will be automatically resolved after model creation. -->
+自己参照フィールドを持つモデルもサポートされています。自己参照フィールドは、モデルの作成後に自動的に解決されます。
 
-Within the model, you can refer to the not-yet-constructed model using a string:
+<!-- Within the model, you can refer to the not-yet-constructed model using a string: -->
+モデル内では、次の文字列を使用して、まだ構築されていないモデルを参照できます。
 
 ```py
 from pydantic import BaseModel
@@ -64,7 +69,8 @@ print(Foo(sibling={'a': '321'}))
 #> a=123 sibling=Foo(a=321, sibling=None)
 ```
 
-If you use `from __future__ import annotations`, you can also just refer to the model by its type name:
+<!-- If you use `from __future__ import annotations`, you can also just refer to the model by its type name: -->
+`from__future__import annotations`を使用する場合は、単に型名でモデルを参照することもできます。
 
 ```py
 from __future__ import annotations
@@ -86,12 +92,11 @@ print(Foo(sibling={'a': '321'}))
 
 ### Cyclic references
 
-When working with self-referencing recursive models, it is possible that you might encounter cyclic references
-in validation inputs. For example, this can happen when validating ORM instances with back-references from
-attributes.
+<!-- When working with self-referencing recursive models, it is possible that you might encounter cyclic references in validation inputs. For example, this can happen when validating ORM instances with back-references from attributes. -->
+自己参照再帰モデルを使用する場合、検証入力で循環参照が発生する可能性があります。たとえば、属性からの後方参照を使用してORMインスタンスを検証する場合に発生します。
 
-Rather than raising a Python `RecursionError` while attempting to validate data with cyclic references, Pydantic is able
-to detect the cyclic reference and raise an appropriate `ValidationError`:
+<!-- Rather than raising a Python `RecursionError` while attempting to validate data with cyclic references, Pydantic is able to detect the cyclic reference and raise an appropriate `ValidationError`: -->
+巡回参照を使用してデータを検証しようとするときにPythonの`RecursiveError`を発生させるのではなく、Pydanticは巡回参照を検出して適切な`ValidationError`を発生させることができます。
 
 ```py
 from typing import Optional
@@ -123,8 +128,8 @@ except ValidationError as exc:
     """
 ```
 
-Because this error is raised without actually exceeding the maximum recursion depth, you can catch and
-handle the raised `ValidationError` without needing to worry about the limited remaining recursion depth:
+<!-- Because this error is raised without actually exceeding the maximum recursion depth, you can catch and handle the raised `ValidationError` without needing to worry about the limited remaining recursion depth: -->
+このエラーは実際には再帰の深さの最大値を超えずに発生するので、再帰の深さの制限を気にすることなく、発生した`ValidationError`をキャッチして処理することができます。
 
 ```python
 from contextlib import contextmanager
@@ -179,8 +184,8 @@ print(Node.model_validate(node_data))
 #> id=1 children=[Node(id=2, children=[Node(id=3, children=[])])]
 ```
 
-Similarly, if Pydantic encounters a recursive reference during _serialization_, rather than waiting for the maximum
-recursion depth to be exceeded, a `ValueError` is raised immediately:
+<!-- Similarly, if Pydantic encounters a recursive reference during _serialization_, rather than waiting for the maximum recursion depth to be exceeded, a `ValueError` is raised immediately: -->
+同様に、Pydanticが_serialization_中に再帰参照を検出した場合、最大再帰深度を超えるのを待つのではなく、すぐに`ValueError`が発生します。
 
 ```py
 from pydantic import TypeAdapter
@@ -199,7 +204,8 @@ except ValueError as exc:
     """
 ```
 
-This can also be handled if desired:
+<!-- This can also be handled if desired: -->
+これは必要に応じて処理することもできます。
 
 ```py
 from dataclasses import field

@@ -1,14 +1,16 @@
+{% include-markdown "../warning.md" %}
+
 ??? api "API Documentation"
     [`pydantic.validate_call_decorator.validate_call`][pydantic.validate_call_decorator.validate_call]<br>
 
-The [`@validate_call`][pydantic.validate_call] decorator allows the arguments passed to a function to be parsed
-and validated using the function's annotations before the function is called.
+<!-- The [`@validate_call`][pydantic.validate_call] decorator allows the arguments passed to a function to be parsed and validated using the function's annotations before the function is called. -->
+[`@validate_call`][pydantic.validate_call]デコレータを使用すると、関数が呼び出される前に、関数に渡された引数を解析し、関数の注釈を使用して検証することができます。
 
-While under the hood this uses the same approach of model creation and initialisation
-(see [Validators](validators.md) for more details), it provides an extremely easy way to apply validation
-to your code with minimal boilerplate.
+<!-- While under the hood this uses the same approach of model creation and initialisation (see [Validators](validators.md) for more details), it provides an extremely easy way to apply validation to your code with minimal boilerplate. -->
+内部的には、これはモデルの作成と初期化と同じアプローチを使用しますが(詳細については[Validators](validators.md)を参照)、最小限の定型文でコードに検証を適用する非常に簡単な方法を提供します。
 
-Example of usage:
+<!-- Example of usage: -->
+使用例:
 
 ```py
 from pydantic import ValidationError, validate_call
@@ -41,10 +43,10 @@ except ValidationError as exc:
 
 ## Argument types
 
-Argument types are inferred from type annotations on the function, arguments without a type decorator are considered
-as `Any`. All types listed in [types](../concepts/types.md) can be validated, including Pydantic models and
-[custom types](../concepts/types.md#custom-types).
-As with the rest of Pydantic, types can be coerced by the decorator before they're passed to the actual function:
+<!-- Argument types are inferred from type annotations on the function, arguments without a type decorator are considered as `Any`. All types listed in [types](../concepts/types.md) can be validated, including Pydantic models and [custom types](../concepts/types.md#custom-types).
+As with the rest of Pydantic, types can be coerced by the decorator before they're passed to the actual function: -->
+引数の型は関数の型アノテーションから推測され、型デコレータのない引数は`Any`と見なされます。[types](../concepts/types.md)にリストされているすべての型は、Pydanticモデルや[custom types](../concepts/types.md#custom-types)を含めて検証できます。
+Pydanticの他の部分と同様に、型は実際の関数に渡される前にデコレータによって強制することができます。
 
 ```py test="no-print-intercept"
 # TODO replace find_file with something that isn't affected the filesystem
@@ -71,28 +73,37 @@ print(find_file(this_dir, '^validation.*'))
 print(find_file(this_dir, '^foobar.*', max=3))
 ```
 
-A few notes:
+<!-- A few notes: -->
+いくつかの注意点:
 
-- Though they're passed as strings, `path` and `regex` are converted to a `Path` object and regex respectively
-    by the decorator.
-- `max` has no type annotation, so will be considered as `Any` by the decorator.
+<!-- - Though they're passed as strings, `path` and `regex` are converted to a `Path` object and regex respectively by the decorator.
+- `max` has no type annotation, so will be considered as `Any` by the decorator. -->
+- `path`と`regex`は文字列として渡されますが、デコレータによってそれぞれ`Path`オブジェクトとregexに変換されます。
+- `max`は型アノテーションを持たないので、デコレータによって`Any`と見なされます。
 
-Type coercion like this can be extremely helpful, but also confusing or not desired.
-See [Coercion and strictness](#coercion-and-strictness) for a discussion of `@validate_call`'s limitations
-in this regard.
+<!-- Type coercion like this can be extremely helpful, but also confusing or not desired.
+See [Coercion and strictness](#coercion-and-strictness) for a discussion of `@validate_call`'s limitations in this regard. -->
+このような型強制は非常に役立ちますが、混乱を招くこともあれば、望まれないこともあります。
+この点に関する`@validate_call`の制限については、[Enforcement and strictness](#enforcement-and-strictness)を参照してください。
 
 ## Function signatures
 
-The `@validate_call` decorator is designed to work with functions using all possible parameter configurations and
-all possible combinations of these:
+<!-- The `@validate_call` decorator is designed to work with functions using all possible parameter configurations and all possible combinations of these: -->
+`@validate_call`デコレータは、可能なすべてのパラメータ設定と、これらの可能なすべての組み合わせを使用して関数を操作するように設計されています。
 
-* Positional or keyword arguments with or without defaults.
+<!-- * Positional or keyword arguments with or without defaults.
 * Variable positional arguments defined via `*` (often `*args`).
 * Variable keyword arguments defined via `**` (often `**kwargs`).
 * Keyword-only arguments: arguments after `*,`.
-* Positional-only arguments: arguments before `, /` (new in Python 3.8).
+* Positional-only arguments: arguments before `, /` (new in Python 3.8). -->
+* 位置引数またはキーワード引数(デフォルトありまたはなし)。
+* `*`で定義される可変位置引数(多くの場合`*args`)。
+* `**`で定義される可変キーワード引数(多くの場合`**kwargs`)。
+* キーワードのみの引数:`*,`の後の引数。
+* 位置のみの引数:`、/`の前の引数(Python 3.8の新機能)。
 
-To demonstrate all the above parameter types:
+<!-- To demonstrate all the above parameter types: -->
+上記のすべてのパラメータタイプを表示するには、次の手順に従います。
 
 ```py requires="3.8"
 from pydantic import validate_call
@@ -180,10 +191,10 @@ print(armageddon(1, 2, 3, 4, 5, 6, d=8, e=9, f=10, spam=11))
 
 ## Using Field to describe function arguments
 
-[Field](json_schema.md#field-level-customization) can also be used with `@validate_call` to provide extra information about
-the field and validations. In general it should be used in a type hint with
-[Annotated](types.md#composing-types-via-annotated), unless `default_factory` is specified, in which case it should be
-used as the default value of the field:
+<!-- [Field](json_schema.md#field-level-customization) can also be used with `@validate_call` to provide extra information about the field and validations. In general it should be used in a type hint with
+[Annotated](types.md#composing-types-via-annotated), unless `default_factory` is specified, in which case it should be used as the default value of the field: -->
+[Field](json_schema.md#field-level-customization)を`@validate_call`とともに使用して、フィールドと検証に関する追加情報を提供することもできます。一般的には、次のような型ヒントで使用する必要があります。
+[Annotated](types.md#composing-types-via-annotated)。ただし、`default_factory`が指定されている場合は、フィールドのデフォルト値として使用されます。
 
 ```py
 from datetime import datetime
@@ -218,7 +229,8 @@ print(type(when()))
 #> <class 'datetime.datetime'>
 ```
 
-The [`alias`](fields.md#field-aliases) can be used with the decorator as normal.
+<!-- The [`alias`](fields.md#field-aliases) can be used with the decorator as normal. -->
+[`alias`](fields.md#field-aliases)はデコレータとともに通常通り使用できます。
 
 ```py
 from typing_extensions import Annotated
@@ -237,15 +249,15 @@ how_many(number=42)
 
 ## Usage with mypy
 
-The `validate_call` decorator should work "out of the box" with [mypy](http://mypy-lang.org/) since it's
-defined to return a function with the same signature as the function it decorates. The only limitation is that
-since we trick mypy into thinking the function returned by the decorator is the same as the function being
-decorated; access to the [raw function](#raw-function) or other attributes will require `type: ignore`.
+<!-- The `validate_call` decorator should work "out of the box" with [mypy](http://mypy-lang.org/) since it's defined to return a function with the same signature as the function it decorates.
+The only limitation is that since we trick mypy into thinking the function returned by the decorator is the same as the function being decorated; access to the [raw function](#raw-function) or other attributes will require `type: ignore`. -->
+`validate_call`デコレータは、修飾する関数と同じシグネチャを持つ関数を返すように定義されているので、[mypy](http://mypy-lang.org/)で"そのまま"動作するはずです。
+唯一の制限は、デコレータによって返される関数がデコレートされる関数と同じであるとmypyに思わせるため、[raw function](#raw-function)やその他の属性にアクセスするには`type:ignore`が必要になるということです。
 
 ## Raw function
 
-The raw function which was decorated is accessible, this is useful if in some scenarios you trust your input
-arguments and want to call the function in the most performant way (see [notes on performance](#performance) below):
+<!-- The raw function which was decorated is accessible, this is useful if in some scenarios you trust your input arguments and want to call the function in the most performant way (see [notes on performance](#performance) below): -->
+デコレートされた生の関数はアクセス可能です。これは、入力引数を信頼し、最もパフォーマンスの高い方法で関数を呼び出したい場合に便利です(下記の[notes on performance](#performance)を参照)。
 
 ```py
 from pydantic import validate_call
@@ -321,11 +333,11 @@ asyncio.run(main())
 
 ## Custom config
 
-The model behind `@validate_call` can be customised using a `config` setting, which is equivalent to
-setting the [`ConfigDict`][pydantic.config.ConfigDict] sub-class in normal models.
+<!-- The model behind `@validate_call` can be customised using a `config` setting, which is equivalent to setting the [`ConfigDict`][pydantic.config.ConfigDict] sub-class in normal models. -->
+`@validate_call`の背後にあるモデルは、`config`設定を使用してカスタマイズできます。これは、通常のモデルで[`ConfigDict`][pydantic.config.ConfigDict]サブクラスを設定するのと同じです。
 
-Configuration is set using the `config` keyword argument to the decorator, it may be either a config class
-or a dict of properties which are converted to a class later.
+<!-- Configuration is set using the `config` keyword argument to the decorator, it may be either a config class or a dict of properties which are converted to a class later. -->
+設定はデコレータへの`config`キーワード引数を使用して設定されます。これは設定クラスか、後でクラスに変換されるプロパティのdictのいずれかです。
 
 ```py
 from pydantic import ValidationError, validate_call
@@ -366,10 +378,13 @@ except ValidationError as e:
 
 ## Extension — validating arguments before calling a function
 
-In some cases, it may be helpful to separate validation of a function's arguments from the function call itself.
-This might be useful when a particular function is costly / time consuming.
+<!-- In some cases, it may be helpful to separate validation of a function's arguments from the function call itself.
+This might be useful when a particular function is costly / time consuming. -->
+場合によっては、関数の引数の検証を関数呼び出し自体から分離すると便利なことがあります。
+これは、特定の機能にコストや時間がかかる場合に便利です。
 
-Here's an example of a workaround you can use for that pattern:
+<!-- Here's an example of a workaround you can use for that pattern: -->
+このパターンに使用できる回避策の例を次に示します。
 
 ```py
 from pydantic import validate_call
@@ -392,31 +407,33 @@ print(foo())
 
 ### Validation exception
 
-Currently upon validation failure, a standard Pydantic [`ValidationError`][pydantic_core.ValidationError] is raised.
-See [model error handling](models.md#error-handling) for details.
+<!-- Currently upon validation failure, a standard Pydantic [`ValidationError`][pydantic_core.ValidationError] is raised.
+See [model error handling](models.md#error-handling) for details. -->
+現在、検証が失敗すると、標準のPydantic[`ValidationError`][pydantic_core.ValidationError]が発生します。
+詳細については、[model error handling](models.md#error-handling)を参照してください。
 
-This is helpful since its `str()` method provides useful details of the error which occurred and methods like
-`.errors()` and `.json()` can be useful when exposing the errors to end users. However, `ValidationError` inherits
-from `ValueError` **not** `TypeError`, which may be unexpected since Python would raise a `TypeError` upon invalid
-or missing arguments. This may be addressed in future by either allowing a custom error or raising a different
-exception by default, or both.
+<!-- This is helpful since its `str()` method provides useful details of the error which occurred and methods like `.errors()` and `.json()` can be useful when exposing the errors to end users.
+However, `ValidationError` inherits from `ValueError` **not** `TypeError`, which may be unexpected since Python would raise a `TypeError` upon invalid or missing arguments.
+This may be addressed in future by either allowing a custom error or raising a different exception by default, or both. -->
+これは、その`str()`メソッドが発生したエラーの有用な詳細を提供し、`.errors()`や`.json()`のようなメソッドがエンドユーザにエラーを公開する際に有用であるため、有用です。
+ただし、`ValidationError`は`TypeError`**ではなく**`ValueError`**から継承します。これは、Pythonが引数が無効または欠落している場合に`TypeError`を呼び出すため、予期しないことがあります。
+これは、カスタムエラーを許可するか、デフォルトで別の例外を発生させるか、またはその両方によって、将来対処される可能性があります。
 
 ### Coercion and strictness
 
-Pydantic currently leans on the side of trying to coerce types rather than raise an error if a type is wrong,
-see [model data conversion](models.md#data-conversion) and `@validate_call` is no different.
+<!-- Pydantic currently leans on the side of trying to coerce types rather than raise an error if a type is wrong, see [model data conversion](models.md#data-conversion) and `@validate_call` is no different. -->
+Pydanticは現在、型が間違っている場合にエラーを発生させるのではなく、型を強制しようとする側に傾いています。[model data conversion](models.md#data-conversion)を参照してください。`@validate_call`も同じです。
 
 ### Performance
 
-We've made a big effort to make Pydantic as performant as possible
-and argument inspect and model creation is only performed once when the function is defined, however
-there will still be a performance impact to using the `@validate_call` decorator compared to
-calling the raw function.
+<!-- We've made a big effort to make Pydantic as performant as possible and argument inspect and model creation is only performed once when the function is defined, however there will still be a performance impact to using the `@validate_call` decorator compared to calling the raw function. -->
+私たちはPydanticを可能な限りパフォーマンスの高いものにするために多大な努力をし、引数の検査とモデルの作成は関数が定義されたときに一度だけ実行されますが、生の関数を呼び出す場合と比較して、`@validate_call`デコレータを使用するとパフォーマンスに影響があります。
 
-In many situations this will have little or no noticeable effect, however be aware that
-`@validate_call` is not an equivalent or alternative to function definitions in strongly typed languages;
-it never will be.
+<!-- In many situations this will have little or no noticeable effect, however be aware that `@validate_call` is not an equivalent or alternative to function definitions in strongly typed languages; -->
+<!-- it never will be. -->
+多くの場合、これはほとんど、あるいはまったく効果がありませんが、`@validate_call`は、強く型付けされた言語での関数定義と同等、あるいはそれに代わるものではないことに注意してください。
 
 ### Return value
 
-The return value of the function may optionally be validated against its return type annotation.
+<!-- The return value of the function may optionally be validated against its return type annotation. -->
+関数の戻り値は、その戻り値の型アノテーションに対して検証することもできます。
