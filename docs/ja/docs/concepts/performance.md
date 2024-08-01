@@ -1,6 +1,6 @@
-{% include-markdown "../warning.md" %}
-
 # Performance tips
+
+{% include-markdown "../warning.md" %}
 
 <!-- In most cases Pydantic won't be your bottle neck, only follow this if you're sure it's necessary. -->
 ほとんどの場合、Pydanticはボトルネックにはならないので、それが必要だと確信している場合にのみ利用してください。

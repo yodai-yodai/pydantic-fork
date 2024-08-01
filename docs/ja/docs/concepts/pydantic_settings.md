@@ -1,11 +1,11 @@
-{% include-markdown "../warning.md" %}
-
 ---
 <!-- description: Support for loading a settings or config class from environment variables or secrets files. -->
 description: 環境変数またはシークレットファイルから設定クラスまたは構成クラスをロードするためのサポートです。
 ---
 
 # Settings Management
+
+{% include-markdown "../warning.md" %}
 
 <!-- [Pydantic Settings](https://github.com/pydantic/pydantic-settings) provides optional Pydantic features for loading a settings or config class from environment variables or secrets files. -->
 [Pydantic Settings](https://github.com/pydantic/pydantic-settings)は、環境変数やシークレットファイルから設定や構成クラスをロードするためのオプションのPydantic機能を提供します。

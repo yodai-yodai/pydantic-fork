@@ -1,6 +1,6 @@
-{% include-markdown "../warning.md" %}
-
 # Experimental Features
+
+{% include-markdown "../warning.md" %}
 
 <!-- In this section you will find documentation for new, experimental features in Pydantic. These features are subject to change or removal, and we are looking for feedback and suggestions before making them a permanent part of Pydantic. -->
 このセクションには、Pydanticの新しい実験的な機能に関するドキュメントがあります。これらの機能は変更または削除される可能性があり、Pydanticの恒久的な一部にする前にフィードバックと提案を求めています。

@@ -3,6 +3,8 @@
 !!! warning "🚧 Work in Progress"
     This page is a work in progress.
 
+    このページは、翻訳時点(2024/08)では本家では作成途中です。
+
 ## Serialize `SecretStr` and `SecretBytes` as plain-text
 
 <!-- By default, [`SecretStr`][pydantic.types.SecretStr] and [`SecretBytes`][pydantic.types.SecretBytes] will be serialized as `**********` when serializing to json. -->

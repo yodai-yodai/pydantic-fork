@@ -1,7 +1,9 @@
+# JSON
+
 !!! warning "🚧 Work in Progress"
     This page is a work in progress.
 
-# JSON
+    このページは、翻訳時点(2024/08)では本家では作成途中です。
 
 {% include-markdown "../warning.md" %}
 

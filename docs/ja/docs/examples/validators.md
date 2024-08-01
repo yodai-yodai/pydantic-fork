@@ -2,7 +2,8 @@
 
 !!! warning "🚧 Work in Progress"
     This page is a work in progress.
-    このページは、翻訳時点(2024/08)でも本家では作成途中でした。
+
+    このページは、翻訳時点(2024/08)では本家では作成途中です。
 
 <!-- This page provides example snippets for creating more complex, custom validators in Pydantic. -->
 このページでは、Pydanticでより複雑なカスタムバリデータを作成するためのサンプルスニペットを紹介します。
