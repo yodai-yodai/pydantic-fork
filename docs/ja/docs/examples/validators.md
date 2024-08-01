@@ -1,16 +1,22 @@
+{% include-markdown "../warning.md" %}
+
 !!! warning "🚧 Work in Progress"
     This page is a work in progress.
+    このページは、翻訳時点(2024/08)でも本家では作成途中でした。
 
-This page provides example snippets for creating more complex, custom validators in Pydantic.
+<!-- This page provides example snippets for creating more complex, custom validators in Pydantic. -->
+このページでは、Pydanticでより複雑なカスタムバリデータを作成するためのサンプルスニペットを紹介します。
 
 ## Using Custom Validators with [`Annotated`][typing.Annotated] Metadata
 
-In this example, we'll construct a custom validator, attached to an [`Annotated`][typing.Annotated] type,
-that ensures a [`datetime`][datetime.datetime] object adheres to a given timezone constraint.
+<!-- In this example, we'll construct a custom validator, attached to an [`Annotated`][typing.Annotated] type, that ensures a [`datetime`][datetime.datetime] object adheres to a given timezone constraint. -->
+この例では、[`datetime`][datetime.datetime]オブジェクトが指定されたタイムゾーン制約に従うことを保証する、[`Annotated`][typing.Annotated]型にアタッチされたカスタムバリデータを作成します。
 
-The custom validator supports string specification of the timezone, and will raise an error if the [`datetime`][datetime.datetime] object does not have the correct timezone.
+<!-- The custom validator supports string specification of the timezone, and will raise an error if the [`datetime`][datetime.datetime] object does not have the correct timezone. -->
+カスタムバリデータはタイムゾーンの文字列指定をサポートしており、[`datetime`][datetime.datetime]オブジェクトに正しいタイムゾーンが含まれていない場合はエラーが発生します。
 
-We use `__get_pydantic_core_schema__` in the validator to customize the schema of the annotated type (in this case, [`datetime`][datetime.datetime]), which allows us to add custom validation logic. Notably, we use a `wrap` validator function so that we can perform operations both before and after the default `pydantic` validation of a [`datetime`][datetime.datetime].
+<!-- We use `__get_pydantic_core_schema__` in the validator to customize the schema of the annotated type (in this case, [`datetime`][datetime.datetime]), which allows us to add custom validation logic. Notably, we use a `wrap` validator function so that we can perform operations both before and after the default `pydantic` validation of a [`datetime`][datetime.datetime]. -->
+アノテーション型(この場合は[`datetime`][datetime.datetime])のスキーマをカスタマイズするために、バリデータで`__get_pydantic_core_schema__`を使用します。これにより、カスタム検証ロジックを追加できます。特に、[`datetime`][datetime.datetime]のデフォルトの`pydantic`検証の前後に操作を実行できるように、`wrap`バリデータ関数を使用します。
 
 ```py
 import datetime as dt
@@ -95,10 +101,13 @@ except ValidationError as ve:
     """
 ```
 
-1. The `handler` function is what we call to validate the input with standard `pydantic` validation
-2. We call the `handler` function to validate the input with standard `pydantic` validation in this wrap validator
+<!-- 1. The `handler` function is what we call to validate the input with standard `pydantic` validation
+2. We call the `handler` function to validate the input with standard `pydantic` validation in this wrap validator -->
+1. "handler"関数は、標準の"pydantic"検証で入力を検証するために呼び出すものです。
+2. このラップバリデータで標準の`pydantic`検証を使用して入力を検証するために`handler`関数を呼び出します。
 
-We can also enforce UTC offset constraints in a similar way.  Assuming we have a `lower_bound` and an `upper_bound`, we can create a custom validator to ensure our `datetime` has a UTC offset that is inclusive within the boundary we define:
+<!-- We can also enforce UTC offset constraints in a similar way.  Assuming we have a `lower_bound` and an `upper_bound`, we can create a custom validator to ensure our `datetime` has a UTC offset that is inclusive within the boundary we define: -->
+同様の方法でUTCオフセット制約を強制することもできます。`lower_bound`と`upper_bound`があると仮定すると、カスタムバリデータを作成して、`datetime`が定義した境界内に含まれるUTCオフセットを持つようにすることができます。
 
 
 ```py
@@ -172,11 +181,14 @@ except ValidationError as e:
 
 ## Validating Nested Model Fields
 
-Here, we demonstrate two ways to validate a field of a nested model, where the validator utilizes data from the parent model.
+<!-- Here, we demonstrate two ways to validate a field of a nested model, where the validator utilizes data from the parent model. -->
+ここでは、ネストされたモデルのフィールドを検証する2つの方法を示し、バリデータは親モデルからのデータを利用します。
 
-In this example, we construct a validator that checks that each user's password is not in a list of forbidden passwords specified by the parent model.
+<!-- In this example, we construct a validator that checks that each user's password is not in a list of forbidden passwords specified by the parent model. -->
+この例では、各ユーザーのパスワードが、親モデルによって指定された禁止パスワードのリストに含まれていないことをチェックするバリデータを構築します。
 
-One way to do this is to place a custom validator on the outer model:
+<!-- One way to do this is to place a custom validator on the outer model: -->
+これを行う1つの方法は、外部モデルにカスタムバリデータを配置することです。
 
 ```py
 from typing import List
@@ -224,10 +236,12 @@ except ValidationError as e:
     """
 ```
 
-Alternatively, a custom validator can be used in the nested model class (`User`), with the forbidden passwords data from the parent model being passed in via validation context.
+<!-- Alternatively, a custom validator can be used in the nested model class (`User`), with the forbidden passwords data from the parent model being passed in via validation context. -->
+<!-- あるいは、ネストされたモデルクラス(`User`)でカスタムバリデータを使用し、親モデルからの禁止されたパスワードデータを検証コンテキストを介して渡すこともできます。 -->
 
 !!! warning
-    The ability to mutate the context within a validator adds a lot of power to nested validation, but can also lead to confusing or hard-to-debug code. Use this approach at your own risk!
+    <!-- The ability to mutate the context within a validator adds a lot of power to nested validation, but can also lead to confusing or hard-to-debug code. Use this approach at your own risk! -->
+    バリデータ内のコンテキストを変更する機能は、ネストされた検証に多くの機能を追加しますが、コードが混乱したり、デバッグが困難になったりする可能性もあります。この方法は自己責任で使用してください。
 
 ```py
 from typing import List
@@ -284,6 +298,8 @@ except ValidationError as e:
     """
 ```
 
-Note that if the context property is not included in `model_validate`, then `info.context` will be `None` and the forbidden passwords list will not get added to the context in the above implementation. As such, `validate_user_passwords` would not carry out the desired password validation.
+<!-- Note that if the context property is not included in `model_validate`, then `info.context` will be `None` and the forbidden passwords list will not get added to the context in the above implementation. As such, `validate_user_passwords` would not carry out the desired password validation. -->
+contextプロパティが`model_validate`に含まれていない場合、`info.context`は`None`になり、上記の実装では禁止されたパスワードのリストがコンテキストに追加されないことに注意してください。したがって、`validate_user_passwords`は目的のパスワード検証を実行しません。
 
-More details about validation context can be found [here](../concepts/validators.md#validation-context).
+<!-- More details about validation context can be found [here](../concepts/validators.md#validation-context). -->
+検証コンテキストの詳細については、[ここ](../concepts/validators.md#validation-context)を参照してください。

@@ -100,7 +100,7 @@ print(user.model_dump(by_alias=True))  # (2)!
 ```
 
 <!-- 1. The alias `'username'` is used for instance creation and validation. -->
-1. エイリアス「username」`は、インスタンスの作成と検証に使用されます。
+1. エイリアス"username"`は、インスタンスの作成と検証に使用されます。
 <!-- 2. We are using `model_dump` to convert the model into a serializable format. -->
 2. モデルをシリアライズ可能なフォーマットに変換するために`model_dump`を使用しています。
 
@@ -155,7 +155,7 @@ print(user.model_dump(by_alias=True))  # (2)!
 ```
 
 1. The field name `'name'` is used for validation.
-<!-- 1. フィールド名「name」は検証に使用されます。 -->
+<!-- 1. フィールド名"name"は検証に使用されます。 -->
 <!-- 2. The serialization alias `'username'` is used for serialization. -->
 2. シリアル化には、シリアル化エイリアス`'username'`が使用されます。
 
@@ -210,7 +210,7 @@ print(user.model_dump(by_alias=True))  # (2)!
     1. VSCodeはここに警告を表示します。
 
     <!-- To "trick" VSCode into preferring the field name, you can use the `str` function to wrap the alias value. -->
-    VSCodeを「だまして」フィールド名を優先させるには、`str`関数を使用してエイリアス値をラップします。
+    VSCodeを"だまして"フィールド名を優先させるには、`str`関数を使用してエイリアス値をラップします。
     <!-- With this approach, though, a warning is shown when instantiating a model using the alias for the field: -->
     ただし、この方法では、フィールドのエイリアスを使用してモデルをインスタンス化するときに警告が表示されます。
 

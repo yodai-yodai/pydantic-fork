@@ -33,7 +33,7 @@ warnings.filterwarnings('ignore', category=PydanticExperimentalWarning)
 
 <!-- Pydantic v2.8.0 introduced an experimental "pipeline" API that allows composing of parsing (validation), constraints and transformations in a more type-safe manner than existing APIs.
 This API is subject to change or removal, we are looking for feedback and suggestions before making it a permanent part of Pydantic. -->
-Pydantic v2.8.0では、既存のAPIよりも型安全な方法でパース(バリデーション)、制約、変換を構成できる実験的な「パイプライン」APIが導入されました。
+Pydantic v2.8.0では、既存のAPIよりも型安全な方法でパース(バリデーション)、制約、変換を構成できる実験的な"パイプライン"APIが導入されました。
 このAPIは変更または削除される可能性があります。Pydanticの恒久的な一部にする前に、フィードバックと提案を求めています。
 
 ??? api "API Documentation"

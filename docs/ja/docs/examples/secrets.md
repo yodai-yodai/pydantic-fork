@@ -1,13 +1,15 @@
+{% include-markdown "../warning.md" %}
+
 !!! warning "🚧 Work in Progress"
     This page is a work in progress.
 
 ## Serialize `SecretStr` and `SecretBytes` as plain-text
 
-By default, [`SecretStr`][pydantic.types.SecretStr] and [`SecretBytes`][pydantic.types.SecretBytes]
-will be serialized as `**********` when serializing to json.
+<!-- By default, [`SecretStr`][pydantic.types.SecretStr] and [`SecretBytes`][pydantic.types.SecretBytes] will be serialized as `**********` when serializing to json. -->
+デフォルトでは、jsonにシリアライズする際、[`SecretStr`][pydantic.types.SecretStr]と[`SecretBytes`][pydantic.types.SecretBytes]は`***********`としてシリアライズされます。
 
-You can use the [`field_serializer`][pydantic.functional_serializers.field_serializer] to dump the
-secret as plain-text when serializing to json.
+<!-- You can use the [`field_serializer`][pydantic.functional_serializers.field_serializer] to dump the secret as plain-text when serializing to json.  -->
+[`field_serializer`][pydantic.functional_serializers.field_serializer]を使用すると、jsonにシリアライズするときにシークレットをプレーンテキストとしてダンプできます。
 
 ```py
 from pydantic import BaseModel, SecretBytes, SecretStr, field_serializer
@@ -40,13 +42,16 @@ print(model.model_dump_json())
 
 ## Create your own Secret field
 
-Pydantic provides the generic `Secret` class as a mechanism for creating custom secret types.
+<!-- Pydantic provides the generic `Secret` class as a mechanism for creating custom secret types. -->
+Pydanticでは、カスタムのsecret型を作成するためのメカニズムとして、汎用の`Secret`クラスを提供しています。
 
 ??? api "API Documentation"
     [`pydantic.types.Secret`][pydantic.types.Secret]<br>
 
-Pydantic provides the generic `Secret` class as a mechanism for creating custom secret types.
-You can either directly parametrize `Secret`, or subclass from a parametrized `Secret` to customize the `str()` and `repr()` of a secret type.
+<!-- Pydantic provides the generic `Secret` class as a mechanism for creating custom secret types. -->
+<!-- You can either directly parametrize `Secret`, or subclass from a parametrized `Secret` to customize the `str()` and `repr()` of a secret type. -->
+Pydanticでは、カスタムのsecret型を作成するためのメカニズムとして、汎用の`Secret`クラスを提供しています。
+`Secret`を直接パラメータ化するか、パラメータ化された`Secret`をサブクラス化して、secret型の`str()`と`repr()`をカスタマイズすることができます。
 
 ```py
 from datetime import date
@@ -86,8 +91,13 @@ print(employee.date_of_birth.get_secret_value())
 #> 1990-01-01
 ```
 
-You can enforce constraints on the underlying type through annotations:
-For example:
+<!-- You can enforce constraints on the underlying type through annotations: -->
+アノテーションを使用して、基礎となる型に制約を適用できます。
+
+<!-- For example: -->
+次に例を示します。
+
+
 
 ```py
 from typing_extensions import Annotated
@@ -135,5 +145,7 @@ except ValidationError as exc_info:
     """
 ```
 
-1. The input value is not greater than 0, so it raises a validation error.
-2. The input value is not an integer, so it raises a validation error because the `SecretPosInt` type has strict mode enabled.
+<!-- 1. The input value is not greater than 0, so it raises a validation error.
+2. The input value is not an integer, so it raises a validation error because the `SecretPosInt` type has strict mode enabled. -->
+1. 入力値が0より大きくないため、検証エラーが発生します。
+2. 入力値が整数ではないため、`SecretPosInt`型でstrictモードが有効になっているため、検証エラーが発生します。

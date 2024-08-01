@@ -22,7 +22,7 @@ Pydanticは組み込みのJSON解析を提供し、次のことを実現する�
 -->
 * サードパーティ製ライブラリを使用せずに、パフォーマンスが大幅に向上
 * カスタムエラーのサポート
-* 「厳密な」仕様のサポート
+* "厳密な"仕様のサポート
 
 <!-- Here's an example of Pydantic's builtin JSON parsing via the [`model_validate_json`][pydantic.main.BaseModel.model_validate_json] method, showcasing the support for `strict` specifications while parsing JSON data that doesn't match the model's type annotations: -->
 以下は、[`model_validate_json`][pydantic.main.BaseModel.model_validate_json]メソッドによるPydanticの組み込みJSON解析の例で、モデルの型アノテーションと一致しないJSONデータを解析する際の`strict`仕様のサポートを示しています。

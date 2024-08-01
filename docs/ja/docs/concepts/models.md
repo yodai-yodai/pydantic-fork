@@ -1741,7 +1741,7 @@ print(Model(a=3.000, b='2.72', c=b'binary data').model_dump())
 ```
 
 <!-- This is a deliberate decision of Pydantic, and is frequently the most useful approach. See [here](https://github.com/pydantic/pydantic/issues/578) for a longer discussion on the subject. -->
-これはPydanticの意図的な決定であり、多くの場合、最も有用なアプローチである。このテーマに関するより長い議論については、[ここ](https://github.com/pydantic/pydantic/issues/578)を参照してください。
+これはPydanticの意図的な決定であり、多くの場合、最も有用なアプローチです。このテーマに関するより長い議論については、[ここ](https://github.com/pydantic/pydantic/issues/578)を参照してください。
 
 <!-- Nevertheless, [strict type checking](strict_mode.md) is also supported. -->
 ただし、[strict type checking](strict_mode.md)もサポートされています。

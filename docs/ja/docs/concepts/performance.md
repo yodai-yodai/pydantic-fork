@@ -9,7 +9,7 @@
 
 <!-- On `model_validate(json.loads(...))`, the JSON is parsed in Python, then converted to a dict, then it's validated internally.
 On the other hand, `model_validate_json()` already performs the validation internally. -->
-`model_validate(json.loads(.))`では、JSONがPythonで解析され、dictに変換されてから内部で検証されます。
+`model_validate(json.loads(...))`では、JSONがPythonで解析され、dictに変換されてから内部で検証されます。
 一方、`model_validate_json()`はすでに内部で検証を実行しています。
 
 <!-- There are a few cases where `model_validate(json.loads(...))` may be faster. Specifically, when using a `'before'` or `'wrap'` validator on a model, validation may be faster with the two step method.
