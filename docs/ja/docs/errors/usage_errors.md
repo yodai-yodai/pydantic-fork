@@ -1,12 +1,14 @@
-Pydantic attempts to provide useful errors. The following sections provide details on common errors developers may
-encounter when working with Pydantic, along with suggestions for addressing the error condition.
+{% include-markdown "../warning.md" %}
+
+<!-- Pydantic attempts to provide useful errors. The following sections provide details on common errors developers may encounter when working with Pydantic, along with suggestions for addressing the error condition. -->
+Pydanticは有用なエラーを提供しようとします。次のセクションでは、開発者がPydanticを使用しているときに遭遇する可能性のある一般的なエラーの詳細と、エラー状態に対処するための提案について説明します。
 
 <!-- Note: raw tag is used to avoid rendering of jinja2 template tags in the docs. -->
 {% raw %}
 ## Class not fully defined {#class-not-fully-defined}
 
-This error is raised when a type referenced in an annotation of a pydantic-validated type
-(such as a subclass of `BaseModel`, or a pydantic `dataclass`) is not defined:
+<!-- This error is raised when a type referenced in an annotation of a pydantic-validated type (such as a subclass of `BaseModel`, or a pydantic `dataclass`) is not defined: -->
+このエラーは、pydanicで検証された型(`BaseModel`のサブクラスやpydanic`dataclass`など)の注釈で参照される型が定義されていない場合に発生します。
 
 ```py
 from typing import ForwardRef
@@ -53,7 +55,8 @@ class Bar(BaseModel):
 foo = Foo(a={'b': {'a': None}})
 ```
 
-For BaseModel subclasses, it can be fixed by defining the type and then calling `.model_rebuild()`:
+<!-- For BaseModel subclasses, it can be fixed by defining the type and then calling `.model_rebuild()`: -->
+BaseModelサブクラスでは、型を定義してから`.model_rebuild()`を呼び出すことで修正できます。
 
 ```py
 from typing import Optional
@@ -74,13 +77,16 @@ Foo.model_rebuild()
 foo = Foo(a={'b': {'a': None}})
 ```
 
-In other cases, the error message should indicate how to rebuild the class with the appropriate type defined.
+<!-- In other cases, the error message should indicate how to rebuild the class with the appropriate type defined. -->
+それ以外の場合は、エラーメッセージに、適切な型を定義してクラスを再構築する方法が示されます。
 
 ## Custom JSON Schema {#custom-json-schema}
 
-The `__modify_schema__` method is no longer supported in V2. You should use the `__get_pydantic_json_schema__` method instead.
+<!-- The `__modify_schema__` method is no longer supported in V2. You should use the `__get_pydantic_json_schema__` method instead. -->
+`__modify_schema__`メソッドはV2でサポートされなくなりました。代わりに`__get_pydantic_json_schema__`メソッドを使用してください。
 
-The `__modify_schema__` used to receive a single argument representing the JSON schema. See the example below:
+<!-- The `__modify_schema__` used to receive a single argument representing the JSON schema. See the example below: -->
+`__modify_schema__`は、JSONスキーマを表す単一の引数を受け取るために使用されます。以下の例を参照してください。
 
 ```py title="Old way"
 from pydantic import BaseModel, PydanticUserError
@@ -96,9 +102,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'custom-json-schema'
 ```
 
-The new method `__get_pydantic_json_schema__` receives two arguments: the first is a dictionary denoted as `CoreSchema`,
-and the second a callable `handler` that receives a `CoreSchema` as parameter, and returns a JSON schema. See the example
-below:
+<!-- The new method `__get_pydantic_json_schema__` receives two arguments: the first is a dictionary denoted as `CoreSchema`, and the second a callable `handler` that receives a `CoreSchema` as parameter, and returns a JSON schema. See the example below: -->
+新しいメソッド`__get_pydantic_json_schema__`は2つの引数を受け取ります。1つ目は`CoreSchema`と呼ばれる辞書で、2つ目は`CoreSchema`をパラメータとして受け取り、JSONスキーマを返す呼び出し可能な`handler`です。以下の例を参照してください。
 
 ```py title="New way"
 from typing import Any, Dict
@@ -127,7 +132,8 @@ print(Model.model_json_schema())
 
 ## Decorator on missing field {#decorator-missing-field}
 
-This error is raised when you define a decorator with a field that is not valid.
+<!-- This error is raised when you define a decorator with a field that is not valid. -->
+このエラーは、無効なフィールドを持つデコレータを定義した場合に発生します。
 
 ```py
 from typing import Any
@@ -147,7 +153,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'decorator-missing-field'
 ```
 
-You can use `check_fields=False` if you're inheriting from the model and intended this.
+<!-- You can use `check_fields=False` if you're inheriting from the model and intended this. -->
+モデルから継承していて、これを意図している場合は、`check_fields=False`を使用できます。
 
 ```py
 from typing import Any
@@ -166,7 +173,8 @@ model = create_model('FooModel', a=(str, 'cake'), __base__=Model)
 
 ## Discriminator no field {#discriminator-no-field}
 
-This error is raised when a model in discriminated unions doesn't define a discriminator field.
+<!-- This error is raised when a model in discriminated unions doesn't define a discriminator field. -->
+このエラーは、識別されたユニオンのモデルが識別フィールドを定義していない場合に発生します。
 
 ```py
 from typing import Union
@@ -197,7 +205,8 @@ except PydanticUserError as exc_info:
 
 ## Discriminator alias type {#discriminator-alias-type}
 
-This error is raised when you define a non-string alias on a discriminator field.
+<!-- This error is raised when you define a non-string alias on a discriminator field. -->
+このエラーは、識別子フィールドに文字列以外のエイリアスを定義すると発生します。
 
 ```py
 from typing import Union
@@ -231,7 +240,8 @@ except PydanticUserError as exc_info:
 
 ## Discriminator needs literal {#discriminator-needs-literal}
 
-This error is raised when you define a non-`Literal` type on a discriminator field.
+<!-- This error is raised when you define a non-`Literal` type on a discriminator field. -->
+このエラーは、識別子フィールドに`Literal`以外の型を定義した場合に発生します。
 
 ```py
 from typing import Union
@@ -263,7 +273,8 @@ except PydanticUserError as exc_info:
 
 ## Discriminator alias {#discriminator-alias}
 
-This error is raised when you define different aliases on discriminator fields.
+<!-- This error is raised when you define different aliases on discriminator fields. -->
+識別子フィールドに異なるエイリアスを定義すると、このエラーが発生します。
 
 ```py
 from typing import Union
@@ -295,10 +306,11 @@ except PydanticUserError as exc_info:
 
 ## Invalid discriminator validator {#discriminator-validator}
 
-This error is raised when you use a before, wrap, or plain validator on a discriminator field.
+<!-- This error is raised when you use a before, wrap, or plain validator on a discriminator field. -->
+このエラーは、識別子フィールドでbefore、wrap、またはplainバリデータを使用した場合に発生します。
 
-This is disallowed because the discriminator field is used to determine the type of the model to use for validation,
-so you can't use a validator that might change its value.
+<!-- This is disallowed because the discriminator field is used to determine the type of the model to use for validation, so you can't use a validator that might change its value. -->
+discriminatorフィールドは検証に使用するモデルのタイプを決定するために使用されるため、これは許可されません。したがって、その値を変更する可能性のあるバリデータは使用できません。
 
 ```py
 from typing import Union
@@ -333,7 +345,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'discriminator-validator'
 ```
 
-This can be worked around by using a standard `Union`, dropping the discriminator:
+<!-- This can be worked around by using a standard `Union`, dropping the discriminator: -->
+これは、標準の`Union`を使用して、識別子を削除することで回避できます。
 
 ```py
 from typing import Union
@@ -367,7 +380,8 @@ assert Model(pet={'pet_type': 'kitten'}).pet.pet_type == 'cat'
 
 ## Callable discriminator case with no tag {#callable-discriminator-no-tag}
 
-This error is raised when a `Union` that uses a callable `Discriminator` doesn't have `Tag` annotations for all cases.
+<!-- This error is raised when a `Union` that uses a callable `Discriminator` doesn't have `Tag` annotations for all cases. -->
+このエラーは、呼び出し可能な`Discriminator`を使用する`Union`が、すべてのケースに対して`Tag`アノテーションを持っていない場合に発生します。
 
 ```py
 from typing import Union
@@ -424,12 +438,13 @@ except PydanticUserError as exc_info:
 
 ## `TypedDict` version {#typed-dict-version}
 
-This error is raised when you use [typing.TypedDict][]
-instead of `typing_extensions.TypedDict` on Python < 3.12.
+<!-- This error is raised when you use [typing.TypedDict][] instead of `typing_extensions.TypedDict` on Python < 3.12. -->
+このエラーは、Python<3.12で`typing_extensions.TypedDict`の代わりに[typing.TypedDict][]を使用した場合に発生します。
 
 ## Model parent field overridden {#model-field-overridden}
 
-This error is raised when a field defined on a base class was overridden by a non-annotated attribute.
+<!-- This error is raised when a field defined on a base class was overridden by a non-annotated attribute. -->
+このエラーは、基本クラスで定義されたフィールドが、注釈のない属性によって上書きされた場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError
@@ -451,7 +466,8 @@ except PydanticUserError as exc_info:
 
 ## Model field missing annotation {#model-field-missing-annotation}
 
-This error is raised when a field doesn't have an annotation.
+<!-- This error is raised when a field doesn't have an annotation. -->
+このエラーは、フィールドにアノテーションがない場合に発生します。
 
 ```py
 from pydantic import BaseModel, Field, PydanticUserError
@@ -466,8 +482,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'model-field-missing-annotation'
 ```
 
-If the field is not meant to be a field, you may be able to resolve the error
-by annotating it as a `ClassVar`:
+<!-- If the field is not meant to be a field, you may be able to resolve the error by annotating it as a `ClassVar`: -->
+フィールドがフィールドとして意図されていない場合は、`ClassVar`として注釈を付けることでエラーを解決できる場合があります。
 
 ```py
 from typing import ClassVar
@@ -500,7 +516,8 @@ class MyModel(BaseModel):
 
 ## `Config` and `model_config` both defined {#config-both}
 
-This error is raised when `class Config` and `model_config` are used together.
+<!-- This error is raised when `class Config` and `model_config` are used together. -->
+このエラーは`class Config`と`model_config`が一緒に使用された場合に発生します。
 
 ```py
 from pydantic import BaseModel, ConfigDict, PydanticUserError
@@ -521,9 +538,11 @@ except PydanticUserError as exc_info:
 
 ## Keyword arguments removed {#removed-kwargs}
 
-This error is raised when the keyword arguments are not available in Pydantic V2.
+<!-- This error is raised when the keyword arguments are not available in Pydantic V2. -->
+このエラーは、キーワード引数がPydantic V2で使用できない場合に発生します。
 
-For example, `regex` is removed from Pydantic V2:
+<!-- For example, `regex` is removed from Pydantic V2: -->
+例えば、`regex`はPydantic V2から削除されました。
 
 ```py
 from pydantic import BaseModel, Field, PydanticUserError
@@ -539,7 +558,8 @@ except PydanticUserError as exc_info:
 
 ## JSON schema invalid type {#invalid-for-json-schema}
 
-This error is raised when Pydantic fails to generate a JSON schema for some `CoreSchema`.
+<!-- This error is raised when Pydantic fails to generate a JSON schema for some `CoreSchema`. -->
+このエラーは、Pydanticが何らかの`CoreSchema`のJSONスキーマを生成できなかった場合に発生します。
 
 ```py
 from pydantic import BaseModel, ImportString, PydanticUserError
@@ -558,12 +578,15 @@ except PydanticUserError as exc_info:
 
 ## JSON schema already used {#json-schema-already-used}
 
-This error is raised when the JSON schema generator has already been used to generate a JSON schema.
-You must create a new instance to generate a new JSON schema.
+<!-- This error is raised when the JSON schema generator has already been used to generate a JSON schema.
+You must create a new instance to generate a new JSON schema. -->
+このエラーは、JSONスキーマの生成にJSONスキーマジェネレータがすでに使用されている場合に発生します。
+新しいJSONスキーマを生成するには、新しいインスタンスを作成する必要があります。
 
 ## BaseModel instantiated {#base-model-instantiated}
 
-This error is raised when you instantiate `BaseModel` directly. Pydantic models should inherit from `BaseModel`.
+<!-- This error is raised when you instantiate `BaseModel` directly. Pydantic models should inherit from `BaseModel`. -->
+このエラーは、`BaseModel`を直接インスタンス化すると発生します。Pydanticモデルは`BaseModel`から継承する必要があります。
 
 ```py
 from pydantic import BaseModel, PydanticUserError
@@ -576,7 +599,8 @@ except PydanticUserError as exc_info:
 
 ## Undefined annotation {#undefined-annotation}
 
-This error is raised when handling undefined annotations during `CoreSchema` generation.
+<!-- This error is raised when handling undefined annotations during `CoreSchema` generation. -->
+このエラーは、`CoreSchema`の生成中に未定義の注釈を処理すると発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUndefinedAnnotation
@@ -594,7 +618,8 @@ except PydanticUndefinedAnnotation as exc_info:
 
 ## Schema for unknown type {#schema-for-unknown-type}
 
-This error is raised when Pydantic fails to generate a `CoreSchema` for some type.
+<!-- This error is raised when Pydantic fails to generate a `CoreSchema` for some type. -->
+このエラーは、Pydanticがある型に対して`CoreSchema`を生成できなかった場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError
@@ -610,14 +635,18 @@ except PydanticUserError as exc_info:
 
 ## Import error {#import-error}
 
-This error is raised when you try to import an object that was available in Pydantic V1, but has been removed in
-Pydantic V2.
+<!-- This error is raised when you try to import an object that was available in Pydantic V1, but has been removed in Pydantic V2. -->
+このエラーは、Pydantic V1では使用できたが、Pydantic V2では削除されたオブジェクトをインポートしようとしたときに発生します。
 
-See the [Migration Guide](../migration.md) for more information.
+<!-- See the [Migration Guide](../migration.md) for more information. -->
+詳細については、[Migration Guide](../migration.md)を参照してください。
+
+
 
 ## `create_model` field definitions {#create-model-field-definitions}
 
-This error is raised when you provide field definitions input in `create_model` that is not valid.
+<!-- This error is raised when you provide field definitions input in `create_model` that is not valid. -->
+このエラーは、`create_model`に無効なフィールド定義を入力した場合に発生します。
 
 ```py
 from pydantic import PydanticUserError, create_model
@@ -643,7 +672,8 @@ except PydanticUserError as exc_info:
 
 ## `create_model` config base {#create-model-config-base}
 
-This error is raised when you use both `__config__` and `__base__` together in `create_model`.
+<!-- This error is raised when you use both `__config__` and `__base__` together in `create_model`. -->
+このエラーは、`create_model`で`__config__`と`__base__`の両方を一緒に使用すると発生します。
 
 ```py
 from pydantic import BaseModel, ConfigDict, PydanticUserError, create_model
@@ -659,7 +689,8 @@ except PydanticUserError as exc_info:
 
 ## Validator with no fields {#validator-no-fields}
 
-This error is raised when you use validator bare (with no fields).
+<!-- This error is raised when you use validator bare (with no fields). -->
+このエラーは、validator bare(フィールドなし)を使用した場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, field_validator
@@ -677,7 +708,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'validator-no-fields'
 ```
 
-Validators should be used with fields and keyword arguments.
+<!-- Validators should be used with fields and keyword arguments. -->
+バリデータは、フィールドおよびキーワード引数とともに使用する必要があります。
 
 ```py
 from pydantic import BaseModel, field_validator
@@ -693,7 +725,8 @@ class Model(BaseModel):
 
 ## Invalid validator fields {#validator-invalid-fields}
 
-This error is raised when you use a validator with non-string fields.
+<!-- This error is raised when you use a validator with non-string fields. -->
+このエラーは、文字列以外のフィールドでバリデータを使用した場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, field_validator
@@ -712,7 +745,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'validator-invalid-fields'
 ```
 
-Fields should be passed as separate string arguments:
+<!-- Fields should be passed as separate string arguments: -->
+フィールドは別の文字列引数として渡す必要があります。
 
 ```py
 from pydantic import BaseModel, field_validator
@@ -729,7 +763,8 @@ class Model(BaseModel):
 
 ## Validator on instance method {#validator-instance-method}
 
-This error is raised when you apply a validator on an instance method.
+<!-- This error is raised when you apply a validator on an instance method. -->
+このエラーは、インスタンスメソッドにバリデータを適用すると発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, field_validator
@@ -749,19 +784,26 @@ except PydanticUserError as exc_info:
 
 ## Root validator, `pre`, `skip_on_failure` {#root-validator-pre-skip}
 
-If you use `@root_validator` with `pre=False` (the default) you MUST specify `skip_on_failure=True`.
-The `skip_on_failure=False` option is no longer available.
+<!-- If you use `@root_validator` with `pre=False` (the default) you MUST specify `skip_on_failure=True`.
+The `skip_on_failure=False` option is no longer available. -->
+`pre=False`(デフォルト)で`@root_validator`を使用する場合は、`skip_on_failure=True`を指定しなければなりません。
+`skip_on_failure=False`オプションは使用できなくなりました。
 
-If you were not trying to set `skip_on_failure=False`, you can safely set `skip_on_failure=True`.
-If you do, this root validator will no longer be called if validation fails for any of the fields.
+<!-- If you were not trying to set `skip_on_failure=False`, you can safely set `skip_on_failure=True`.
+If you do, this root validator will no longer be called if validation fails for any of the fields. -->
+`skip_on_failure=False`を設定しようとしていない場合は、`skip_on_failure=True`を設定しても問題ありません。
+これを行うと、いずれかのフィールドで検証が失敗した場合に、このルート・バリデーターが呼び出されなくなります。
 
-Please see the [Migration Guide](../migration.md) for more details.
+<!-- Please see the [Migration Guide](../migration.md) for more details. -->
+詳細については、[Migration Guide](../migration.md)を参照してください。
 
 ## `model_serializer` instance methods {#model-serializer-instance-method}
 
-`@model_serializer` must be applied to instance methods.
+<!-- `@model_serializer` must be applied to instance methods. -->
+`@model_serializer`はインスタンスメソッドに適用しなければなりません。
 
-This error is raised when you apply `model_serializer` on an instance method without `self`:
+<!-- This error is raised when you apply `model_serializer` on an instance method without `self`: -->
+このエラーは、`self`のないインスタンスメソッドに`model_serializer`を適用すると発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, model_serializer
@@ -779,7 +821,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'model-serializer-instance-method'
 ```
 
-Or on a class method:
+<!-- Or on a class method: -->
+クラスメソッドの場合:
 
 ```py
 from pydantic import BaseModel, PydanticUserError, model_serializer
@@ -800,17 +843,21 @@ except PydanticUserError as exc_info:
 
 ## `validator`, `field`, `config`, and `info` {#validator-field-config-info}
 
-The `field` and `config` parameters are not available in Pydantic V2.
-Please use the `info` parameter instead.
+<!-- The `field` and `config` parameters are not available in Pydantic V2.
+Please use the `info` parameter instead. -->
+`field`および`config`パラメータはPydantic V2では使用できません。
+代わりに`info`パラメータを使用してください。
 
-You can access the configuration via `info.config`,
-but it is a dictionary instead of an object like it was in Pydantic V1.
+<!-- You can access the configuration via `info.config`, but it is a dictionary instead of an object like it was in Pydantic V1. -->
+`info.config`から設定にアクセスできますが、これはPydantic V1のようなオブジェクトではなく辞書です。
 
-The `field` argument is no longer available.
+<!-- The `field` argument is no longer available. -->
+`field`引数は使用できなくなりました。
 
 ## Pydantic V1 validator signature {#validator-v1-signature}
 
-This error is raised when you use an unsupported signature for Pydantic V1-style validator.
+<!-- This error is raised when you use an unsupported signature for Pydantic V1-style validator. -->
+このエラーは、Pydantic V 1スタイルのバリデータにサポートされていない署名を使用した場合に発生します。
 
 ```py
 import warnings
@@ -834,7 +881,8 @@ except PydanticUserError as exc_info:
 
 ## Unrecognized `field_validator` signature {#validator-signature}
 
-This error is raised when a `field_validator` or `model_validator` function has the wrong signature.
+<!-- This error is raised when a `field_validator` or `model_validator` function has the wrong signature. -->
+このエラーは、`field_validator`または`model_validator`関数のシグネチャが間違っている場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, field_validator
@@ -855,7 +903,8 @@ except PydanticUserError as exc_info:
 
 ## Unrecognized `field_serializer` signature {#field-serializer-signature}
 
-This error is raised when the `field_serializer` function has the wrong signature.
+<!-- This error is raised when the `field_serializer` function has the wrong signature. -->
+このエラーは、`field_serializer`関数のシグネチャが間違っている場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, field_serializer
@@ -873,7 +922,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'field-serializer-signature'
 ```
 
-Valid serializer signatures are:
+<!-- Valid serializer signatures are: -->
+有効なシリアライザシグネチャは次のとおりです。
 
 ```py test="skip" lint="skip" upgrade="skip"
 from pydantic import model_serializer
@@ -913,7 +963,8 @@ def ser_x(self, value: Any, handler: pydantic.SerializerFunctionWrapHandler): ..
 
 ## Unrecognized `model_serializer` signature {#model-serializer-signature}
 
-This error is raised when the `model_serializer` function has the wrong signature.
+<!-- This error is raised when the `model_serializer` function has the wrong signature. -->
+このエラーは、`model_serializer`関数のシグネチャが間違っている場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, model_serializer
@@ -933,7 +984,8 @@ except PydanticUserError as exc_info:
 
 ## Multiple field serializers {#multiple-field-serializers}
 
-This error is raised when multiple `model_serializer` functions are defined for a field.
+<!-- This error is raised when multiple `model_serializer` functions are defined for a field. -->
+このエラーは、1つのフィールドに対して複数の`model_serializer`関数が定義されている場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, field_serializer
@@ -958,7 +1010,8 @@ except PydanticUserError as exc_info:
 
 ## Invalid annotated type {#invalid-annotated-type}
 
-This error is raised when an annotation cannot annotate a type.
+<!-- This error is raised when an annotation cannot annotate a type. -->
+このエラーは、注釈がタイプに注釈を付けられない場合に発生します。
 
 ```py
 from typing_extensions import Annotated
@@ -976,8 +1029,8 @@ except PydanticUserError as exc_info:
 
 ## `config` is unused with `TypeAdapter` {#type-adapter-config-unused}
 
-You will get this error if you try to pass `config` to `TypeAdapter` when the type is a type that
-has its own config that cannot be overridden (currently this is only `BaseModel`, `TypedDict` and `dataclass`):
+<!-- You will get this error if you try to pass `config` to `TypeAdapter` when the type is a type that has its own config that cannot be overridden (currently this is only `BaseModel`, `TypedDict` and `dataclass`): -->
+`config`を`TypeAdapter`に渡そうとしたときに、その型が上書きできない独自の設定を持つ型である場合(現在は`BaseModel`、`TypedDict`、`dataclass`)、このエラーが表示されます。
 
 ```py
 from typing_extensions import TypedDict
@@ -995,7 +1048,8 @@ except PydanticUserError as exc_info:
     assert exc_info.code == 'type-adapter-config-unused'
 ```
 
-Instead you'll need to subclass the type and override or set the config on it:
+<!-- Instead you'll need to subclass the type and override or set the config on it: -->
+代わりに、型をサブクラス化して、その型の設定を上書きまたは設定する必要があります。
 
 ```py
 from typing_extensions import TypedDict
@@ -1015,8 +1069,8 @@ TypeAdapter(MyTypedDict)  # ok
 
 ## Cannot specify `model_config['extra']` with `RootModel` {#root-model-extra}
 
-Because `RootModel` is not capable of storing or even accepting extra fields during initialization, we raise an error
-if you try to specify a value for the config setting `'extra'` when creating a subclass of `RootModel`:
+<!-- Because `RootModel` is not capable of storing or even accepting extra fields during initialization, we raise an error if you try to specify a value for the config setting `'extra'` when creating a subclass of `RootModel`: -->
+`RootModel`は初期化中に追加フィールドを格納することも受け入れることもできないので、`RootModel`のサブクラスを作成するときにconfig設定`'extra'`に値を指定しようとすると、エラーが発生します。
 
 ```py
 from pydantic import PydanticUserError, RootModel
@@ -1033,8 +1087,8 @@ except PydanticUserError as exc_info:
 
 ## Cannot evaluate type annotation {#unevaluable-type-annotation}
 
-Because type annotations are evaluated *after* assignments, you might get unexpected results when using a type annotation name
-that clashes with one of your fields. We raise an error in the following case:
+<!-- Because type annotations are evaluated *after* assignments, you might get unexpected results when using a type annotation name that clashes with one of your fields. We raise an error in the following case: -->
+型アノテーションは代入の*後*に評価されるため、フィールドの1つと競合する型アノテーション名を使用すると、予期しない結果になる可能性があります。次の場合にエラーが発生します。
 
 ```py test="skip"
 from datetime import date
@@ -1046,7 +1100,8 @@ class Model(BaseModel):
     date: date = Field(description='A date')
 ```
 
-As a workaround, you can either use an alias or change your import:
+<!-- As a workaround, you can either use an alias or change your import: -->
+回避策として、エイリアスを使用するか、インポートを変更します。
 
 ```py lint="skip"
 import datetime
@@ -1061,10 +1116,11 @@ class Model(BaseModel):
 
 ## Incompatible `dataclass` `init` and `extra` settings {#dataclass-init-false-extra-allow}
 
-Pydantic does not allow the specification of the `extra='allow'` setting on a dataclass
-while any of the fields have `init=False` set.
+<!-- Pydantic does not allow the specification of the `extra='allow'` setting on a dataclass while any of the fields have `init=False` set. -->
+Pydanticでは、どのフィールドにも`init=False`が設定されている場合、データクラスに`extra='allow'`設定を指定することはできません。
 
-Thus, you may not do something like the following:
+<!-- Thus, you may not do something like the following: -->
+したがって、次のような操作はできません。
 
 ```py test="skip"
 from pydantic import ConfigDict, Field
@@ -1076,7 +1132,8 @@ class A:
     a: int = Field(init=False, default=1)
 ```
 
-The above snippet results in the following error during schema building for the `A` dataclass:
+<!-- The above snippet results in the following error during schema building for the `A` dataclass: -->
+上記のスニペットでは、`A`データクラスのスキーマ構築中に次のエラーが発生します。
 
 ```
 pydantic.errors.PydanticUserError: Field a has `init=False` and dataclass has config setting `extra="allow"`.
@@ -1085,7 +1142,8 @@ This combination is not allowed.
 
 ## Incompatible `init` and `init_var` settings on `dataclass` field {#clashing-init-and-init-var}
 
-The `init=False` and `init_var=True` settings are mutually exclusive. Doing so results in the `PydanticUserError` shown in the example below.
+<!-- The `init=False` and `init_var=True` settings are mutually exclusive. Doing so results in the `PydanticUserError` shown in the example below. -->
+`init=False`と`init_var=True`の設定は相互に排他的です。これを行うと、次の例に示す`PydantictUserError`が発生します。
 
 ```py test="skip"
 from pydantic import Field
@@ -1104,7 +1162,9 @@ pydantic.errors.PydanticUserError: Dataclass field bar has init=False and init_v
 
 ## `model_config` is used as a model field {#model-config-invalid-field-name}
 
-This error is raised when `model_config` is used as the name of a field.
+<!-- This error is raised when `model_config` is used as the name of a field. -->
+このエラーは、`model_config`がフィールドの名前として使用されている場合に発生します。
+
 ```py
 from pydantic import BaseModel, PydanticUserError
 
@@ -1120,7 +1180,8 @@ except PydanticUserError as exc_info:
 
 ## [`with_config`][pydantic.config.with_config] is used on a `BaseModel` subclass {#with-config-on-model}
 
-This error is raised when the [`with_config`][pydantic.config.with_config]  decorator is used on a class which is already a Pydantic model (use the `model_config` attribute instead).
+<!-- This error is raised when the [`with_config`][pydantic.config.with_config]  decorator is used on a class which is already a Pydantic model (use the `model_config` attribute instead). -->
+このエラーは、[`with_config`][pydantic.config.with_config]デコレータがすでにPydanticモデルであるクラスで使用された場合に発生します(代わりに`model_config`属性を使用してください)。
 
 ```py
 from pydantic import BaseModel, PydanticUserError, with_config
@@ -1138,8 +1199,8 @@ except PydanticUserError as exc_info:
 
 ## `dataclass` is used on a `BaseModel` subclass {#dataclass-on-model}
 
-This error is raised when the Pydantic `dataclass` decorator is used on a class which is already
-a Pydantic model.
+<!-- This error is raised when the Pydantic `dataclass` decorator is used on a class which is already a Pydantic model. -->
+このエラーは、すでにPydanticモデルであるクラスでPydantic`dataclass`デコレータが使用された場合に発生します。
 
 ```py
 from pydantic import BaseModel, PydanticUserError

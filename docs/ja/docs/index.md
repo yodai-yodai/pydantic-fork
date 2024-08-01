@@ -9,7 +9,7 @@
 [![downloads](https://static.pepy.tech/badge/pydantic/month)](https://pepy.tech/project/pydantic)<br>
 [![license](https://img.shields.io/github/license/pydantic/pydantic.svg)](https://github.com/pydantic/pydantic/blob/main/LICENSE)
 
-{{ version }}.
+<!-- {{ version }}. -->
 
 <!-- Pydantic is the most widely used data validation library for Python. -->
 Pydanticは、Pythonで最も広く使用されているデータ検証ライブラリです。

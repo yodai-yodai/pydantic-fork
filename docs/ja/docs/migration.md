@@ -1,3 +1,10 @@
+
+!!! warning
+
+    本サイトのドキュメントは、[Pydantic](https://docs.pydantic.dev/latest/)の日本語翻訳の私家版です。
+
+    Pydantic V1は開発が終了しているため、このドキュメントは翻訳しません。
+
 ---
 description: Migrating from Pydantic V1.
 ---

@@ -1,25 +1,39 @@
+{% include-markdown "../warning.md" %}
 
-Pydantic will raise a [`ValidationError`][pydantic_core.ValidationError] whenever it finds an error in the data it's validating.
+<!-- Pydantic will raise a [`ValidationError`][pydantic_core.ValidationError] whenever it finds an error in the data it's validating. -->
+Pydanticは、検証中のデータにエラーを検出すると、[`ValidationError`][pydantic_core.ValidationError]を発生させます。
 
 !!! note
-    Validation code should not raise `ValidationError` itself, but rather raise a `ValueError` or
-    `AssertionError` (or subclass thereof) which will be caught and used to populate
-    `ValidationError`.
+    <!-- Validation code should not raise `ValidationError` itself, but rather raise a `ValueError` or `AssertionError` (or subclass thereof) which will be caught and used to populate `ValidationError`. -->
+    検証コードは`ValidationError`自体を発生させるのではなく、`ValueError`または`AssertionError`(またはそのサブクラス)を発生させます。これらは捕捉され、`ValidationError`を生成するために使用されます。
 
-One exception will be raised regardless of the number of errors found, that `ValidationError` will
-contain information about all the errors and how they happened.
+<!-- One exception will be raised regardless of the number of errors found, that `ValidationError` will contain information about all the errors and how they happened. -->
+検出されたエラーの数に関係なく、1つの例外が発生します。`ValidationError`には、すべてのエラーとその発生方法に関する情報が含まれます。
 
-You can access these errors in several ways:
+<!-- You can access these errors in several ways: -->
+これらのエラーには、いくつかの方法でアクセスできます。
 
+<!--
 | Method            | Description                                            |
 |-------------------|--------------------------------------------------------|
 | `e.errors()`      | Returns a list of errors found in the input data.      |
 | `e.error_count()` | Returns the number of errors found in `errors`.        |
 | `e.json()`        | Returns a JSON representation of `errors`.             |
 | `str(e)`          | Returns a human-readable representation of the errors. |
+ -->
 
-Each error object contains:
 
+| Method            | Description                                            |
+|-------------------|--------------------------------------------------------|
+| `e.errors()`      | 入力データ内で見つかったエラーのリストを返します。         |
+| `e.error_count()` | `errors`で見つかったエラーの数を返します。                |
+| `e.json()`        | `errors`のJSON表現を返します。                          |
+| `str(e)`          | 人間が読める形式でエラーを返します。                      |
+
+<!-- Each error object contains: -->
+各エラーオブジェクトには次のものが含まれます。
+
+<!--
 | Property | Description                                                                    |
 |----------|--------------------------------------------------------------------------------|
 | `ctx`    | An optional object which contains values required to render the error message. |
@@ -28,11 +42,22 @@ Each error object contains:
 | `msg`    | A human-readable explanation of the error.                                     |
 | `type`   | A computer-readable identifier of the error type.                              |
 | `url`    | The URL to further information about the error.                                |
+-->
 
-The first item in the `loc` list will be the field where the error occurred, and if the field is a
-[sub-model](../concepts/models.md#nested-models), subsequent items will be present to indicate the nested location of the error.
+| Property | Description                                                                    |
+|----------|--------------------------------------------------------------------------------|
+| `ctx`    | エラーメッセージを表示するために必要な値を含むオプションのオブジェクトです。          |
+| `input`  | 検証のために提供される入力。                                                      |
+| `loc`    | エラーの場所をリストで示します。                                                  |
+| `msg`    | 人間が読めるエラーの説明。                                                        |
+| `type`   | エラータイプのコンピュータで読み取り可能な識別子。                                  |
+| `url`    | エラーに関する詳細情報へのURL。                                                   |
 
-As a demonstration:
+<!-- The first item in the `loc` list will be the field where the error occurred, and if the field is a [sub-model](../concepts/models.md#nested-models), subsequent items will be present to indicate the nested location of the error. -->
+`loc`リストの最初の項目はエラーが発生したフィールドで、そのフィールドが[sub-model](../concepts/models.md#nested-models)の場合、後続の項目はエラーのネストされた場所を示します。
+
+<!-- As a demonstration: -->
+デモンストレーションとして:
 
 ```py
 from typing import List
@@ -131,9 +156,11 @@ except ValidationError as e:
 
 ### Custom Errors
 
-In your custom data types or validators you should use `ValueError` or `AssertionError` to raise errors.
+<!-- In your custom data types or validators you should use `ValueError` or `AssertionError` to raise errors. -->
+カスタムデータ型やバリデータでは、エラーを発生させるために`ValueError`または`AssertionError`を使用してください。
 
-See [validators](../concepts/validators.md) for more details on use of the `@validator` decorator.
+<!-- See [validators](../concepts/validators.md) for more details on use of the `@validator` decorator. -->
+`@validator`デコレータの使い方の詳細については、[validators](../concepts/validators.md)を参照してください。
 
 ```py
 from pydantic import BaseModel, ValidationError, field_validator
@@ -174,7 +201,8 @@ except ValidationError as e:
     """
 ```
 
-You can also use [`PydanticCustomError`][pydantic_core.PydanticCustomError], to fully control the error structure:
+<!-- You can also use [`PydanticCustomError`][pydantic_core.PydanticCustomError], to fully control the error structure: -->
+[`PydanticCustomError`][pydantic_core.PydanticCustomError]を使用して、エラー構造を完全に制御することもできます。
 
 ```py
 from pydantic_core import PydanticCustomError
@@ -209,16 +237,19 @@ except ValidationError as e:
 
 ## Error messages
 
-Pydantic attempts to provide useful default error messages for validation and usage errors.
+<!-- Pydantic attempts to provide useful default error messages for validation and usage errors. -->
+Pydanticは、検証エラーや使用エラーに役立つデフォルトのエラーメッセージを提供します。
 
-We've provided documentation for default error codes in the following sections:
+<!-- We've provided documentation for default error codes in the following sections: -->
+デフォルトのエラーコードについては、次のセクションで説明します。
 
 - [Validation Errors](validation_errors.md)
-- [Usage Errors](usage_errors.md)
+- [Usage Errors](usage_errors.md) -->
 
 ### Customize error messages
 
-You can customize error messages by creating a custom error handler.
+<!-- You can customize error messages by creating a custom error handler. -->
+カスタムエラーハンドラを作成して、エラーメッセージをカスタマイズできます。
 
 ```py
 from typing import Dict, List
@@ -279,11 +310,11 @@ except ValidationError as e:
     """
 ```
 
-A common use case would be to translate error messages. For example, in the above example,
-we could translate the error messages replacing the `CUSTOM_MESSAGES` dictionary with a
-dictionary of translations.
+<!-- A common use case would be to translate error messages. For example, in the above example, we could translate the error messages replacing the `CUSTOM_MESSAGES` dictionary with a dictionary of translations. -->
+一般的な使用例は、エラーメッセージを翻訳することです。たとえば、上の例では、`CUSTOM_MESSAGES`辞書を翻訳の辞書に置き換えてエラーメッセージを翻訳できます。
 
-Another example is customizing the way that the `'loc'` value of an error is represented.
+<!-- Another example is customizing the way that the `'loc'` value of an error is represented. -->
+もう1つの例は、エラーの`'loc'`値の表示方法をカスタマイズすることです。
 
 ```py
 from typing import Any, Dict, List, Tuple, Union
@@ -353,5 +384,7 @@ except ValidationError as e:
     """
 ```
 
-1. By default, `e.errors()` produces a List of errors with `loc` values that take the form of tuples.
-2. With our custom `loc_to_dot_sep` function, we've modified the form of the `loc` representation.
+<!-- 1. By default, `e.errors()` produces a List of errors with `loc` values that take the form of tuples.
+2. With our custom `loc_to_dot_sep` function, we've modified the form of the `loc` representation. -->
+1. デフォルトでは、`e.errors()`はタプルの形式をとる`loc`値を持つエラーのリストを生成します。
+2. カスタムの`loc_to_dot_sep`関数を使用して、`loc`表現の形式を変更しました。
