@@ -5,7 +5,8 @@ We're sorry about this pain :pray:, it was an unfortunate but necessary step to 
 まず第一に、Pydantic V1からV2への移行は、一部のユーザにとって苦痛であり、これからも苦痛であることを認識しています。
 私たちはこの苦痛についてお詫びします :pray:、これは不幸なことでしたが、V1の設計ミスを修正するために必要なステップでした。
 
-**There will not be another breaking change of this magnitude!**
+<!-- **There will not be another breaking change of this magnitude!** -->
+**この規模の重大な変更はもうありません!**
 
 ## Pydantic V1
 
