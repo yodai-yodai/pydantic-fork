@@ -44,14 +44,14 @@ print(m.dimensions)
 
     <!-- The name "Pydantic" is a portmanteau of "Py" and "pedantic." The "Py" part indicates that the library is associated with Python, and
     "pedantic" refers to the library's meticulous approach to data validation and type enforcement. -->
-    「Pydantic」という名前は、「Py」と「pedantic」の合成語です。「Py」の部分は、ライブラリがPythonに関連付けられていることを示します。
-    「pedantic」とは、データ検証と型強制に対するライブラリの細心の注意を払ったアプローチを指します。
+    "Pydantic"という名前は、"Py"と"pedantic"の合成語です。"Py"の部分は、ライブラリがPythonに関連付けられていることを示します。
+    "pedantic"とは、データ検証と型強制に対するライブラリの細心の注意を払ったアプローチを指します。
 
     <!-- Combining these elements, "Pydantic" describes our Python library that provides detail-oriented, rigorous data validation. -->
-    これらの要素を組み合わせて、「Pydantic」は、詳細指向で厳密なデータ検証を提供するPythonライブラリを提供している。
+    これらの要素を組み合わせて、"Pydantic"は、詳細指向で厳密なデータ検証を提供するPythonライブラリを提供している。
 
     <!-- We’re aware of the irony that Pydantic V1 was not strict in its validation, so if we're being pedantic, "Pydantic" was a misnomer until V2 😉. -->
-    私たちは、Pydantic V1がその検証において厳密ではなかったという皮肉を認識しているので、私たちは物知り顔で、「Pydantic」はV2が登場するまでは誤った名称であったと言えたはずです。
+    私たちは、Pydantic V1がその検証において厳密ではなかったという皮肉を認識しているので、私たちは物知り顔で、"Pydantic"はV2が登場するまでは誤った名称であったと言えたはずです。
 
 ## Why use Pydantic?
 
@@ -138,7 +138,7 @@ PydanticはUNIXのタイムスタンプint(例えば`1496498400`)か、日付と
 <!-- 6. The key here is `bytes`, but Pydantic will take care of coercing it to a string. -->
 6. ここで重要なのは`bytes`ですが、Pydanticはこれを文字列に強制的に変換します。
 <!-- 7. Similarly, Pydantic will coerce the string `'1'` to an integer `1`. -->
-7. 同様に、Pydanticは文字列「1」を整数「1」に強制的に変換します。
+7. 同様に、Pydanticは文字列"1"を整数"1"に強制的に変換します。
 <!-- 8. Here we create instance of `User` by passing our external data to `User` as keyword arguments -->
 8. ここでは、外部データをキーワード引数として`User`に渡すことによって`User`のインスタンスを作成します。
 <!-- 9. We can access fields as attributes of the model -->

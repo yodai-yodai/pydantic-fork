@@ -35,10 +35,10 @@ V2のマイナーリリースで意図的に重大な変更を加えることは
 * `ValidationError`エラーの`msg`、`ctx`、`loc`フィールドを変更します。`type`は変更されません。プログラムでエラーメッセージを解析している場合は、`type`を使用する必要があります。
 * `ValidationError`エラーに新しいキーを追加します。たとえば、新しいJSONパーサに移行した後、JSONを検証するときにエラーに`line_number`と`column_number`を追加する予定です。
 * 新しい`ValidationError`エラーを追加します。
-* パブリッククラスの「repr」も変更します。
+* パブリッククラスの"repr"も変更します。
 
 <!-- In all cases we will aim to minimize churn and do so only when justified by the increase of quality of `pydantic` for users. -->
-いずれの場合も、私たちはひっかきまわすことをを最小限に抑えることを目指し、ユーザーにとって「pydantic」の質の向上によって正当化される場合にのみ修正します。
+いずれの場合も、私たちはひっかきまわすことをを最小限に抑えることを目指し、ユーザーにとって"pydantic"の質の向上によって正当化される場合にのみ修正します。
 
 ## Pydantic V3 and beyond
 
