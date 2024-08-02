@@ -1,3 +1,5 @@
+{% include-markdown "../warning.md" %}
+
 Pydantic works well with [mypy](http://mypy-lang.org) right out of the box.
 
 However, Pydantic also ships with a mypy plugin that adds a number of important pydantic-specific

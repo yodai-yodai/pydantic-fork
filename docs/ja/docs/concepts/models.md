@@ -3,10 +3,8 @@
 ??? api "API Documentation"
     [`pydantic.main.BaseModel`][pydantic.main.BaseModel]<br>
 
-<!-- One of the primary ways of defining schema in Pydantic is via models. Models are simply classes which inherit from -->
-[`pydantic.BaseModel`][pydantic.main.BaseModel] and define fields as annotated attributes.
-Pydanticでスキーマを定義する主な方法の1つは、モデルを使用することです。モデルは単に
-[`pydantic.BaseModel`][pydantic.main.BaseModel]フィールドを注釈付き属性として定義します。
+<!-- One of the primary ways of defining schema in Pydantic is via models. Models are simply classes which inherit from [`pydantic.BaseModel`][pydantic.main.BaseModel] and define fields as annotated attributes.  -->
+Pydanticでスキーマを定義する主な方法の1つは、モデルを使用することです。モデルは、[`pydantic.BaseModel`][pydantic.main.BaseModel]から継承し、フィールドを注釈付き属性として定義する単純なクラスです。
 
 <!-- You can think of models as similar to structs in languages like C, or as the requirements of a single endpoint in an API. -->
 モデルは、Cなどの言語の構造体に似ていると考えることも、APIの単一エンドポイントの要件と考えることもできます。

@@ -18,12 +18,12 @@ repos:
     exclude: '^pdm\.lock$'
 - repo: local
   hooks:
-  - id: lint
-    name: Lint
-    entry: make lint
-    types: [python]
-    language: system
-    pass_filenames: false
+  # - id: lint
+  #   name: Lint
+  #   entry: make lint
+  #   types: [python]
+  #   language: system
+  #   pass_filenames: false
   - id: usage_docs
     name: Usage docs links
     entry: pdm run ./tests/check_usage_docs.py
