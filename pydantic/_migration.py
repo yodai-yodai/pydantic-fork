@@ -247,14 +247,6 @@ REMOVED_IN_V2 = {
 
 
 def getattr_migration(module: str) -> Callable[[str], Any]:
-    # """Implement PEP 562 for objects that were either moved or removed on the migration to V2.
-
-    # Args:
-    #     module: The module name.
-
-    # Returns:
-    #     A callable that will raise an error if the object is not found.
-    # """
     """V2への移行時に移動または削除されたオブジェクトに対してPEP 562を実装します。
 
     Args:
@@ -266,16 +258,6 @@ def getattr_migration(module: str) -> Callable[[str], Any]:
     from .errors import PydanticImportError
 
     def wrapper(name: str) -> object:
-        # """Raise an error if the object is not found, or warn if it was moved.
-
-        # In case it was moved, it still returns the object.
-
-        # Args:
-        #     name: The object name.
-
-        # Returns:
-        #     The object.
-        # """
         """オブジェクトが見つからない場合はエラーを発生させ、オブジェクトが移動された場合は警告します。
 
         移動された場合でも、オブジェクトを返します。

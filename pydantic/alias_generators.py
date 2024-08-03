@@ -10,14 +10,6 @@ __all__ = ("to_pascal", "to_camel", "to_snake")
 
 
 def to_pascal(snake: str) -> str:
-    # """Convert a snake_case string to PascalCase.
-
-    # Args:
-    #     snake: The string to convert.
-
-    # Returns:
-    #     The PascalCase string.
-    # """
     """snake_case文字列をPascalCaseに変換します。
 
     Args:
@@ -31,14 +23,6 @@ def to_pascal(snake: str) -> str:
 
 
 def to_camel(snake: str) -> str:
-    # """Convert a snake_case string to camelCase.
-
-    # Args:
-    #     snake: The string to convert.
-
-    # Returns:
-    #     The converted camelCase string.
-    # """
     """snake_case文字列をcamelCaseに変換します。
 
     Args:
@@ -57,14 +41,6 @@ def to_camel(snake: str) -> str:
 
 
 def to_snake(camel: str) -> str:
-    # """Convert a PascalCase, camelCase, or kebab-case string to snake_case.
-
-    # Args:
-    #     camel: The string to convert.
-
-    # Returns:
-    #     The converted string in snake_case.
-    # """
     """PascalCase、camelCase、またはkebab-case文字列をsnake_caseに変換します。
 
     Args:

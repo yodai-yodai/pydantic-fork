@@ -1,16 +1,3 @@
-# """Color definitions are used as per the CSS3
-# [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#svg-color) specification.
-
-# A few colors have multiple names referring to the sames colors, eg. `grey` and `gray` or `aqua` and `cyan`.
-
-# In these cases the _last_ color when sorted alphabetically takes preferences,
-# eg. `Color((0, 255, 255)).as_named() == 'cyan'` because "cyan" comes after "aqua".
-
-# Warning: Deprecated
-#     The `Color` class is deprecated, use `pydantic_extra_types` instead.
-#     See [`pydantic-extra-types.Color`](../usage/types/extra_types/color_types.md)
-#     for more information.
-# """
 """カラー定義はCSS3に従って使用されます
 [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#svg-color)仕様
 
@@ -44,7 +31,6 @@ HslColorTuple = Union[Tuple[float, float, float], Tuple[float, float, float, flo
 
 
 class RGBA:
-    # """Internal use only as a representation of a color."""
     """色の表現としてのみ内部的に使用されます。"""
 
     __slots__ = "r", "g", "b", "alpha", "_tuple"
@@ -277,17 +263,6 @@ class Color(_repr.Representation):
 
 
 def parse_tuple(value: Tuple[Any, ...]) -> RGBA:
-    # """Parse a tuple or list to get RGBA values.
-
-    # Args:
-    #     value: A tuple or list.
-
-    # Returns:
-    #     An `RGBA` tuple parsed from the input tuple.
-
-    # Raises:
-    #     PydanticCustomError: If tuple is not valid.
-    # """
     """タプルまたはリストを解析してRGBA値を取得します。
 
     Args:
@@ -312,25 +287,6 @@ def parse_tuple(value: Tuple[Any, ...]) -> RGBA:
 
 
 def parse_str(value: str) -> RGBA:
-    # """Parse a string representing a color to an RGBA tuple.
-
-    # Possible formats for the input string include:
-
-    # * named color, see `COLORS_BY_NAME`
-    # * hex short eg. `<prefix>fff` (prefix can be `#`, `0x` or nothing)
-    # * hex long eg. `<prefix>ffffff` (prefix can be `#`, `0x` or nothing)
-    # * `rgb(<r>, <g>, <b>)`
-    # * `rgba(<r>, <g>, <b>, <a>)`
-
-    # Args:
-    #     value: A string representing a color.
-
-    # Returns:
-    #     An `RGBA` tuple parsed from the input string.
-
-    # Raises:
-    #     ValueError: If the input string cannot be parsed to an RGBA tuple.
-    # """
     """色を表す文字列をRGBAタプルに解析します。
 
     入力文字列の形式は次のとおりです。
@@ -398,17 +354,6 @@ def ints_to_rgba(
     b: Union[int, str],
     alpha: Optional[float] = None,
 ) -> RGBA:
-    # """Converts integer or string values for RGB color and an optional alpha value to an `RGBA` object.
-
-    # Args:
-    #     r: An integer or string representing the red color value.
-    #     g: An integer or string representing the green color value.
-    #     b: An integer or string representing the blue color value.
-    #     alpha: A float representing the alpha value. Defaults to None.
-
-    # Returns:
-    #     An instance of the `RGBA` class with the corresponding color and alpha values.
-    # """
     """RGBカラーの整数値または文字列値とオプションのアルファ値を`RGBA`オブジェクトに変換します。
 
     Args:
@@ -431,18 +376,6 @@ def ints_to_rgba(
 
 
 def parse_color_value(value: Union[int, str], max_val: int = 255) -> float:
-    # """Parse the color value provided and return a number between 0 and 1.
-
-    # Args:
-    #     value: An integer or string color value.
-    #     max_val: Maximum range value. Defaults to 255.
-
-    # Raises:
-    #     PydanticCustomError: If the value is not a valid color.
-
-    # Returns:
-    #     A number between 0 and 1.
-    # """
     """指定された色の値を解析し、0～1の数値を返します。
 
     Args:
@@ -473,17 +406,6 @@ def parse_color_value(value: Union[int, str], max_val: int = 255) -> float:
 
 
 def parse_float_alpha(value: Union[None, str, float, int]) -> Optional[float]:
-    # """Parse an alpha value checking it's a valid float in the range 0 to 1.
-
-    # Args:
-    #     value: The input value to parse.
-
-    # Returns:
-    #     The parsed value as a float, or `None` if the value was None or equal 1.
-
-    # Raises:
-    #     PydanticCustomError: If the input value cannot be successfully parsed as a float in the expected range.
-    # """
     """アルファ値を解析して、それが0から1の範囲の有効な浮動小数点であることを確認します。
 
     Args:
@@ -522,18 +444,6 @@ def parse_float_alpha(value: Union[None, str, float, int]) -> Optional[float]:
 def parse_hsl(
     h: str, h_units: str, sat: str, light: str, alpha: Optional[float] = None
 ) -> RGBA:
-    # """Parse raw hue, saturation, lightness, and alpha values and convert to RGBA.
-
-    # Args:
-    #     h: The hue value.
-    #     h_units: The unit for hue value.
-    #     sat: The saturation value.
-    #     light: The lightness value.
-    #     alpha: Alpha value.
-
-    # Returns:
-    #     An instance of `RGBA`.
-    # """
     """生の色相、彩度、明度、およびアルファ値を解析し、RGBAに変換します。
 
     Args:
@@ -562,17 +472,6 @@ def parse_hsl(
 
 
 def float_to_255(c: float) -> int:
-    # """Converts a float value between 0 and 1 (inclusive) to an integer between 0 and 255 (inclusive).
-
-    # Args:
-    #     c: The float value to be converted. Must be between 0 and 1 (inclusive).
-
-    # Returns:
-    #     The integer equivalent of the given float value rounded to the nearest whole number.
-
-    # Raises:
-    #     ValueError: If the given float value is outside the acceptable range of 0 to 1 (inclusive).
-    # """
     """0～1(両端を含む)の浮動小数点値を0～255(両端を含む)の整数に変換します。
 
     Args:

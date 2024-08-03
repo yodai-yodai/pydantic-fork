@@ -14,13 +14,6 @@ __all__ = ("AliasGenerator", "AliasPath", "AliasChoices")
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasPath:
-    # """Usage docs: https://docs.pydantic.dev/2.9/concepts/alias#aliaspath-and-aliaschoices
-
-    # A data class used by `validation_alias` as a convenience to create aliases.
-
-    # Attributes:
-    #     path: A list of string or integer aliases.
-    # """
     """Usage docs: ../concepts/alias#aliaspath-and-aliaschoices
 
     エイリアスを作成するために`validation_alias`によって使用されるデータクラス。
@@ -28,17 +21,13 @@ class AliasPath:
     Attributes:
         path:文字列または整数のエイリアスのリスト。
     """
+
     path: list[int | str]
 
     def __init__(self, first_arg: str, *args: str | int) -> None:
         self.path = [first_arg] + list(args)
 
     def convert_to_aliases(self) -> list[str | int]:
-        # """Converts arguments to a list of string or integer aliases.
-
-        # Returns:
-        #     The list of aliases.
-        # """
         """引数を文字列または整数のエイリアスのリストに変換します。
 
         Returns:
@@ -47,11 +36,6 @@ class AliasPath:
         return self.path
 
     def search_dict_for_path(self, d: dict) -> Any:
-        # """Searches a dictionary for the path specified by the alias.
-
-        # Returns:
-        #     The value at the specified path, or `PydanticUndefined` if the path is not found.
-        # """
         """エイリアスで指定されたパスを辞書で検索します。
 
         Returns:
@@ -71,13 +55,6 @@ class AliasPath:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasChoices:
-    # """Usage docs: https://docs.pydantic.dev/2.9/concepts/alias#aliaspath-and-aliaschoices
-
-    # A data class used by `validation_alias` as a convenience to create aliases.
-
-    # Attributes:
-    #     choices: A list containing a string or `AliasPath`.
-    # """
     """Usage docs: ../concepts/alias#aliaspath-and-aliaschoices
 
     エイリアスを作成するために`validation_alias`によって使用されるデータクラス。
@@ -94,11 +71,6 @@ class AliasChoices:
         self.choices = [first_choice] + list(choices)
 
     def convert_to_aliases(self) -> list[list[str | int]]:
-        # """Converts arguments to a list of lists containing string or integer aliases.
-
-        # Returns:
-        #     The list of aliases.
-        # """
         """引数を、文字列または整数のエイリアスを含むリストのリストに変換します。
 
         Returns:
@@ -115,15 +87,6 @@ class AliasChoices:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasGenerator:
-    # """Usage docs: https://docs.pydantic.dev/2.9/concepts/alias#using-an-aliasgenerator
-
-    # A data class used by `alias_generator` as a convenience to create various aliases.
-
-    # Attributes:
-    #     alias: A callable that takes a field name and returns an alias for it.
-    #     validation_alias: A callable that takes a field name and returns a validation alias for it.
-    #     serialization_alias: A callable that takes a field name and returns a serialization alias for it.
-    # """
     """Usage docs: ../concepts/alias#using-an-aliasgenerator
 
     さまざまなエイリアスを簡単に作成するために`alias_generator`が使用するデータクラスです。
@@ -144,11 +107,6 @@ class AliasGenerator:
         allowed_types: tuple[type[str] | type[AliasPath] | type[AliasChoices], ...],
         field_name: str,
     ) -> str | AliasPath | AliasChoices | None:
-        # """Generate an alias of the specified kind. Returns None if the alias generator is None.
-
-        # Raises:
-        #     TypeError: If the alias generator produces an invalid type.
-        # """
         """指定された種類のエイリアスを生成します。エイリアスジェネレータがNoneの場合は、Noneを返します。
 
         Raises:
@@ -166,11 +124,6 @@ class AliasGenerator:
     def generate_aliases(
         self, field_name: str
     ) -> tuple[str | None, str | AliasPath | AliasChoices | None, str | None]:
-        # """Generate `alias`, `validation_alias`, and `serialization_alias` for a field.
-
-        # Returns:
-        #     A tuple of three aliases - validation, alias, and serialization.
-        # """
         """フィールドの`alias`、`validation_alias`、`serialization_alias`を生成します。
 
         Returns:
