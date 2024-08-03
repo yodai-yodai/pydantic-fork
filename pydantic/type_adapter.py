@@ -1,4 +1,4 @@
-"""Type adapter specification."""
+"""アダプター仕様"""
 
 from __future__ import annotations as _annotations
 
@@ -52,17 +52,13 @@ if TYPE_CHECKING:
 
 
 def _get_schema(type_: Any, config_wrapper: _config.ConfigWrapper, parent_depth: int) -> CoreSchema:
-    """`BaseModel` uses its own `__module__` to find out where it was defined
-    and then looks for symbols to resolve forward references in those globals.
-    On the other hand this function can be called with arbitrary objects,
-    including type aliases, where `__module__` (always `typing.py`) is not useful.
-    So instead we look at the globals in our parent stack frame.
+    """`BaseModel`は独自の`__module__`を使用して定義された場所を見つけ、それらのグローバル内の前方参照を解決するシンボルを探します。
+    一方、この関数は、`__module__`(常に`typing.py`)が役に立たないような、型エイリアスを含む任意のオブジェクトで呼び出すことができます。
+    そのため、代わりに親スタックフレーム内のグローバルを調べます。
 
-    This works for the case where this function is called in a module that
-    has the target of forward references in its scope, but
-    does not always work for more complex cases.
+    これは、この関数がスコープ内に前方参照のターゲットを持つモジュール内で呼び出される場合には機能しますが、より複雑な場合には必ずしも機能しません。
 
-    For example, take the following:
+    たとえば、
 
     a.py
     ```python
@@ -83,17 +79,13 @@ def _get_schema(type_: Any, config_wrapper: _config.ConfigWrapper, parent_depth:
     v({'x': 1})  # should fail but doesn't
     ```
 
-    If `OuterDict` were a `BaseModel`, this would work because it would resolve
-    the forward reference within the `a.py` namespace.
-    But `TypeAdapter(OuterDict)` can't determine what module `OuterDict` came from.
+    `OuterDict`が`BaseModel`であれば、`a.py`名前空間内の前方参照を解決するので、これはうまくいきます。
+    しかし、`TypeAdapter(OuterDict)`は`OuterDict`がどのモジュールから来たのか判断できません。
 
-    In other words, the assumption that _all_ forward references exist in the
-    module we are being called from is not technically always true.
-    Although most of the time it is and it works fine for recursive models and such,
-    `BaseModel`'s behavior isn't perfect either and _can_ break in similar ways,
-    so there is no right or wrong between the two.
+    言い換えれば、呼び出し元のモジュールに_all_forward参照が存在するという前提は、技術的には常に正しいとは限りません。
+    ほとんどの場合はそうで、再帰的なモデルなどではうまく動作しますが、`BaseModel`の動作も完璧ではなく、同じような方法で_破ることができるので、この2つの間に正しいことも間違っていることもありません。
 
-    But at the very least this behavior is _subtly_ different from `BaseModel`'s.
+    しかし、少なくともこの振る舞いは`BaseModel`のものとは微妙に異なっています。
     """
     local_ns = _typing_extra.parent_frame_namespace(parent_depth=parent_depth)
     global_ns = sys._getframe(max(parent_depth - 1, 1)).f_globals.copy()
@@ -105,7 +97,7 @@ def _get_schema(type_: Any, config_wrapper: _config.ConfigWrapper, parent_depth:
 
 
 def _getattr_no_parents(obj: Any, attribute: str) -> Any:
-    """Returns the attribute value without attempting to look up attributes from parent types."""
+    """親タイプから属性を検索せずに属性値を返します。"""
     if hasattr(obj, '__dict__'):
         try:
             return obj.__dict__[attribute]
@@ -120,7 +112,7 @@ def _getattr_no_parents(obj: Any, attribute: str) -> Any:
 
 
 def _type_has_config(type_: Any) -> bool:
-    """Returns whether the type has config."""
+    """タイプにconfigがあるかどうかを返します。"""
     type_ = _typing_extra.annotated_type(type_) or type_
     try:
         return issubclass(type_, BaseModel) or is_dataclass(type_) or is_typeddict(type_)
@@ -148,26 +140,20 @@ def _frame_depth(
 
 @final
 class TypeAdapter(Generic[T]):
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/type_adapter/
+    """Usage docs: ../concepts/type_adapter/
 
-    Type adapters provide a flexible way to perform validation and serialization based on a Python type.
+    タイプアダプタは、Pythonタイプに基づいて検証とシリアライゼーションを実行する柔軟な方法を提供します。
 
-    A `TypeAdapter` instance exposes some of the functionality from `BaseModel` instance methods
-    for types that do not have such methods (such as dataclasses, primitive types, and more).
+    `TypeAdapter`インスタンスは、そのようなメソッドを持たない型(データクラス、プリミティブ型など)に対して、`BaseModel`インスタンスメソッドの機能の一部を公開します。
 
-    **Note:** `TypeAdapter` instances are not types, and cannot be used as type annotations for fields.
+    **Note:** `TypeAdapter`インスタンスは型ではなく、フィールドの型注釈として使用することはできません。
 
-    **Note:** By default, `TypeAdapter` does not respect the
-    [`defer_build=True`][pydantic.config.ConfigDict.defer_build] setting in the
-    [`model_config`][pydantic.BaseModel.model_config] or in the `TypeAdapter` constructor `config`. You need to also
-    explicitly set [`experimental_defer_build_mode=('model', 'type_adapter')`][pydantic.config.ConfigDict.experimental_defer_build_mode] of the
-    config to defer the model validator and serializer construction. Thus, this feature is opt-in to ensure backwards
-    compatibility.
+    **Note:** デフォルトでは、`TypeAdapter`は[`model_config`][pydantic.BaseModel.model_config]または`TypeAdapter`コンストラクタ`config`の[`defer_build=True`][pydantic.config.ConfigDict.defer_build]設定を考慮しません。また、モデルバリデータとシリアライザの構築を延期するには、設定の[`experimental_defer_build_mode=('model','type_adapter')`][pydantic.config.ConfigDict.experimental_defer_build_mode]を明示的に設定する必要があります。したがって、この機能は下位互換性を保証するためにオプトインされています。
 
     Attributes:
-        core_schema: The core schema for the type.
-        validator (SchemaValidator): The schema validator for the type.
-        serializer: The schema serializer for the type.
+        core_schema: 型のコア・スキーマ。
+        validator(SchemaValidator): 型のスキーマ・バリデーター。
+        serializer: 型のスキーマ・シリアライザ。
     """
 
     @overload
@@ -201,27 +187,23 @@ class TypeAdapter(Generic[T]):
         _parent_depth: int = 2,
         module: str | None = None,
     ) -> None:
-        """Initializes the TypeAdapter object.
+        """TypeAdapterオブジェクトを初期化します。
 
         Args:
-            type: The type associated with the `TypeAdapter`.
-            config: Configuration for the `TypeAdapter`, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
-            _parent_depth: depth at which to search the parent namespace to construct the local namespace.
-            module: The module that passes to plugin if provided.
+            type: `TypeAdapter`に関連付けられた型。
+            config: `TypeAdapter`の設定は、[`ConfigDict`][pydantic.config.ConfigDict]に準拠した辞書でなければなりません。
+            _parent_depth: ローカルネームスペースを構築するために親ネームスペースを検索するデプス。
+            module: プラグインに渡されるモジュール(指定されている場合)。
 
         !!! note
-            You cannot use the `config` argument when instantiating a `TypeAdapter` if the type you're using has its own
-            config that cannot be overridden (ex: `BaseModel`, `TypedDict`, and `dataclass`). A
-            [`type-adapter-config-unused`](../errors/usage_errors.md#type-adapter-config-unused) error will be raised in this case.
+            使用している型が上書きできない独自の設定を持っている場合(例:`BaseModel`、`TypedDict`、`dataclass`)、`TypeAdapter`をインスタンス化するときに`config`引数を使用することはできません。この場合、[`type-adapter-config-unused`](../errors/usage_errors.md#type-adapter-config-unused)エラーが発生します。
 
         !!! note
-            The `_parent_depth` argument is named with an underscore to suggest its private nature and discourage use.
-            It may be deprecated in a minor version, so we only recommend using it if you're
-            comfortable with potential change in behavior / support.
+            `_parent_depth`引数の名前にはアンダースコアが付いています。これは、引数がプライベートであることを示し、使用しないようにするためです。
+            マイナーバージョンでは非推奨になる可能性があるため、動作/サポートの潜在的な変更に満足している場合にのみ使用することをお勧めします。
 
         ??? tip "Compatibility with `mypy`"
-            Depending on the type used, `mypy` might raise an error when instantiating a `TypeAdapter`. As a workaround, you can explicitly
-            annotate your variable:
+            使用されているタイプによっては、`mypy`が`TypeAdapter`をインスタンス化するときにエラーが発生することがあります。回避策として、変数に明示的に注釈を付けることができます。
 
             ```py
             from typing import Union
@@ -232,7 +214,7 @@ class TypeAdapter(Generic[T]):
             ```
 
         Returns:
-            A type adapter configured for the specified `type`.
+            指定された`type`用に設定されたタイプアダプタ。
         """
         if _type_has_config(type) and config is not None:
             raise PydanticUserError(
@@ -303,7 +285,7 @@ class TypeAdapter(Generic[T]):
     @cached_property
     @_frame_depth(2)  # +2 for @cached_property and core_schema(self)
     def core_schema(self) -> CoreSchema:
-        """The pydantic-core schema used to build the SchemaValidator and SchemaSerializer."""
+        """「SchemaValidatorとSchemaSerializerを構築するために使用されるpydantic-coreスキーマ。"""
         if self._core_schema is None or isinstance(self._core_schema, _mock_val_ser.MockCoreSchema):
             self._init_core_attrs(rebuild_mocks=True)  # Do not expose MockCoreSchema from public function
         assert self._core_schema is not None and not isinstance(self._core_schema, _mock_val_ser.MockCoreSchema)
@@ -312,7 +294,7 @@ class TypeAdapter(Generic[T]):
     @cached_property
     @_frame_depth(2)  # +2 for @cached_property + validator(self)
     def validator(self) -> SchemaValidator | PluggableSchemaValidator:
-        """The pydantic-core SchemaValidator used to validate instances of the model."""
+        """モデルのインスタンスを検証するために使用されるpydantic-core SchemaValidator。"""
         if not isinstance(self._validator, (SchemaValidator, PluggableSchemaValidator)):
             self._init_core_attrs(rebuild_mocks=True)  # Do not expose MockValSer from public function
         assert isinstance(self._validator, (SchemaValidator, PluggableSchemaValidator))
@@ -321,7 +303,7 @@ class TypeAdapter(Generic[T]):
     @cached_property
     @_frame_depth(2)  # +2 for @cached_property + serializer(self)
     def serializer(self) -> SchemaSerializer:
-        """The pydantic-core SchemaSerializer used to dump instances of the model."""
+        """モデルのインスタンスをダンプするために使用されるpydantic-core SchemaSerializer。"""
         if not isinstance(self._serializer, SchemaSerializer):
             self._init_core_attrs(rebuild_mocks=True)  # Do not expose MockValSer from public function
         assert isinstance(self._serializer, SchemaSerializer)
@@ -355,20 +337,19 @@ class TypeAdapter(Generic[T]):
         from_attributes: bool | None = None,
         context: dict[str, Any] | None = None,
     ) -> T:
-        """Validate a Python object against the model.
+        """モデルに対してPythonオブジェクトを検証します。
 
         Args:
-            object: The Python object to validate against the model.
-            strict: Whether to strictly check types.
-            from_attributes: Whether to extract data from object attributes.
-            context: Additional context to pass to the validator.
+            object: モデルに対して検証するPythonオブジェクト。
+            strict: 型を厳密にチェックするかどうか。
+            from_attributes: オブジェクト属性からデータを抽出するかどうか。
+            context: バリデータに渡す追加のコンテキスト。
 
         !!! note
-            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
-            argument is not supported.
+            Pydanticの`dataclass`で`TypeAdapter`を使用する場合、`from_attributes`引数の使用はサポートされません。
 
         Returns:
-            The validated object.
+            検証されたオブジェクトです。
         """
         return self.validator.validate_python(object, strict=strict, from_attributes=from_attributes, context=context)
 
@@ -376,44 +357,44 @@ class TypeAdapter(Generic[T]):
     def validate_json(
         self, data: str | bytes, /, *, strict: bool | None = None, context: dict[str, Any] | None = None
     ) -> T:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/json/#json-parsing
+        """Usage docs: ../concepts/json/#json-parsing
 
-        Validate a JSON string or bytes against the model.
+        JSON文字列またはバイトをモデルに対して検証します。
 
         Args:
-            data: The JSON data to validate against the model.
-            strict: Whether to strictly check types.
-            context: Additional context to use during validation.
+            data: モデルに対して検証するJSONデータ。
+            strict: 型を厳密にチェックするかどうか。
+            context: 検証中に使用する追加のコンテキスト。
 
         Returns:
-            The validated object.
+            検証されたオブジェクトです。
         """
         return self.validator.validate_json(data, strict=strict, context=context)
 
     @_frame_depth(1)
     def validate_strings(self, obj: Any, /, *, strict: bool | None = None, context: dict[str, Any] | None = None) -> T:
-        """Validate object contains string data against the model.
+        """検証オブジェクトには、モデルに対する文字列データが含まれています。
 
         Args:
-            obj: The object contains string data to validate.
-            strict: Whether to strictly check types.
-            context: Additional context to use during validation.
+            obj: 検証する文字列データがオブジェクトに含まれています。
+            strict: 型を厳密にチェックするかどうか。
+            context: 検証中に使用する追加のコンテキスト。
 
         Returns:
-            The validated object.
+            検証されたオブジェクトです。
         """
         return self.validator.validate_strings(obj, strict=strict, context=context)
 
     @_frame_depth(1)
     def get_default_value(self, *, strict: bool | None = None, context: dict[str, Any] | None = None) -> Some[T] | None:
-        """Get the default value for the wrapped type.
+        """ラップされたタイプのデフォルト値を取得します。
 
         Args:
-            strict: Whether to strictly check types.
-            context: Additional context to pass to the validator.
+            strict: 型を厳密にチェックするかどうか。
+            context: バリデータに渡す追加のコンテキスト。
 
         Returns:
-            The default value wrapped in a `Some` if there is one or None if not.
+            存在する場合は`Some`でラップされたデフォルト値、存在しない場合はNoneでラップされたデフォルト値。
         """
         return self.validator.get_default_value(strict=strict, context=context)
 
@@ -435,25 +416,24 @@ class TypeAdapter(Generic[T]):
         serialize_as_any: bool = False,
         context: dict[str, Any] | None = None,
     ) -> Any:
-        """Dump an instance of the adapted type to a Python object.
+        """適合した型のインスタンスをPythonオブジェクトにダンプします。
 
         Args:
-            instance: The Python object to serialize.
-            mode: The output format.
-            include: Fields to include in the output.
-            exclude: Fields to exclude from the output.
-            by_alias: Whether to use alias names for field names.
-            exclude_unset: Whether to exclude unset fields.
-            exclude_defaults: Whether to exclude fields with default values.
-            exclude_none: Whether to exclude fields with None values.
-            round_trip: Whether to output the serialized data in a way that is compatible with deserialization.
-            warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
-                "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
-            serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
-            context: Additional context to pass to the serializer.
+            instance: シリアライズするPythonオブジェクト。
+            mode: 出力フォーマット。
+            include: 出力に含めるフィールド。
+            exclude: 出力から除外するフィールド。
+            by_alias: フィールド名にエイリアス名を使用するかどうか。
+            exclude_unset: 設定されていないフィールドを除外するかどうか。
+            exclude_defaults: デフォルト値を持つフィールドを除外するかどうか。
+            exclude_none: None値を持つフィールドを除外するかどうか。
+            round_trip: デシリアライズと互換性のある方法でシリアライズされたデータを出力するかどうか。
+            warnings: シリアライゼーションエラーの処理方法。False/"none"はエラーを無視します。True/"warn"はエラーをログに記録します。"error"は[`PydanticSerializationError`][pydantic_core.PydanticSerializationError]を発生させます。
+            serialize_as_any: ダック型のシリアライズ動作でフィールドをシリアライズするかどうか。
+            context: シリアライザに渡す追加のコンテキスト。
 
         Returns:
-            The serialized object.
+            シリアライズされたオブジェクト。
         """
         return self.serializer.to_python(
             instance,
@@ -488,27 +468,26 @@ class TypeAdapter(Generic[T]):
         serialize_as_any: bool = False,
         context: dict[str, Any] | None = None,
     ) -> bytes:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/json/#json-serialization
+        """Usage docs: ../concepts/json/#json-serialization
 
-        Serialize an instance of the adapted type to JSON.
+        適応型のインスタンスをJSONにシリアライズします。
 
         Args:
-            instance: The instance to be serialized.
-            indent: Number of spaces for JSON indentation.
-            include: Fields to include.
-            exclude: Fields to exclude.
-            by_alias: Whether to use alias names for field names.
-            exclude_unset: Whether to exclude unset fields.
-            exclude_defaults: Whether to exclude fields with default values.
-            exclude_none: Whether to exclude fields with a value of `None`.
-            round_trip: Whether to serialize and deserialize the instance to ensure round-tripping.
-            warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
-                "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
-            serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
-            context: Additional context to pass to the serializer.
+            instance: シリアライズされるインスタンス。
+            indent: JSONインデントのスペースの数。
+            include: 含めるフィールド。
+            exclude: 除外するフィールド。
+            by_alias: フィールド名にエイリアス名を使用するかどうか。
+            exclude_unset: 設定されていないフィールドを除外するかどうか。
+            exclude_defaults: デフォルト値を持つフィールドを除外するかどうか。
+            exclude_none: `None`の値を持つフィールドを除外するかどうか。
+            round_trip: ラウンドトリップを確実にするために、インスタンスをシリアライズしてデシリアライズするかどうか。
+            warnings: シリアライゼーションエラーの処理方法。False/"none"はエラーを無視します。True/"warn"はエラーをログに記録します。"error"は[`PydanticSerializationError`][pydantic_core.PydanticSerializationError]を発生させます。
+            serialize_as_any: ダック型のシリアライズ動作でフィールドをシリアライズするかどうか。
+            context: シリアライザに渡す追加のコンテキスト。
 
         Returns:
-            The JSON representation of the given instance as bytes.
+            指定されたインスタンスのJSON表現(バイト単位)。
         """
         return self.serializer.to_json(
             instance,
@@ -534,16 +513,16 @@ class TypeAdapter(Generic[T]):
         schema_generator: type[GenerateJsonSchema] = GenerateJsonSchema,
         mode: JsonSchemaMode = 'validation',
     ) -> dict[str, Any]:
-        """Generate a JSON schema for the adapted type.
+        """適用された型のJSONスキーマを生成します。
 
         Args:
-            by_alias: Whether to use alias names for field names.
-            ref_template: The format string used for generating $ref strings.
-            schema_generator: The generator class used for creating the schema.
-            mode: The mode to use for schema generation.
+            by_alias: フィールド名にエイリアス名を使用するかどうか。
+            ref_template: $ref文字列の生成に使用される書式文字列。
+            schema_generator: スキーマの作成に使用するジェネレーター・クラス。
+            mode: スキーマの生成に使用するモード。
 
         Returns:
-            The JSON schema for the model as a dictionary.
+            ディクショナリとしてのモデルのJSONスキーマ。
         """
         schema_generator_instance = schema_generator(by_alias=by_alias, ref_template=ref_template)
         return schema_generator_instance.generate(self.core_schema, mode=mode)
@@ -559,27 +538,21 @@ class TypeAdapter(Generic[T]):
         ref_template: str = DEFAULT_REF_TEMPLATE,
         schema_generator: type[GenerateJsonSchema] = GenerateJsonSchema,
     ) -> tuple[dict[tuple[JsonSchemaKeyT, JsonSchemaMode], JsonSchemaValue], JsonSchemaValue]:
-        """Generate a JSON schema including definitions from multiple type adapters.
+        """複数のタイプアダプタからの定義を含むJSONスキーマを生成します。
 
         Args:
-            inputs: Inputs to schema generation. The first two items will form the keys of the (first)
-                output mapping; the type adapters will provide the core schemas that get converted into
-                definitions in the output JSON schema.
-            by_alias: Whether to use alias names.
-            title: The title for the schema.
-            description: The description for the schema.
-            ref_template: The format string used for generating $ref strings.
-            schema_generator: The generator class used for creating the schema.
+            inputs: スキーマ生成への入力です。最初の2つの項目は、(最初の)出力マッピングのキーを形成します。
+            by_alias: エイリアス名を使用するかどうか。
+            title: スキーマのタイトル。
+            description: スキーマの説明。
+            ref_template: $ref文字列の生成に使用される書式文字列。
+            schema_generator: スキーマの作成に使用するジェネレーター・クラス。
 
         Returns:
-            A tuple where:
+            次の条件を満たすタプル:
 
-                - The first element is a dictionary whose keys are tuples of JSON schema key type and JSON mode, and
-                    whose values are the JSON schema corresponding to that pair of inputs. (These schemas may have
-                    JsonRef references to definitions that are defined in the second returned element.)
-                - The second element is a JSON schema containing all definitions referenced in the first returned
-                    element, along with the optional title and description keys.
-
+            - 最初の要素は、JSONスキーマ・キー・タイプとJSONモードのタプルをキーとし、その入力ペアに対応するJSONスキーマを値とする辞書です(これらのスキーマは、2番目に返された要素で定義されている定義へのJsonRef参照を持つ場合があります)。
+            - 2番目の要素は、最初に返された要素で参照されるすべての定義と、オプションのtitleおよびdescriptionキーを含むJSONスキーマです。
         """
         schema_generator_instance = schema_generator(by_alias=by_alias, ref_template=ref_template)
 

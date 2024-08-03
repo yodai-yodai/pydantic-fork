@@ -139,7 +139,7 @@ class RootModel(BaseModel, typing.Generic[RootModelRootType], metaclass=_RootMod
             引数の詳細については、`BaseModel.model_dump`のドキュメントを参照してください。
 
             一般に、`RootModelRootType`が`BaseModel`サブクラスではないと仮定すると、このメソッドの戻り値の型は`RootModelRootType`になります。`RootModelRootType`が`BaseModel`サブクラスである場合、戻り値の型は`dict[str, Any]`になります。これは`model_dump`呼び出しが再帰的であるためです。カスタムシリアライザの場合、戻り値の型は別のものになることもあります。
-            したがって、ここでは「Any」を使用して、これらのケースをすべてキャッチします。
+            したがって、ここでは"Any"を使用して、これらのケースをすべてキャッチします。
             """
             ...
 
