@@ -27,12 +27,12 @@ _inspect_validator = _decorators.inspect_validator
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class AfterValidator:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validators/#annotated-validators
+    """Usage docs: ../concepts/validators/#annotated-validators
 
-    A metadata class that indicates that a validation should be applied **after** the inner validation logic.
+    内部検証ロジックの**後**に検証を適用する必要があることを示すメタデータクラス。
 
     Attributes:
-        func: The validator function.
+        func: バリデーター関数。
 
     Example:
         ```py
@@ -83,12 +83,12 @@ class AfterValidator:
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class BeforeValidator:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validators/#annotated-validators
+    """Usage docs: ../concepts/validators/#annotated-validators
 
-    A metadata class that indicates that a validation should be applied **before** the inner validation logic.
+    内部検証ロジックの**前**に検証を適用する必要があることを示すメタデータクラス。
 
     Attributes:
-        func: The validator function.
+        func: バリデーター関数。
 
     Example:
         ```py
@@ -127,12 +127,12 @@ class BeforeValidator:
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class PlainValidator:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validators/#annotated-validators
+    """Usage docs: ../concepts/validators/#annotated-validators
 
-    A metadata class that indicates that a validation should be applied **instead** of the inner validation logic.
+    内部検証ロジックの**代わりに**検証を適用する必要があることを示すメタデータクラス。
 
     Attributes:
-        func: The validator function.
+        func: バリデーター関数。
 
     Example:
         ```py
@@ -179,12 +179,12 @@ class PlainValidator:
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class WrapValidator:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validators/#annotated-validators
+    """Usage docs: ../concepts/validators/#annotated-validators
 
-    A metadata class that indicates that a validation should be applied **around** the inner validation logic.
+    内部検証ロジックの**周辺**に検証を適用する必要があることを示すメタデータクラス。
 
     Attributes:
-        func: The validator function.
+        func:バリデーター関数。
 
     ```py
     from datetime import datetime
@@ -297,9 +297,9 @@ def field_validator(
     mode: FieldValidatorModes = 'after',
     check_fields: bool | None = None,
 ) -> Callable[[Any], Any]:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validators/#field-validators
+    """Usage docs: ../concepts/validators/#field-validators
 
-    Decorate methods on the class indicating that they should be used to validate fields.
+    クラスのメソッドをデコレートして、フィールドの検証に使用する必要があることを示します。
 
     Example usage:
     ```py
@@ -335,23 +335,22 @@ def field_validator(
         '''
     ```
 
-    For more in depth examples, see [Field Validators](../concepts/validators.md#field-validators).
+    詳細な例については、[Field Validators](../concepts/validators.md#field-validators)を参照してください。
 
     Args:
-        field: The first field the `field_validator` should be called on; this is separate
-            from `fields` to ensure an error is raised if you don't pass at least one.
-        *fields: Additional field(s) the `field_validator` should be called on.
-        mode: Specifies whether to validate the fields before or after validation.
-        check_fields: Whether to check that the fields actually exist on the model.
+        field: `field_validator`が呼び出される最初のフィールドです。これは`fields`とは別のもので、少なくとも1つ渡さないとエラーが発生します。
+        *fields: `field_validator`が呼び出される追加フィールドです。
+        mode: 検証の前または後にフィールドを検証するかどうかを指定します。
+        check_fields: フィールドがモデル上に実際に存在するかどうかをチェックするかどうか。
 
     Returns:
-        A decorator that can be used to decorate a function to be used as a field_validator.
+        field_validatorとして使用する関数を修飾するために使用できるデコレータ。
 
     Raises:
-        PydanticUserError:
-            - If `@field_validator` is used bare (with no fields).
-            - If the args passed to `@field_validator` as fields are not strings.
-            - If `@field_validator` applied to instance methods.
+        PydantictUserError:
+            - `@field_validator`が(フィールドなしで)使用されている場合。
+            - フィールドとして`@field_validator`に渡された引数が文字列でない場合。
+            - `@field_validator`がインスタンスメソッドに適用された場合。
     """
     if isinstance(field, FunctionType):
         raise PydanticUserError(
@@ -389,7 +388,7 @@ _ModelTypeCo = TypeVar('_ModelTypeCo', covariant=True)
 
 
 class ModelWrapValidatorHandler(_core_schema.ValidatorFunctionWrapHandler, Protocol[_ModelTypeCo]):
-    """@model_validator decorated function handler argument type. This is used when `mode='wrap'`."""
+    """@model_validatorデコレート関数ハンドラ引数タイプ。これは`mode='wrap'`のときに使用されます。"""
 
     def __call__(  # noqa: D102
         self,
@@ -401,8 +400,8 @@ class ModelWrapValidatorHandler(_core_schema.ValidatorFunctionWrapHandler, Proto
 
 
 class ModelWrapValidatorWithoutInfo(Protocol[_ModelType]):
-    """A @model_validator decorated function signature.
-    This is used when `mode='wrap'` and the function does not have info argument.
+    """@model_validatorでデコレートされた関数のシグネチャ。
+    これは、`mode='wrap'`で関数にinfo引数がない場合に使用されます。
     """
 
     def __call__(  # noqa: D102
@@ -418,7 +417,7 @@ class ModelWrapValidatorWithoutInfo(Protocol[_ModelType]):
 
 
 class ModelWrapValidator(Protocol[_ModelType]):
-    """A @model_validator decorated function signature. This is used when `mode='wrap'`."""
+    """@model_validatorでデコレートされた関数のシグネチャ。これは`mode='wrap'`のときに使用されます。"""
 
     def __call__(  # noqa: D102
         self,
@@ -434,8 +433,8 @@ class ModelWrapValidator(Protocol[_ModelType]):
 
 
 class FreeModelBeforeValidatorWithoutInfo(Protocol):
-    """A @model_validator decorated function signature.
-    This is used when `mode='before'` and the function does not have info argument.
+    """@model_validatorでデコレートされた関数のシグネチャ。
+    これは、`mode='before'`で関数にinfo引数がない場合に使用されます。
     """
 
     def __call__(  # noqa: D102
@@ -449,9 +448,11 @@ class FreeModelBeforeValidatorWithoutInfo(Protocol):
 
 
 class ModelBeforeValidatorWithoutInfo(Protocol):
-    """A @model_validator decorated function signature.
-    This is used when `mode='before'` and the function does not have info argument.
+    """@model_validatorデコレータ関数のシグネチャ。
+    これは、`mode='before'`で関数にinfo引数がない場合に使用されます。
     """
+
+
 
     def __call__(  # noqa: D102
         self,
@@ -465,7 +466,7 @@ class ModelBeforeValidatorWithoutInfo(Protocol):
 
 
 class FreeModelBeforeValidator(Protocol):
-    """A `@model_validator` decorated function signature. This is used when `mode='before'`."""
+    """`@model_validator`でデコレートされた関数のシグネチャ。これは`mode='before'`のときに使用されます。"""
 
     def __call__(  # noqa: D102
         self,
@@ -479,7 +480,7 @@ class FreeModelBeforeValidator(Protocol):
 
 
 class ModelBeforeValidator(Protocol):
-    """A `@model_validator` decorated function signature. This is used when `mode='before'`."""
+    """`@model_validator`でデコレートされた関数のシグネチャ。これは`mode='before'`のときに使用されます。"""
 
     def __call__(  # noqa: D102
         self,
@@ -494,12 +495,11 @@ class ModelBeforeValidator(Protocol):
 
 
 ModelAfterValidatorWithoutInfo = Callable[[_ModelType], _ModelType]
-"""A `@model_validator` decorated function signature. This is used when `mode='after'` and the function does not
-have info argument.
+"""`@model_validator`でデコレートされた関数のシグネチャ。これは、`mode='after'`で、関数にinfo引数がない場合に使用されます。
 """
 
 ModelAfterValidator = Callable[[_ModelType, _core_schema.ValidationInfo], _ModelType]
-"""A `@model_validator` decorated function signature. This is used when `mode='after'`."""
+"""`@model_validator`でデコレートされた関数のシグネチャ。これは`mode='after'`のときに使用されます。"""
 
 _AnyModelWrapValidator = Union[ModelWrapValidator[_ModelType], ModelWrapValidatorWithoutInfo[_ModelType]]
 _AnyModeBeforeValidator = Union[
@@ -539,9 +539,10 @@ def model_validator(
     *,
     mode: Literal['wrap', 'before', 'after'],
 ) -> Any:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validators/#model-validators
+    """Usage docs: ../concepts/validators/#model-validators
 
     Decorate model methods for validation purposes.
+    検証のためにモデルメソッドをデコレートする。
 
     Example usage:
     ```py
@@ -573,14 +574,14 @@ def model_validator(
         '''
     ```
 
-    For more in depth examples, see [Model Validators](../concepts/validators.md#model-validators).
+    詳細な例については、[Model Validators](../concepts/validators.md#model-validators)を参照してください。
+
 
     Args:
-        mode: A required string literal that specifies the validation mode.
-            It can be one of the following: 'wrap', 'before', or 'after'.
+        mode: 検証モードを指定する必須文字列リテラル。'wrap'、'before'、または'after'のいずれかです。
 
     Returns:
-        A decorator that can be used to decorate a function to be used as a model validator.
+        モデルバリデータとして使用される関数をデコレートするために使用できるデコレータ。
     """
 
     def dec(f: Any) -> _decorators.PydanticDescriptorProxy[Any]:
@@ -603,7 +604,7 @@ else:
 
     @dataclasses.dataclass(**_internal_dataclass.slots_true)
     class InstanceOf:
-        '''Generic type for annotating a type that is an instance of a given class.
+        '''特定のクラスのインスタンスであるタイプに注釈を付けるための汎用タイプ。
 
         Example:
             ```py
@@ -668,15 +669,11 @@ else:
 
     @dataclasses.dataclass(**_internal_dataclass.slots_true)
     class SkipValidation:
-        """If this is applied as an annotation (e.g., via `x: Annotated[int, SkipValidation]`), validation will be
-            skipped. You can also use `SkipValidation[int]` as a shorthand for `Annotated[int, SkipValidation]`.
+        """これが注釈として適用される場合(例えば、`x:Annotated[int, SkipValidation]`)、検証はスキップされます。`SkipValidation[int]`を`Annotated[int, SkipValidation]`の省略形として使用することもできます。
 
-        This can be useful if you want to use a type annotation for documentation/IDE/type-checking purposes,
-        and know that it is safe to skip validation for one or more of the fields.
+        これは、ドキュメント/IDE/型チェックの目的で型アノテーションを使用し、1つ以上のフィールドの検証を省略しても安全であることがわかっている場合に便利です。
 
-        Because this converts the validation schema to `any_schema`, subsequent annotation-applied transformations
-        may not have the expected effects. Therefore, when used, this annotation should generally be the final
-        annotation applied to a type.
+        これは検証スキーマを`any_schema`に変換するので、後続のアノテーション適用変換は期待された効果を持たない可能性があります。したがって、使用される場合、このアノテーションは通常、型に適用される最後のアノテーションである必要があります。
         """
 
         def __class_getitem__(cls, item: Any) -> Any:

@@ -1,4 +1,4 @@
-"""This module contains related classes and functions for serialization."""
+"""このモジュールには、シリアル化のための関連クラスと関数が含まれています。"""
 
 from __future__ import annotations
 
@@ -17,10 +17,10 @@ from .annotated_handlers import GetCoreSchemaHandler
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true, frozen=True)
 class PlainSerializer:
-    """Plain serializers use a function to modify the output of serialization.
+    """普通のシリアライザは、シリアライゼーションの出力を変更するために関数を使用します。
 
-    This is particularly helpful when you want to customize the serialization for annotated types.
-    Consider an input of `list`, which will be serialized into a space-delimited string.
+    これは特に、アノテーション付き型のシリアライゼーションをカスタマイズしたい場合に役立ちます。
+    スペースで区切られた文字列にシリアライズされる`list`の入力を考えてみましょう。
 
     ```python
     from typing import List
@@ -42,10 +42,9 @@ class PlainSerializer:
     ```
 
     Attributes:
-        func: The serializer function.
-        return_type: The return type for the function. If omitted it will be inferred from the type annotation.
-        when_used: Determines when this serializer should be used. Accepts a string with values `'always'`,
-            `'unless-none'`, `'json'`, and `'json-unless-none'`. Defaults to 'always'.
+        func: シリアライザ関数。
+        return_type: 関数の戻り型。省略した場合は、型注釈から推測されます。
+        when_used: このシリアライザをいつ使用すべきかを決定します。「always」、「unless-none」、「json」、「json-unless-none」の値を持つ文字列を受け入れます。デフォルトは「always」です。
     """
 
     func: core_schema.SerializerFunction
@@ -53,14 +52,14 @@ class PlainSerializer:
     when_used: Literal['always', 'unless-none', 'json', 'json-unless-none'] = 'always'
 
     def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """Gets the Pydantic core schema.
+        """Pydanticコアスキーマを取得します。
 
         Args:
-            source_type: The source type.
-            handler: The `GetCoreSchemaHandler` instance.
+            source_type: ソース・タイプ。
+            handler: `GetCoreSchemaHandler`インスタンスです。
 
         Returns:
-            The Pydantic core schema.
+            Pydanticコアスキーマ。
         """
         schema = handler(source_type)
         try:
@@ -81,10 +80,9 @@ class PlainSerializer:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true, frozen=True)
 class WrapSerializer:
-    """Wrap serializers receive the raw inputs along with a handler function that applies the standard serialization
-    logic, and can modify the resulting value before returning it as the final output of serialization.
+    """ラップシリアライザは、標準のシリアライゼーションロジックを適用するハンドラ関数とともに生の入力を受け取り、シリアライゼーションの最終出力として返す前に、結果の値を変更できます。
 
-    For example, here's a scenario in which a wrap serializer transforms timezones to UTC **and** utilizes the existing `datetime` serialization logic.
+    例えば、ラップシリアライザがタイムゾーンをUTC**に変換し、**が既存の`datetime`シリアライゼーションロジックを利用するシナリオを考えてみましょう。
 
     ```python
     from datetime import datetime, timezone
@@ -138,10 +136,9 @@ class WrapSerializer:
     ```
 
     Attributes:
-        func: The serializer function to be wrapped.
-        return_type: The return type for the function. If omitted it will be inferred from the type annotation.
-        when_used: Determines when this serializer should be used. Accepts a string with values `'always'`,
-            `'unless-none'`, `'json'`, and `'json-unless-none'`. Defaults to 'always'.
+        func: ラップされるシリアライザ関数。
+        return_type: 関数の戻り型。省略した場合は、型注釈から推測されます。
+        when_used: このシリアライザをいつ使用すべきかを決定します。「always」、「unless-none」、「json」、「json-unless-none」の値を持つ文字列を受け入れます。デフォルトは「always」です。
     """
 
     func: core_schema.WrapSerializerFunction
@@ -149,14 +146,14 @@ class WrapSerializer:
     when_used: Literal['always', 'unless-none', 'json', 'json-unless-none'] = 'always'
 
     def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """This method is used to get the Pydantic core schema of the class.
+        """このメソッドは、クラスのPydanticコアスキーマを取得するために使用されます。
 
         Args:
-            source_type: Source type.
-            handler: Core schema handler.
+            source_type: ソース・タイプ。
+            handler: コア・スキーマ・ハンドラー。
 
         Returns:
-            The generated core schema of the class.
+            クラスの生成されたコアスキーマ。
         """
         schema = handler(source_type)
         try:
@@ -225,9 +222,9 @@ def field_serializer(
     when_used: Literal['always', 'unless-none', 'json', 'json-unless-none'] = 'always',
     check_fields: bool | None = None,
 ) -> Callable[[Any], Any]:
-    """Decorator that enables custom field serialization.
+    """カスタムフィールドのシリアル化を可能にするデコレータ。
 
-    In the below example, a field of type `set` is used to mitigate duplication. A `field_serializer` is used to serialize the data as a sorted list.
+    以下の例では、重複を避けるために`set`型のフィールドが使用されています。`field_serializer`はソートされたリストとしてデータをシリアライズするために使用されています。
 
     ```python
     from typing import Set
@@ -247,9 +244,9 @@ def field_serializer(
     #> {"name":"Jane","courses":["Chemistry","English","Math"]}
     ```
 
-    See [Custom serializers](../concepts/serialization.md#custom-serializers) for more information.
+    詳細については、[Custom serializer](../concepts/serialization.md#custom-serializer)を参照してください。
 
-    Four signatures are supported:
+    4つのシグニチャがサポートされています。
 
     - `(self, value: Any, info: FieldSerializationInfo)`
     - `(self, value: Any, nxt: SerializerFunctionWrapHandler, info: FieldSerializationInfo)`
@@ -257,18 +254,16 @@ def field_serializer(
     - `(value: Any, nxt: SerializerFunctionWrapHandler, info: SerializationInfo)`
 
     Args:
-        fields: Which field(s) the method should be called on.
-        mode: The serialization mode.
-
-            - `plain` means the function will be called instead of the default serialization logic,
-            - `wrap` means the function will be called with an argument to optionally call the
-               default serialization logic.
-        return_type: Optional return type for the function, if omitted it will be inferred from the type annotation.
-        when_used: Determines the serializer will be used for serialization.
-        check_fields: Whether to check that the fields actually exist on the model.
+        fields: メソッドが呼び出されるフィールド。
+        mode: シリアライゼーションモード。
+            - `plain`は、デフォルトのシリアライゼーションロジックの代わりに関数が呼び出されることを意味します。
+            - `wrap`は、オプションでデフォルトのシリアライゼーションロジックを呼び出すための引数とともに関数が呼び出されることを意味します。
+        return_type: 関数のオプションの戻り型です。省略した場合は、型アノテーションから推測されます。
+        when_used: シリアライズに使用するシリアライザを指定します。
+        check_fields: フィールドがモデル上に実際に存在するかどうかをチェックするかどうか。
 
     Returns:
-        The decorator function.
+        デコレータ関数。
     """
 
     def dec(
@@ -310,11 +305,11 @@ def model_serializer(
     when_used: Literal['always', 'unless-none', 'json', 'json-unless-none'] = 'always',
     return_type: Any = PydanticUndefined,
 ) -> Callable[[Any], Any]:
-    """Decorator that enables custom model serialization.
+    """カスタムモデルのシリアライゼーションを可能にするデコレータ。
 
-    This is useful when a model need to be serialized in a customized manner, allowing for flexibility beyond just specific fields.
+    これは、モデルをカスタマイズされた方法でシリアライズする必要がある場合に便利で、特定のフィールド以外にも柔軟性を持たせることができます。
 
-    An example would be to serialize temperature to the same temperature scale, such as degrees Celsius.
+    たとえば、温度を摂氏などの同じ温度スケールに直列化することができます。
 
     ```python
     from typing import Literal
@@ -336,20 +331,20 @@ def model_serializer(
     #> {'unit': 'C', 'value': 100}
     ```
 
-    See [Custom serializers](../concepts/serialization.md#custom-serializers) for more information.
+    詳細については、[Custom serializer](../concepts/serialization.md#custom-serializer)を参照してください。
 
     Args:
-        f: The function to be decorated.
-        mode: The serialization mode.
+        f: 装飾される関数。
+        mode: シリアライゼーションモード。
 
-            - `'plain'` means the function will be called instead of the default serialization logic
-            - `'wrap'` means the function will be called with an argument to optionally call the default
-                serialization logic.
-        when_used: Determines when this serializer should be used.
-        return_type: The return type for the function. If omitted it will be inferred from the type annotation.
+            - `'plain'`は、デフォルトのシリアライゼーションロジックの代わりに関数が呼び出されることを意味します。
+            - `'wrap'`は、デフォルトのシリアライゼーションロジックをオプションで呼び出すための引数を指定して関数が呼び出されることを意味します。
+
+        when_used: このシリアライザをいつ使用すべきかを決定します。
+        return_type: 関数の戻り型。省略した場合は、型注釈から推測されます。
 
     Returns:
-        The decorator function.
+        デコレータ関数。
     """
 
     def dec(f: Callable[..., Any]) -> _decorators.PydanticDescriptorProxy[Any]:
@@ -367,10 +362,8 @@ AnyType = TypeVar('AnyType')
 
 if TYPE_CHECKING:
     SerializeAsAny = Annotated[AnyType, ...]  # SerializeAsAny[list[str]] will be treated by type checkers as list[str]
-    """Force serialization to ignore whatever is defined in the schema and instead ask the object
-    itself how it should be serialized.
-    In particular, this means that when model subclasses are serialized, fields present in the subclass
-    but not in the original schema will be included.
+    """スキーマで定義されているものを無視し、代わりにオブジェクト自体にどのようにシリアライズすべきかを尋ねるようにシリアライズを強制します。
+    特に、これは、モデルサブクラスがシリアライズされるとき、サブクラスに存在するが元のスキーマには存在しないフィールドが含まれることを意味します。
     """
 else:
 
