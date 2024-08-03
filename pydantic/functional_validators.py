@@ -27,7 +27,7 @@ _inspect_validator = _decorators.inspect_validator
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class AfterValidator:
-    """Usage docs: ../concepts/validators/#annotated-validators
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/validators/#annotated-validators
 
     内部検証ロジックの**後**に検証を適用する必要があることを示すメタデータクラス。
 
@@ -83,7 +83,7 @@ class AfterValidator:
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class BeforeValidator:
-    """Usage docs: ../concepts/validators/#annotated-validators
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/validators/#annotated-validators
 
     内部検証ロジックの**前**に検証を適用する必要があることを示すメタデータクラス。
 
@@ -127,7 +127,7 @@ class BeforeValidator:
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class PlainValidator:
-    """Usage docs: ../concepts/validators/#annotated-validators
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/validators/#annotated-validators
 
     内部検証ロジックの**代わりに**検証を適用する必要があることを示すメタデータクラス。
 
@@ -179,7 +179,7 @@ class PlainValidator:
 
 @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)
 class WrapValidator:
-    """Usage docs: ../concepts/validators/#annotated-validators
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/validators/#annotated-validators
 
     内部検証ロジックの**周辺**に検証を適用する必要があることを示すメタデータクラス。
 
@@ -297,7 +297,7 @@ def field_validator(
     mode: FieldValidatorModes = 'after',
     check_fields: bool | None = None,
 ) -> Callable[[Any], Any]:
-    """Usage docs: ../concepts/validators/#field-validators
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/validators/#field-validators
 
     クラスのメソッドをデコレートして、フィールドの検証に使用する必要があることを示します。
 
@@ -335,7 +335,7 @@ def field_validator(
         '''
     ```
 
-    詳細な例については、[Field Validators](../concepts/validators.md#field-validators)を参照してください。
+    詳細な例については、[Field Validators](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/validators.md#field-validators)を参照してください。
 
     Args:
         field: `field_validator`が呼び出される最初のフィールドです。これは`fields`とは別のもので、少なくとも1つ渡さないとエラーが発生します。
@@ -539,7 +539,7 @@ def model_validator(
     *,
     mode: Literal['wrap', 'before', 'after'],
 ) -> Any:
-    """Usage docs: ../concepts/validators/#model-validators
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/validators/#model-validators
 
     Decorate model methods for validation purposes.
     検証のためにモデルメソッドをデコレートする。
@@ -574,7 +574,7 @@ def model_validator(
         '''
     ```
 
-    詳細な例については、[Model Validators](../concepts/validators.md#model-validators)を参照してください。
+    詳細な例については、[Model Validators](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/validators.md#model-validators)を参照してください。
 
 
     Args:

@@ -78,7 +78,7 @@ _object_setattr = _model_construction.object_setattr
 
 
 class BaseModel(metaclass=_model_construction.ModelMetaclass):
-    """Usage docs: ../concepts/models/
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/models/
 
     Pydanticモデルを作成するための基本クラス。
 
@@ -217,9 +217,6 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         デフォルト値が使用されますが、その他の検証は実行されません。
 
         !!! note
-            # `model_construct()` generally respects the `model_config.extra` setting on the provided model.
-            # That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__` and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
-            # Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in an error if extra values are passed, but they will be ignored.
             `model_construct()`は一般に、提供されたモデルの`model_config.extra`設定を尊重します。
             つまり、`model_config.extra=='allow'`の場合、余分に渡された値はすべてモデルインスタンスの`__dict__`フィールドと`__pydantic_extra__`フィールドに追加されます。`model_config.extra=='ignore'`(デフォルト)の場合、余分に渡された値はすべて無視されます。
             `model_construct()`を呼び出しても検証は行われないので、`model_config.extra=='forbid'`を指定しても、余分な値が渡されてもエラーにはなりませんが、無視されます。
@@ -292,7 +289,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         return m
 
     def model_copy(self, *, update: dict[str, Any] | None = None, deep: bool = False) -> Self:
-        """Usage docs: ../concepts/serialization/#model_copy
+        """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/serialization/#model_copy
 
         モデルのコピーを返します。
 
@@ -333,7 +330,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         warnings: bool | Literal['none', 'warn', 'error'] = True,
         serialize_as_any: bool = False,
     ) -> dict[str, Any]:
-        """Usage docs: ../concepts/serialization/#modelmodel_dump
+        """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/serialization/#modelmodel_dump
 
         モデルのディクショナリ表現を生成します。オプションで、含めるフィールドまたは除外するフィールドを指定します。
 
@@ -385,7 +382,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         warnings: bool | Literal['none', 'warn', 'error'] = True,
         serialize_as_any: bool = False,
     ) -> str:
-        """Usage docs: ../concepts/serialization/#modelmodel_dump_json
+        """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/serialization/#modelmodel_dump_json
 
         Pydanticの`to_json`メソッドを使用してモデルのJSON表現を生成します。
 
@@ -569,7 +566,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         strict: bool | None = None,
         context: Any | None = None,
     ) -> Self:
-        """Usage docs: ../concepts/json/#json-parsing
+        """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/json/#json-parsing
 
         指定されたJSONデータをPydanticモデルに対して検証します。
 
@@ -1448,7 +1445,7 @@ def create_model(  # noqa: C901
     __slots__: tuple[str, ...] | None = None,
     **field_definitions: Any,
 ) -> type[ModelT]:
-    """Usage docs: ../concepts/models/#dynamic-model-creation
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/models/#dynamic-model-creation
 
     新しいPydanticモデルを動的に作成して返します。言い換えれば、`create_model`は[`BaseModel`][pydantic.BaseModel]のサブクラスを動的に作成します。
 

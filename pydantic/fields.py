@@ -712,7 +712,7 @@ def Field(  # noqa: C901
     fail_fast: bool | None = _Unset,
     **extra: Unpack[_EmptyKwargs],
 ) -> Any:
-    """Usage docs: ../concepts/fields
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/fields
 
     設定可能なオブジェクトのフィールドを作成します。
 
@@ -743,7 +743,7 @@ def Field(  # noqa: C901
         init_var: データ・クラスのコンストラクタにフィールドを含めるかどうか(データ・クラスにのみ適用)。
         kw_only: データクラスのコンストラクタで、フィールドをキーワードのみの引数にするかどうかを指定します(データクラスにのみ適用されます)。
         coerce_numbers_to_str: `Number`型の`str`への強制を有効にするかどうか(`strict`モードでは適用されません)。
-        strict: `True`の場合、厳密な検証がフィールドに適用されます。詳細については、[Strict Mode](../concepts/strict_mode.md)を参照してください。
+        strict: `True`の場合、厳密な検証がフィールドに適用されます。詳細については、[Strict Mode](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/strict_mode.md)を参照してください。
         gt: より大きい。設定する場合、値はこれより大きい必要があります。数値にのみ適用できます。
         ge: 以上。設定する場合、値はこれ以上である必要があります。数値にのみ適用できます。
         lt: より小さい。設定する場合、値はこれより小さくする必要があります。数値にのみ適用できます。
@@ -755,7 +755,7 @@ def Field(  # noqa: C901
         allow_inf_nan: `inf`、`-inf`、`nan`を許可します。数値にのみ適用されます。
         max_digits: 文字列の最大許容桁数。
         decimal_places: 数値の小数点以下の最大桁数。
-        union_mode: 共用体を検証するときに適用される方式。`smart`(デフォルト)または`left_to_right`のいずれかです。詳細については、[Union Mode](../concepts/unions.md#union-modes)を参照してください。
+        union_mode: 共用体を検証するときに適用される方式。`smart`(デフォルト)または`left_to_right`のいずれかです。詳細については、[Union Mode](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/unions.md#union-modes)を参照してください。
         fail_fast: `True`の場合、検証は最初のエラーで停止します。`False`の場合、すべての検証エラーが収集されます。このオプションは、反復可能な型(list、tuple、set、frozenset)にのみ適用できます。
         extra: (非推奨)JSONスキーマに含まれる追加フィールド。
 
@@ -937,7 +937,7 @@ def PrivateAttr(
     default_factory: typing.Callable[[], Any] | None = None,
     init: Literal[False] = False,
 ) -> Any:
-    """Usage docs: ../concepts/models/#private-model-attributes
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/models/#private-model-attributes
 
     属性がプライベートに使用され、通常の検証/シリアライゼーションでは処理されないことを示します。
 
@@ -1059,7 +1059,7 @@ def computed_field(
     repr: bool | None = None,
     return_type: Any = PydanticUndefined,
 ) -> PropertyT | typing.Callable[[PropertyT], PropertyT]:
-    """Usage docs: ../concepts/fields#the-computed_field-decorator
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/fields#the-computed_field-decorator
 
     モデルまたはデータクラスをシリアライズするときに`property`と`cached_property`を含めるデコレータ。
 

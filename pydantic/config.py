@@ -418,9 +418,9 @@ class ConfigDict(TypedDict, total=False):
         age: int
     ```
 
-    詳細については、[Strict Mode](../concepts/strict_mode.md)を参照してください。
+    詳細については、[Strict Mode](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/strict_mode.md)を参照してください。
 
-    Pydanticがstrictモードとlaxモードの両方でデータを変換する方法の詳細については、[Conversion Table](../concepts/conversion_table.md)を参照してください。
+    Pydanticがstrictモードとlaxモードの両方でデータを変換する方法の詳細については、[Conversion Table](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/conversion_table.md)を参照してください。
     """
     revalidate_instances: Literal["always", "never", "subclass-instances"]
     """
@@ -729,7 +729,7 @@ class ConfigDict(TypedDict, total=False):
     # """A `dict` of settings for plugins. Defaults to `None`.
     """プラグインの設定の`dict`です。デフォルトは`None`です。
 
-    詳細については、[Pydantic Plugins](../concepts/plugins.md)を参照してください。
+    詳細については、[Pydantic Plugins](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/plugins.md)を参照してください。
     """
 
     schema_generator: type[_GenerateSchema] | None
@@ -976,7 +976,7 @@ _TypeT = TypeVar("_TypeT", bound=type)
 
 
 def with_config(config: ConfigDict) -> Callable[[_TypeT], _TypeT]:
-    """Usage docs: ../concepts/config/#configuration-with-dataclass-from-the-standard-library-or-typeddict
+    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/config/#configuration-with-dataclass-from-the-standard-library-or-typeddict
 
     標準ライブラリの`TypedDict`または`dataclass`に[Pydantic configuration](config.md)を設定するための便利なデコレータです。
 

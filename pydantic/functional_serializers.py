@@ -244,7 +244,7 @@ def field_serializer(
     #> {"name":"Jane","courses":["Chemistry","English","Math"]}
     ```
 
-    詳細については、[Custom serializer](../concepts/serialization.md#custom-serializer)を参照してください。
+    詳細については、[Custom serializer](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/serialization.md#custom-serializer)を参照してください。
 
     4つのシグネチャがサポートされています。
 
@@ -331,7 +331,7 @@ def model_serializer(
     #> {'unit': 'C', 'value': 100}
     ```
 
-    詳細については、[Custom serializer](../concepts/serialization.md#custom-serializer)を参照してください。
+    詳細については、[Custom serializer](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/serialization.md#custom-serializer)を参照してください。
 
     Args:
         f: デコレートされる関数。
