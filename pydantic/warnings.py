@@ -1,4 +1,5 @@
-"""Pydantic-specific warnings."""
+"""Pydantic固有のワーニング。"""
+
 
 from __future__ import annotations as _annotations
 
@@ -13,15 +14,14 @@ __all__ = (
 
 
 class PydanticDeprecationWarning(DeprecationWarning):
-    """A Pydantic specific deprecation warning.
+    """Pydantic固有の非推奨ワーニングです。
 
-    This warning is raised when using deprecated functionality in Pydantic. It provides information on when the
-    deprecation was introduced and the expected version in which the corresponding functionality will be removed.
+    このワーニングは、Pydanticで非推奨の機能を使用する場合に発生します。非推奨が導入された時期と、対応する機能が削除される予定のバージョンに関する情報を提供します。
 
     Attributes:
-        message: Description of the warning.
-        since: Pydantic version in what the deprecation was introduced.
-        expected_removal: Pydantic version in what the corresponding functionality expected to be removed.
+        message: ワーニングの説明。
+        since: 非推奨になったPydanticバージョン。
+        expected_removal: 対応する機能が削除されると予想されるPydanticバージョン。
     """
 
     message: str
@@ -47,14 +47,14 @@ class PydanticDeprecationWarning(DeprecationWarning):
 
 
 class PydanticDeprecatedSince20(PydanticDeprecationWarning):
-    """A specific `PydanticDeprecationWarning` subclass defining functionality deprecated since Pydantic 2.0."""
+    """Pydantic 2.0以降で非推奨となった機能を定義する特定の`PydanticDeprecationWarning`サブクラス。"""
 
     def __init__(self, message: str, *args: object) -> None:
         super().__init__(message, *args, since=(2, 0), expected_removal=(3, 0))
 
 
 class PydanticDeprecatedSince26(PydanticDeprecationWarning):
-    """A specific `PydanticDeprecationWarning` subclass defining functionality deprecated since Pydantic 2.6."""
+    """Pydantic 2.6以降で非推奨となった機能を定義する特定の`PydanticDeprecationWarning`サブクラス。"""
 
     def __init__(self, message: str, *args: object) -> None:
         super().__init__(message, *args, since=(2, 0), expected_removal=(3, 0))
@@ -65,8 +65,8 @@ class GenericBeforeBaseModelWarning(Warning):
 
 
 class PydanticExperimentalWarning(Warning):
-    """A Pydantic specific experimental functionality warning.
+    """Pydantic固有の実験的な機能に関するワーニング。
 
-    This warning is raised when using experimental functionality in Pydantic.
-    It is raised to warn users that the functionality may change or be removed in future versions of Pydantic.
+    このワーニングは、Pydanticで実験的な機能を使用している場合に発生する。
+    これは、Pydanticの将来のバージョンで機能が変更または削除される可能性があることをユーザにワーニングするために提起された。
     """

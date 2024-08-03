@@ -1,23 +1,27 @@
-"""The `version` module holds the version information for Pydantic."""
+"""`version`モジュールは、Pydanticのバージョン情報を保持します。"""
+
+
 
 from __future__ import annotations as _annotations
 
 __all__ = 'VERSION', 'version_info'
 
 VERSION = '2.9.0a1'
-"""The version of Pydantic."""
+"""Pydanticのバージョン"""
 
 
 def version_short() -> str:
-    """Return the `major.minor` part of Pydantic version.
+    """Pydanticバージョンの`major.minor`部分を返します。
 
-    It returns '2.1' if Pydantic version is '2.1.1'.
+    Pydanticのバージョンが'2.1.1'の場合は'2.1'を返します。
     """
     return '.'.join(VERSION.split('.')[:2])
 
 
 def version_info() -> str:
-    """Return complete version information for Pydantic and its dependencies."""
+    """Pydanticとその依存関係の完全なバージョン情報を返します。"""
+
+
     import importlib.metadata as importlib_metadata
     import os
     import platform
@@ -64,15 +68,14 @@ def version_info() -> str:
 
 
 def parse_mypy_version(version: str) -> tuple[int, ...]:
-    """Parse mypy string version to tuple of ints.
+    """mypy文字列バージョンをintのタプルに解析します。
 
-    It parses normal version like `0.930` and extra info followed by a `+` sign
-    like `0.940+dev.04cac4b5d911c4f9529e6ce86a27b44f28846f5d.dirty`.
+    `0.930`のような通常のバージョンと、`0.940+dev.04cac4b5d911c4f9529e6ce86a27b44f28846f5d.dirty`のような`+`記号が後に続く追加情報を解析します。
 
     Args:
-        version: The mypy version string.
+        version: mypyのバージョン文字列。
 
     Returns:
-        A tuple of ints. e.g. (0, 930).
+        intのタプル。例:(0, 930)。
     """
     return tuple(map(int, version.partition('+')[0].split('.')))

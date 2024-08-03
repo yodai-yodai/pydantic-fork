@@ -1,4 +1,4 @@
-"""Decorator for validating function calls."""
+"""関数呼び出しを検証するためのデコレータ"""
 
 from __future__ import annotations as _annotations
 
@@ -32,16 +32,16 @@ def validate_call(
     config: ConfigDict | None = None,
     validate_return: bool = False,
 ) -> AnyCallableT | Callable[[AnyCallableT], AnyCallableT]:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/validation_decorator/
+    """Usage docs: ../concepts/validation_decorator/
 
-    Returns a decorated wrapper around the function that validates the arguments and, optionally, the return value.
+    引数およびオプションで戻り値を検証する関数を囲むデコレートラッパーを返します。
 
-    Usage may be either as a plain decorator `@validate_call` or with arguments `@validate_call(...)`.
+    通常のデコレータ`@validate_call`として、または引数`@validate_call(...)`と共に使用できます。
 
     Args:
-        func: The function to be decorated.
-        config: The configuration dictionary.
-        validate_return: Whether to validate the return value.
+        func: デコレートする関数。
+        config: 構成辞書。
+        validate_return: 戻り値を検証するかどうか。
 
     Returns:
         The decorated function.

@@ -522,7 +522,7 @@ class PydanticModelTransformer:
         return True
 
     def adjust_decorator_signatures(self) -> None:
-        """関数`f`を`pydantic.validator(.)`、`pydantic.field_validator`または`pydantic.serializer(.)`で装飾すると、pydanticは必要に応じて`f`を`classmethod`で内部的にラップしますが、mypyは`f`を`self`インスタンスを取る通常のメソッドと見なします。
+        """関数`f`を`pydantic.validator(.)`、`pydantic.field_validator`または`pydantic.serializer(.)`でデコレートすると、pydanticは必要に応じて`f`を`classmethod`で内部的にラップしますが、mypyは`f`を`self`インスタンスを取る通常のメソッドと見なします。
 
         一番外側のデコレータが`validator()`、`field_validator()`または`serializer()`呼び出しである関数を`classmethod`としてマークすることで、mypyにこれを教えてください。
         """
@@ -1102,7 +1102,7 @@ class PydanticModelTransformer:
     ) -> list[Argument]:
         """`__init__`および`model_construct`メソッドシグネチャの構築中に使用されるヘルパー関数。
 
-        生成されたシグニチャで使用するmypy Argumentインスタンスのリストを返します。
+        生成されたシグネチャで使用するmypy Argumentインスタンスのリストを返します。
         """
         info = self._cls.info
         arguments = [
@@ -1121,9 +1121,9 @@ class PydanticModelTransformer:
         return arguments
 
     def should_init_forbid_extra(self, fields: list[PydanticModelField], config: ModelConfigData) -> bool:
-        """生成された`__init__`がその署名の最後に`**kwargs`を取得すべきかどうかを示します。
+        """生成された`__init__`がそのシグネチャの最後に`**kwargs`を取得すべきかどうかを示します。
 
-        追加のconfig設定が「forbid」である場合、またはプラグインのconfigがtoを指定している場合は、必要な動的エイリアスが存在しない限り、任意のkwargsを許可しません(その場合、有効な署名を判断できません)。
+        追加のconfig設定が"forbid"である場合、またはプラグインのconfigがtoを指定している場合は、必要な動的エイリアスが存在しない限り、任意のkwargsを許可しません(その場合、有効なシグネチャを判断できません)。
         """
         if not config.populate_by_name:
             if self.is_dynamic_alias_present(fields, bool(config.has_alias_generator)):

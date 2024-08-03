@@ -44,7 +44,7 @@ class PlainSerializer:
     Attributes:
         func: シリアライザ関数。
         return_type: 関数の戻り型。省略した場合は、型注釈から推測されます。
-        when_used: このシリアライザをいつ使用すべきかを決定します。「always」、「unless-none」、「json」、「json-unless-none」の値を持つ文字列を受け入れます。デフォルトは「always」です。
+        when_used: このシリアライザをいつ使用すべきかを決定します。"always"、"unless-none"、"json"、"json-unless-none"の値を持つ文字列を受け入れます。デフォルトは"always"です。
     """
 
     func: core_schema.SerializerFunction
@@ -138,7 +138,7 @@ class WrapSerializer:
     Attributes:
         func: ラップされるシリアライザ関数。
         return_type: 関数の戻り型。省略した場合は、型注釈から推測されます。
-        when_used: このシリアライザをいつ使用すべきかを決定します。「always」、「unless-none」、「json」、「json-unless-none」の値を持つ文字列を受け入れます。デフォルトは「always」です。
+        when_used: このシリアライザをいつ使用すべきかを決定します。"always"、"unless-none"、"json"、"json-unless-none"の値を持つ文字列を受け入れます。デフォルトは"always"です。
     """
 
     func: core_schema.WrapSerializerFunction
@@ -246,7 +246,7 @@ def field_serializer(
 
     詳細については、[Custom serializer](../concepts/serialization.md#custom-serializer)を参照してください。
 
-    4つのシグニチャがサポートされています。
+    4つのシグネチャがサポートされています。
 
     - `(self, value: Any, info: FieldSerializationInfo)`
     - `(self, value: Any, nxt: SerializerFunctionWrapHandler, info: FieldSerializationInfo)`
@@ -334,7 +334,7 @@ def model_serializer(
     詳細については、[Custom serializer](../concepts/serialization.md#custom-serializer)を参照してください。
 
     Args:
-        f: 装飾される関数。
+        f: デコレートされる関数。
         mode: シリアライゼーションモード。
 
             - `'plain'`は、デフォルトのシリアライゼーションロジックの代わりに関数が呼び出されることを意味します。

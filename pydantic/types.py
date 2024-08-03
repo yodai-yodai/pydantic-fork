@@ -2614,7 +2614,7 @@ class GetPydanticSchema:
 class Tag:
     """(呼び出し可能な)識別された結合の場合に使用する、予期されるタグを指定する方法を提供します。
 
-    また、エラーメッセージ内のユニオンケースにラベルを付ける方法も提供します。
+    また、エラーメッセージ内のUnionケースにラベルを付ける方法も提供します。
 
     呼び出し可能な`Discriminator`を使用する場合は、`Union`内の各ケースに`Tag`を付けて、そのケースを識別するために使用するタグを指定します。
     例えば、以下の例では`Tag`を使用して、`get_discriminator_value`が`'apple'`を返す場合、入力は`ApplePie`として検証されるべきであり、`'pumpkin'`を返す場合、入力は`PumpkinPie`として検証されるべきであることを指定しています。
@@ -2697,7 +2697,7 @@ class Tag:
 class Discriminator:
     """Usage docs: ../concepts/unions/#discriminated-unions-with-callable-discriminator
 
-    ユニオン識別子の値を抽出する方法として、カスタムの呼び出し可能オブジェクトを使用する方法を提供します。
+    Union識別子の値を抽出する方法として、カスタムの呼び出し可能オブジェクトを使用する方法を提供します。
 
     これにより、`Field(discriminator=<field_name>)`から得られるような検証動作を得ることができますが、すべてのUnionの選択にわたって単一の共有フィールドを持つ必要はありません。これにより、識別されたUnionスタイルの検証エラーを持つモデルとプリミティブ型のUnionを処理することも可能になります。
     最後に、これにより、識別されたUnionのパフォーマンス上の利点をすべて確認しながら、値が属するUnionのメンバーを識別する方法として、カスタムの呼び出し可能オブジェクトを使用できます。
@@ -2770,7 +2770,7 @@ class Discriminator:
     `str`識別子は、識別するフィールドの名前でなければなりません。
     """
     custom_error_type: str | None = None
-    """標準の識別されたユニオン検証エラーを置き換える[custom errors](../errors/errors.md#custom-errors)で使用するタイプ。
+    """標準の識別されたUnion検証エラーを置き換える[custom errors](../errors/errors.md#custom-errors)で使用するタイプ。
     """
     custom_error_message: str | None = None
     """カスタムエラーで使用するメッセージ。"""

@@ -241,7 +241,7 @@ class FieldInfo(_repr.Representation):
         """`Field`関数を使用して新しい`FieldInfo`オブジェクトを作成します。
 
         Args:
-            default: フィールドのデフォルト値。デフォルトは「未定義」です。
+            default: フィールドのデフォルト値。デフォルトは"未定義"です。
             **kwargs: 追加引数の辞書。
 
         Raises:
@@ -946,7 +946,7 @@ def PrivateAttr(
     プライベート属性は、モデルの`__private_attributes__`に保存されます。
 
     Args:
-        default: 属性のデフォルト値。デフォルトは「未定義」です。
+        default: 属性のデフォルト値。デフォルトは"未定義"です。
         default_factory: この属性にデフォルト値が必要な場合に呼び出される呼び出し可能オブジェクト。`default`と`default_factory`の両方が設定されている場合、エラーが発生します。
         init: 属性をデータクラスのコンストラクタに含めるかどうか。常に`False`です。
 
@@ -1081,7 +1081,7 @@ def computed_field(
     #> {'width': 3, 'length': 2, 'area': 6}
     ```
 
-    `@property`または`@cached_property`で修飾されていない関数に適用すると、その関数は自動的に`property`でラップされます。
+    `@property`または`@cached_property`でデコレートされていない関数に適用すると、その関数は自動的に`property`でラップされます。
     これはより簡潔ですが、IDE内のIntelliSenseが失われ、静的型チェッカーが混乱するため、`@property`を明示的に使用することをお勧めします。
 
     !!! warning "Mypy Warning"
@@ -1150,7 +1150,7 @@ def computed_field(
         #> ValueError("you can't override a field with a computed field")
     ```
 
-    `@computed_field`で装飾されたプライベートプロパティは、デフォルトで`repr=False`です。
+    `@computed_field`でデコレートされたプライベートプロパティは、デフォルトで`repr=False`です。
 
     ```py
     from functools import cached_property
@@ -1182,7 +1182,7 @@ def computed_field(
         title: この計算フィールドをJSONスキーマに含めるときに使用するタイトル
         field_title_generator: フィールド名を受け取り、そのタイトルを返す呼び出し可能オブジェクト。
         description: この計算フィールドをJSONスキーマに含めるときに使用する説明。デフォルトは関数のdocstringです。
-        deprecated: 非推奨メッセージ(または`warnings.deprecated`または`typing_extensions.deprecated`バックポートのインスタンス)。フィールドにアクセスするときに発行されます。またはブール値。プロパティが`deprecated`デコレータで装飾されている場合、これは自動的に設定されます。
+        deprecated: 非推奨メッセージ(または`warnings.deprecated`または`typing_extensions.deprecated`バックポートのインスタンス)。フィールドにアクセスするときに発行されます。またはブール値。プロパティが`deprecated`デコレータでデコレートされている場合、これは自動的に設定されます。
         examples: この計算フィールドをJSONスキーマに含める場合に使用する値の例
         json_schema_extra: 追加のJSONスキーマ・プロパティーを提供するためのdictまたはcallable。
         repr: この計算済みフィールドをモデルreprに含めるかどうか。デフォルトは、プライベートプロパティの場合は`False`で、パブリックプロパティの場合は`True`です。

@@ -85,7 +85,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
     Attributes:
         __class_vars__: モデルに定義されているクラス変数の名前。
         __private_attributes__: モデルのプライベート属性に関するメタデータ。
-        __signature__: モデルをインスタンス化するためのシグニチャー。
+        __signature__: モデルをインスタンス化するためのシグネチャ。
 
         __pydantic_complete__: モデルの構築が完了したかどうか、またはまだ未定義のフィールドがあるかどうか。
         __pydantic_core_schema__: SchemaValidatorとSchemaSerializerの構築に使用されたpydantic-coreスキーマ。
