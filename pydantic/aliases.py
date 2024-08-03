@@ -1,4 +1,4 @@
-"""Support for alias configurations."""
+"""エイリアス構成のサポート。"""
 
 from __future__ import annotations
 

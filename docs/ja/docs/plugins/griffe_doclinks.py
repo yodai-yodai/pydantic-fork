@@ -69,7 +69,7 @@ def replace_links(m: re.Match, *, api_link: str) -> str:
 
 def update_docstring(obj: GriffeObject) -> str:
     return re.sub(
-        r'usage[\- ]docs: ?https://docs\.pydantic\.dev/.+?/(\S+)',
+        r'usage[\- ]docs: ?https://yodai-yodai\.github\.io/.+?/.+?/(\S+)',
         partial(replace_links, api_link=obj.path),
         obj.docstring.value,
         flags=re.I,
