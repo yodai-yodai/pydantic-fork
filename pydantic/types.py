@@ -1,4 +1,4 @@
-"""The types module contains custom types used by pydantic."""
+"""タイプモジュールには、pydanticで使用されるカスタムタイプが含まれています。"""
 
 from __future__ import annotations as _annotations
 
@@ -112,14 +112,14 @@ T = TypeVar('T')
 
 @_dataclasses.dataclass
 class Strict(_fields.PydanticMetadata, BaseMetadata):
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/strict_mode/#strict-mode-with-annotated-strict
+    """Usage docs: ../concepts/strict_mode/#strict-mode-with-annotated-strict
 
-    A field metadata class to indicate that a field should be validated in strict mode.
+    フィールドがstrictモードで検証される必要があることを示すフィールドメタデータクラス。
 
     Attributes:
-        strict: Whether to validate the field in strict mode.
+        strict: strictモードでフィールドを検証するかどうか。
 
-    Example:
+    例:
         ```python
         from typing_extensions import Annotated
 
@@ -138,7 +138,7 @@ class Strict(_fields.PydanticMetadata, BaseMetadata):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BOOLEAN TYPES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 StrictBool = Annotated[bool, Strict()]
-"""A boolean that must be either ``True`` or ``False``."""
+"""ブール値で、"True"または"False"のいずれかでなければなりません。"""
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INTEGER TYPES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -154,13 +154,11 @@ def conint(
 ) -> type[int]:
     """
     !!! warning "Discouraged"
-        This function is **discouraged** in favor of using
-        [`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated) with
-        [`Field`][pydantic.fields.Field] instead.
+        この関数は推奨されません。代わりに[`Field`][pydantic.fields.Field]と共に[`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated)を使用してください。
 
-        This function will be **deprecated** in Pydantic 3.0.
+        この関数はPydantic 3.0で**非推奨**になります。
 
-        The reason is that `conint` returns a type, which doesn't play well with static analysis tools.
+        その理由は、`conint`が型を返すため、静的解析ツールではうまく動作しないからです。
 
         === ":x: Don't do this"
             ```py
@@ -180,18 +178,18 @@ def conint(
                 bar: Annotated[int, Field(strict=True, gt=0)]
             ```
 
-    A wrapper around `int` that allows for additional constraints.
+        追加の制約を可能にする`int`のラッパ。
 
     Args:
-        strict: Whether to validate the integer in strict mode. Defaults to `None`.
-        gt: The value must be greater than this.
-        ge: The value must be greater than or equal to this.
-        lt: The value must be less than this.
-        le: The value must be less than or equal to this.
-        multiple_of: The value must be a multiple of this.
+        strict: strictモードで整数を検証するかどうか。デフォルトは`None`です。
+        gt: この値より大きい必要があります。
+        ge: この値以上にする必要があります。
+        lt: この値より小さくなければなりません。
+        le: この値以下でなければなりません。
+        multiple_of: 値はこのの倍数でなければなりません。
 
     Returns:
-        The wrapped integer type.
+        ラップされた整数型です。
 
     ```py
     from pydantic import BaseModel, ValidationError, conint
@@ -231,7 +229,7 @@ def conint(
 
 
 PositiveInt = Annotated[int, annotated_types.Gt(0)]
-"""An integer that must be greater than zero.
+"""0より大きくなければならない整数。
 
 ```py
 from pydantic import BaseModel, PositiveInt, ValidationError
@@ -262,7 +260,7 @@ except ValidationError as e:
 ```
 """
 NegativeInt = Annotated[int, annotated_types.Lt(0)]
-"""An integer that must be less than zero.
+"""ゼロより小さくなければならない整数。
 
 ```py
 from pydantic import BaseModel, NegativeInt, ValidationError
@@ -293,7 +291,7 @@ except ValidationError as e:
 ```
 """
 NonPositiveInt = Annotated[int, annotated_types.Le(0)]
-"""An integer that must be less than or equal to zero.
+"""0以下の整数。
 
 ```py
 from pydantic import BaseModel, NonPositiveInt, ValidationError
@@ -324,7 +322,7 @@ except ValidationError as e:
 ```
 """
 NonNegativeInt = Annotated[int, annotated_types.Ge(0)]
-"""An integer that must be greater than or equal to zero.
+"""0以上の整数。
 
 ```py
 from pydantic import BaseModel, NonNegativeInt, ValidationError
@@ -355,7 +353,7 @@ except ValidationError as e:
 ```
 """
 StrictInt = Annotated[int, Strict()]
-"""An integer that must be validated in strict mode.
+"""strictモードで検証する必要がある整数。
 
 ```py
 from pydantic import BaseModel, StrictInt, ValidationError
@@ -380,7 +378,7 @@ except ValidationError as e:
 
 @_dataclasses.dataclass
 class AllowInfNan(_fields.PydanticMetadata):
-    """A field metadata class to indicate that a field should allow ``-inf``, ``inf``, and ``nan``."""
+    """フィールドが"-inf"、"inf"、"nan"を許可すべきであることを示すフィールドメタデータクラス。"""
 
     allow_inf_nan: bool = True
 
@@ -400,13 +398,11 @@ def confloat(
 ) -> type[float]:
     """
     !!! warning "Discouraged"
-        This function is **discouraged** in favor of using
-        [`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated) with
-        [`Field`][pydantic.fields.Field] instead.
+        この関数は推奨されません。代わりに[`Field`][pydantic.fields.Field]と共に[`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated)を使用してください。
 
-        This function will be **deprecated** in Pydantic 3.0.
+        この関数はPydantic 3.0で**非推奨**になります。
 
-        The reason is that `confloat` returns a type, which doesn't play well with static analysis tools.
+        その理由は、`confloat`が型を返すため、静的解析ツールではうまく動作しないからです。
 
         === ":x: Don't do this"
             ```py
@@ -426,19 +422,19 @@ def confloat(
                 bar: Annotated[float, Field(strict=True, gt=0)]
             ```
 
-    A wrapper around `float` that allows for additional constraints.
+    追加の制約を可能にする`float`のラッパです。
 
     Args:
-        strict: Whether to validate the float in strict mode.
-        gt: The value must be greater than this.
-        ge: The value must be greater than or equal to this.
-        lt: The value must be less than this.
-        le: The value must be less than or equal to this.
-        multiple_of: The value must be a multiple of this.
-        allow_inf_nan: Whether to allow `-inf`, `inf`, and `nan`.
+        strict: 浮動小数点をstrictモードで検証するかどうか。
+        gt: この値より大きい必要があります。
+        ge: この値以上にする必要があります。
+        lt: この値より小さくなければなりません。
+        le: この値以下でなければなりません。
+        multiple_of: 値はこのの倍数でなければなりません。
+        allow_inf_nan: `-inf`、`inf`、`nan`を許可するかどうか。
 
     Returns:
-        The wrapped float type.
+        ラップされたfloat型。
 
     ```py
     from pydantic import BaseModel, ValidationError, confloat
@@ -478,7 +474,7 @@ def confloat(
 
 
 PositiveFloat = Annotated[float, annotated_types.Gt(0)]
-"""A float that must be greater than zero.
+"""0より大きくなければならない浮動小数点。
 
 ```py
 from pydantic import BaseModel, PositiveFloat, ValidationError
@@ -509,7 +505,7 @@ except ValidationError as e:
 ```
 """
 NegativeFloat = Annotated[float, annotated_types.Lt(0)]
-"""A float that must be less than zero.
+"""0より小さくなければならない浮動小数点。
 
 ```py
 from pydantic import BaseModel, NegativeFloat, ValidationError
@@ -540,7 +536,7 @@ except ValidationError as e:
 ```
 """
 NonPositiveFloat = Annotated[float, annotated_types.Le(0)]
-"""A float that must be less than or equal to zero.
+"""0以下でなければならない浮動小数点。
 
 ```py
 from pydantic import BaseModel, NonPositiveFloat, ValidationError
@@ -571,7 +567,7 @@ except ValidationError as e:
 ```
 """
 NonNegativeFloat = Annotated[float, annotated_types.Ge(0)]
-"""A float that must be greater than or equal to zero.
+"""0以上でなければならない浮動小数点。
 
 ```py
 from pydantic import BaseModel, NonNegativeFloat, ValidationError
@@ -602,7 +598,7 @@ except ValidationError as e:
 ```
 """
 StrictFloat = Annotated[float, Strict(True)]
-"""A float that must be validated in strict mode.
+"""strictモードで検証する必要があるfloat。
 
 ```py
 from pydantic import BaseModel, StrictFloat, ValidationError
@@ -622,7 +618,7 @@ except ValidationError as e:
 ```
 """
 FiniteFloat = Annotated[float, AllowInfNan(False)]
-"""A float that must be finite (not ``-inf``, ``inf``, or ``nan``).
+"""finiteでなければならないfloat("-inf"、"inf"、"nan"ではない)。
 
 ```py
 from pydantic import BaseModel, FiniteFloat
@@ -646,15 +642,15 @@ def conbytes(
     max_length: int | None = None,
     strict: bool | None = None,
 ) -> type[bytes]:
-    """A wrapper around `bytes` that allows for additional constraints.
+    """追加の制約を可能にする`bytes`のラッパ。
 
     Args:
-        min_length: The minimum length of the bytes.
-        max_length: The maximum length of the bytes.
-        strict: Whether to validate the bytes in strict mode.
+        min_length: バイトの最小長。
+        max_length: バイトの最大長。
+        strict: strictモードでバイトを検証するかどうか。
 
     Returns:
-        The wrapped bytes type.
+        ラップされたバイトのタイプ。
     """
     return Annotated[  # pyright: ignore[reportReturnType]
         bytes,
@@ -664,26 +660,25 @@ def conbytes(
 
 
 StrictBytes = Annotated[bytes, Strict()]
-"""A bytes that must be validated in strict mode."""
-
+"""strictモードで検証する必要があるバイト"""
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STRING TYPES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 @_dataclasses.dataclass(frozen=True)
 class StringConstraints(annotated_types.GroupedMetadata):
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/fields/#string-constraints
+    """Usage docs: ../concepts/fields/#string-constraints
 
-    Apply constraints to `str` types.
+    `str`型に制約を適用します。
 
     Attributes:
-        strip_whitespace: Whether to remove leading and trailing whitespace.
-        to_upper: Whether to convert the string to uppercase.
-        to_lower: Whether to convert the string to lowercase.
-        strict: Whether to validate the string in strict mode.
-        min_length: The minimum length of the string.
-        max_length: The maximum length of the string.
-        pattern: A regex pattern that the string must match.
+        strip_whitespace: 先頭と末尾の空白を削除するかどうか。
+        to_upper: 文字列を大文字に変換するかどうか。
+        to_lower: 文字列を小文字に変換するかどうか。
+        strict: 文字列をstrictモードで検証するかどうか。
+        min_length: 文字列の最小長。
+        max_length: 文字列の最大長。
+        pattern: 文字列が一致しなければならない正規表現パターン。
     """
 
     strip_whitespace: bool | None = None
@@ -727,13 +722,11 @@ def constr(
 ) -> type[str]:
     """
     !!! warning "Discouraged"
-        This function is **discouraged** in favor of using
-        [`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated) with
-        [`StringConstraints`][pydantic.types.StringConstraints] instead.
+        この関数は推奨されません。代わりに[`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated)と[`StringConstraints`][pydantic.types.StringConstraints]を使用してください。
 
-        This function will be **deprecated** in Pydantic 3.0.
+        この関数はPydantic 3.0で**非推奨**になります。
 
-        The reason is that `constr` returns a type, which doesn't play well with static analysis tools.
+        その理由は、`constr`が型を返すため、静的解析ツールではうまく動作しないからです。
 
         === ":x: Don't do this"
             ```py
@@ -753,7 +746,7 @@ def constr(
                 bar: Annotated[str, StringConstraints(strip_whitespace=True, to_upper=True, pattern=r'^[A-Z]+$')]
             ```
 
-    A wrapper around `str` that allows for additional constraints.
+    追加の制約を可能にする`str`のラッパ。
 
     ```py
     from pydantic import BaseModel, constr
@@ -768,16 +761,16 @@ def constr(
     ```
 
     Args:
-        strip_whitespace: Whether to remove leading and trailing whitespace.
-        to_upper: Whether to turn all characters to uppercase.
-        to_lower: Whether to turn all characters to lowercase.
-        strict: Whether to validate the string in strict mode.
-        min_length: The minimum length of the string.
-        max_length: The maximum length of the string.
-        pattern: A regex pattern to validate the string against.
+        strip_whitespace: 先頭と末尾の空白を削除するかどうか。
+        to_upper: すべての文字を大文字にするかどうか。
+        to_lower: すべての文字を小文字にするかどうか。
+        strict: 文字列をstrictモードで検証するかどうか。
+        min_length: 文字列の最小長。
+        max_length: 文字列の最大長。
+        pattern: 文字列を検証するための正規表現パターン。
 
     Returns:
-        The wrapped string type.
+        ラップされた文字列型。
     """  # noqa: D212
     return Annotated[  # pyright: ignore[reportReturnType]
         str,
@@ -794,8 +787,7 @@ def constr(
 
 
 StrictStr = Annotated[str, Strict()]
-"""A string that must be validated in strict mode."""
-
+"""strictモードで検証する必要がある文字列"""
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~ COLLECTION TYPES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 HashableItemType = TypeVar('HashableItemType', bound=Hashable)
@@ -804,15 +796,15 @@ HashableItemType = TypeVar('HashableItemType', bound=Hashable)
 def conset(
     item_type: type[HashableItemType], *, min_length: int | None = None, max_length: int | None = None
 ) -> type[set[HashableItemType]]:
-    """A wrapper around `typing.Set` that allows for additional constraints.
+    """追加の制約を可能にする`typing.Set`のラッパ。
 
     Args:
-        item_type: The type of the items in the set.
-        min_length: The minimum length of the set.
-        max_length: The maximum length of the set.
+        item_type: セット内の項目のタイプ。
+        min_length: セットの最小長。
+        max_length: セットの最大長。
 
     Returns:
-        The wrapped set type.
+        ラップされたセットのタイプ。
     """
     return Annotated[Set[item_type], annotated_types.Len(min_length or 0, max_length)]  # pyright: ignore[reportReturnType]
 
@@ -820,15 +812,15 @@ def conset(
 def confrozenset(
     item_type: type[HashableItemType], *, min_length: int | None = None, max_length: int | None = None
 ) -> type[frozenset[HashableItemType]]:
-    """A wrapper around `typing.FrozenSet` that allows for additional constraints.
+    """追加の制約を可能にする`typing.FrozenSet`のラッパ。
 
     Args:
-        item_type: The type of the items in the frozenset.
-        min_length: The minimum length of the frozenset.
-        max_length: The maximum length of the frozenset.
+        item_type: FrozenSet内の項目のタイプ。
+        min_length: FrozenSetの最小長。
+        max_length: FrozenSetの最大長。
 
     Returns:
-        The wrapped frozenset type.
+        ラップされたfrozenset型。
     """
     return Annotated[FrozenSet[item_type], annotated_types.Len(min_length or 0, max_length)]  # pyright: ignore[reportReturnType]
 
@@ -843,19 +835,19 @@ def conlist(
     max_length: int | None = None,
     unique_items: bool | None = None,
 ) -> type[list[AnyItemType]]:
-    """A wrapper around typing.List that adds validation.
+    """検証を追加するtyping.Listのラッパー。
 
     Args:
-        item_type: The type of the items in the list.
-        min_length: The minimum length of the list. Defaults to None.
-        max_length: The maximum length of the list. Defaults to None.
-        unique_items: Whether the items in the list must be unique. Defaults to None.
+        item_type: リスト内の項目のタイプ。
+        min_length: リストの最小長。デフォルトは"なし"です。
+        max_length: リストの最大長。デフォルトは"なし"です。
+        unique_items:リスト内のアイテムが一意である必要があるかどうか。デフォルトは"なし"です。
             !!! warning Deprecated
-                The `unique_items` parameter is deprecated, use `Set` instead.
-                See [this issue](https://github.com/pydantic/pydantic-core/issues/296) for more details.
+                `unique_items`パラメータは廃止されました。代わりに`Set`を使用してください。
+                詳細については、[this issue](https://github.com/pydantic/pydantic-core/issues/296)を参照してください。
 
     Returns:
-        The wrapped list type.
+        ラップされたリストのタイプ。
     """
     if unique_items is not None:
         raise PydanticUserError(
@@ -876,17 +868,14 @@ if TYPE_CHECKING:
 else:
 
     class ImportString:
-        """A type that can be used to import a type from a string.
+        """文字列から型をインポートするために使用できる型。
 
-        `ImportString` expects a string and loads the Python object importable at that dotted path.
-        Attributes of modules may be separated from the module by `:` or `.`, e.g. if `'math:cos'` was provided,
-        the resulting field value would be the function`cos`. If a `.` is used and both an attribute and submodule
-        are present at the same path, the module will be preferred.
+        `ImportString`は文字列を予期し、そのドットパスでインポート可能なPythonオブジェクトをロードします。
+        モジュールの属性はモジュールと`:`または`.`で区切ることができます。例えば、`'math:cos'`が与えられた場合、結果のフィールド値は関数`cos`になります。`.`が使用され、属性とサブモジュールの両方が同じパスに存在する場合、モジュールが優先されます。
 
-        On model instantiation, pointers will be evaluated and imported. There is
-        some nuance to this behavior, demonstrated in the examples below.
+        モデルのインスタンス化では、ポインタが評価されてインポートされます。この動作には、次の例に示すような微妙な違いがあります。
 
-        **Good behavior:**
+        **適切な動作:**
         ```py
         from math import cos
 
@@ -947,7 +936,7 @@ else:
         assert my_cos_default3.obj == 'math.cos'  # just string, not evaluated
         ```
 
-        Serializing an `ImportString` type to json is also possible.
+        `ImportString`型をjsonにシリアライズすることも可能です。
 
         ```py
         from pydantic import BaseModel, ImportString
@@ -1019,13 +1008,11 @@ def condecimal(
 ) -> type[Decimal]:
     """
     !!! warning "Discouraged"
-        This function is **discouraged** in favor of using
-        [`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated) with
-        [`Field`][pydantic.fields.Field] instead.
+        この関数は推奨されません。代わりに[`Field`][pydantic.fields.Field]と共に[`Annotated`](https://docs.python.org/3/library/typing.html#typing.Annotated)を使用してください。
 
-        This function will be **deprecated** in Pydantic 3.0.
+        この関数はPydantic 3.0で**非推奨**になります。
 
-        The reason is that `condecimal` returns a type, which doesn't play well with static analysis tools.
+        その理由は、`condecimal`が型を返すため、静的解析ツールではうまく動作しないからです。
 
         === ":x: Don't do this"
             ```py
@@ -1047,18 +1034,18 @@ def condecimal(
                 bar: Annotated[Decimal, Field(strict=True, allow_inf_nan=True)]
             ```
 
-    A wrapper around Decimal that adds validation.
+    検証を追加するDecimalのラッパー。
 
     Args:
-        strict: Whether to validate the value in strict mode. Defaults to `None`.
-        gt: The value must be greater than this. Defaults to `None`.
-        ge: The value must be greater than or equal to this. Defaults to `None`.
-        lt: The value must be less than this. Defaults to `None`.
-        le: The value must be less than or equal to this. Defaults to `None`.
-        multiple_of: The value must be a multiple of this. Defaults to `None`.
-        max_digits: The maximum number of digits. Defaults to `None`.
-        decimal_places: The number of decimal places. Defaults to `None`.
-        allow_inf_nan: Whether to allow infinity and NaN. Defaults to `None`.
+        strict: strictモードで値を検証するかどうか。デフォルトは`None`です。
+        gt: この値より大きい必要があります。デフォルトは`None`です。
+        ge: この値以上でなければなりません。デフォルトは`None`です。
+        lt: 値はこれより小さくなければなりません。デフォルトは`None`です。
+        le: この値以下でなければなりません。デフォルトは`None`です。
+        multiple_of: 値はthisの倍数でなければなりません。デフォルトは`None`です。
+        max_digits: 最大桁数。デフォルトは`None`です。
+        decimal_places: 小数点以下の桁数。デフォルトは`None`です。
+        allow_inf_NaN: 無限大とNaNを許可するかどうか。デフォルトは`None`です。
 
     ```py
     from decimal import Decimal
@@ -1105,7 +1092,7 @@ def condecimal(
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true)
 class UuidVersion:
-    """A field metadata class to indicate a [UUID](https://docs.python.org/3/library/uuid.html) version."""
+    """[UUID](https://docs.python.org/3/library/uuid.html)バージョンを示すフィールドメタデータクラス。"""
 
     uuid_version: Literal[1, 3, 4, 5]
 
@@ -1133,7 +1120,7 @@ class UuidVersion:
 
 
 UUID1 = Annotated[UUID, UuidVersion(1)]
-"""A [UUID](https://docs.python.org/3/library/uuid.html) that must be version 1.
+"""バージョン1である必要がある[UUID](https://docs.python.org/3/library/uuid.html)。
 
 ```py
 import uuid
@@ -1147,7 +1134,7 @@ Model(uuid1=uuid.uuid1())
 ```
 """
 UUID3 = Annotated[UUID, UuidVersion(3)]
-"""A [UUID](https://docs.python.org/3/library/uuid.html) that must be version 3.
+"""バージョン3である必要がある[UUID](https://docs.python.org/3/library/uuid.html)。
 
 ```py
 import uuid
@@ -1161,7 +1148,7 @@ Model(uuid3=uuid.uuid3(uuid.NAMESPACE_DNS, 'pydantic.org'))
 ```
 """
 UUID4 = Annotated[UUID, UuidVersion(4)]
-"""A [UUID](https://docs.python.org/3/library/uuid.html) that must be version 4.
+"""バージョン4である必要がある[UUID](https://docs.python.org/3/library/uuid.html)。
 
 ```py
 import uuid
@@ -1175,7 +1162,7 @@ Model(uuid4=uuid.uuid4())
 ```
 """
 UUID5 = Annotated[UUID, UuidVersion(5)]
-"""A [UUID](https://docs.python.org/3/library/uuid.html) that must be version 5.
+"""バージョン5である必要がある[UUID](https://docs.python.org/3/library/uuid.html)。
 
 ```py
 import uuid
@@ -1245,7 +1232,7 @@ class PathType:
 
 
 FilePath = Annotated[Path, PathType('file')]
-"""A path that must point to a file.
+"""ファイルへの参照が必要なパス。
 
 ```py
 from pathlib import Path
@@ -1287,7 +1274,7 @@ except ValidationError as e:
 ```
 """
 DirectoryPath = Annotated[Path, PathType('dir')]
-"""A path that must point to a directory.
+"""ディレクトリへの参照が必要なパス。
 
 ```py
 from pathlib import Path
@@ -1329,8 +1316,7 @@ except ValidationError as e:
 ```
 """
 NewPath = Annotated[Path, PathType('new')]
-"""A path for a new file or directory that must not already exist. The parent directory must already exist."""
-
+"""まだ存在していない新しいファイルまたはディレクトリのパス。親ディレクトリはすでに存在している必要があります。"""
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JSON TYPE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1341,10 +1327,9 @@ if TYPE_CHECKING:
 else:
 
     class Json:
-        """A special type wrapper which loads JSON before parsing.
+        """解析前にJSONをロードする特殊な型ラッパー。
 
-        You can use the `Json` data type to make Pydantic first load a raw JSON string before
-        validating the loaded data into the parametrized type:
+        `Json`データ型を使用すると、ロードされたデータをパラメータ化された型に検証する前に、Pydanticに生のJSON文字列を最初にロードさせることができます。
 
         ```py
         from typing import Any, List
@@ -1398,8 +1383,7 @@ else:
             '''
         ```
 
-        When you dump the model using `model_dump` or `model_dump_json`, the dumped value will be the result of validation,
-        not the original JSON string. However, you can use the argument `round_trip=True` to get the original JSON string back:
+        `model_dump`または`model_dump_json`を使用してモデルをダンプすると、ダンプされた値は元のJSON文字列ではなく検証の結果になります。ただし、引数`round_trip=True`を使用して元のJSON文字列を取得することもできます。
 
         ```py
         from typing import List
@@ -1451,10 +1435,10 @@ class _SecretBase(Generic[SecretType]):
         self._secret_value: SecretType = secret_value
 
     def get_secret_value(self) -> SecretType:
-        """Get the secret value.
+        """シークレット値を取得します。
 
         Returns:
-            The secret value.
+            シークレット値。
         """
         return self._secret_value
 
@@ -1475,13 +1459,11 @@ class _SecretBase(Generic[SecretType]):
 
 
 class Secret(_SecretBase[SecretType]):
-    """A generic base class used for defining a field with sensitive information that you do not want to be visible in logging or tracebacks.
+    """ロギングやトレースバックで表示したくない機密情報を含むフィールドを定義するために使用される汎用基本クラス。
 
-    You may either directly parametrize `Secret` with a type, or subclass from `Secret` with a parametrized type. The benefit of subclassing
-    is that you can define a custom `_display` method, which will be used for `repr()` and `str()` methods. The examples below demonstrate both
-    ways of using `Secret` to create a new secret type.
+    `Secret`を型で直接パラメータ化するか、または`Secret`のサブクラスをパラメータ化された型でパラメータ化することができます。サブクラス化の利点は、`repr()`および`str()`メソッドに使用されるカスタム`_display`メソッドを定義できることです。以下の例は、`Secret`を使用して新しいシークレット型を作成する両方の方法を示しています。
 
-    1. Directly parametrizing `Secret` with a type:
+    1. `Secret`型を直接パラメータ化する:
 
     ```py
     from pydantic import BaseModel, Secret
@@ -1502,7 +1484,7 @@ class Secret(_SecretBase[SecretType]):
     #> True
     ```
 
-    2. Subclassing from parametrized `Secret`:
+    2. パラメータ化された`Secret`からのサブクラス化:
 
     ```py
     from datetime import date
@@ -1527,7 +1509,7 @@ class Secret(_SecretBase[SecretType]):
     #> 2022-01-01
     ```
 
-    The value returned by the `_display` method will be used for `repr()` and `str()`.
+    `_display`メソッドが返す値は`repr()`と`str()`に使用されます。
     """
 
     def _display(self) -> str | bytes:
@@ -1642,10 +1624,10 @@ class _SecretField(_SecretBase[SecretType]):
 
 
 class SecretStr(_SecretField[str]):
-    """A string used for storing sensitive information that you do not want to be visible in logging or tracebacks.
+    """ロギングやトレースバックで表示したくない機密情報を格納するために使用される文字列。
 
-    When the secret value is nonempty, it is displayed as `'**********'` instead of the underlying value in
-    calls to `repr()` and `str()`. If the value _is_ empty, it is displayed as `''`.
+    シークレットの値が空でない場合、`repr()`や`str()`の呼び出しでは、元になる値の代わりに`'**********'`として表示されます。
+    value_is_emptyの場合は、""と表示されます。
 
     ```py
     from pydantic import BaseModel, SecretStr
@@ -1676,11 +1658,10 @@ class SecretStr(_SecretField[str]):
 
 
 class SecretBytes(_SecretField[bytes]):
-    """A bytes used for storing sensitive information that you do not want to be visible in logging or tracebacks.
+    """ログやトレースバックに表示したくない機密情報を保存するために使用されるバイト。
 
-    It displays `b'**********'` instead of the string value on `repr()` and `str()` calls.
-    When the secret value is nonempty, it is displayed as `b'**********'` instead of the underlying value in
-    calls to `repr()` and `str()`. If the value _is_ empty, it is displayed as `b''`.
+    `repr()`や`str()`を呼び出すと、文字列値の代わりに`b'**********'`が表示されます。
+    シークレット値が空でない場合、`repr()`や`str()`の呼び出しでは、元になる値の代わりに`b'**********'`として表示されます。
 
     ```py
     from pydantic import BaseModel, SecretBytes
@@ -1727,7 +1708,7 @@ class PaymentCardBrand(str, Enum):
     category=PydanticDeprecatedSince20,
 )
 class PaymentCardNumber(str):
-    """Based on: https://en.wikipedia.org/wiki/Payment_card_number."""
+    """https://en.wikipedia.org/wiki/Payment_card_numberに基づきます。"""
 
     strip_whitespace: ClassVar[bool] = True
     min_length: ClassVar[int] = 12
@@ -1756,28 +1737,30 @@ class PaymentCardNumber(str):
 
     @classmethod
     def validate(cls, input_value: str, /, _: core_schema.ValidationInfo) -> PaymentCardNumber:
-        """Validate the card number and return a `PaymentCardNumber` instance."""
+        """カード番号を検証して、`PaymentCardNumber`インスタンスを返します。"""
         return cls(input_value)
 
     @property
     def masked(self) -> str:
-        """Mask all but the last 4 digits of the card number.
+        """カード番号の最後の4桁を除くすべてをマスクします。
 
         Returns:
-            A masked card number string.
+            マスクされたカード番号文字列。
         """
         num_masked = len(self) - 10  # len(bin) + len(last4) == 10
         return f'{self.bin}{"*" * num_masked}{self.last4}'
 
     @classmethod
     def validate_digits(cls, card_number: str) -> None:
-        """Validate that the card number is all digits."""
+        """カード番号がすべて数字であることを確認します。"""
+
         if not card_number.isdigit():
             raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
     def validate_luhn_check_digit(cls, card_number: str) -> str:
-        """Based on: https://en.wikipedia.org/wiki/Luhn_algorithm."""
+        """https://en.wikipedia.org/wiki/Luhn_algorithmに基づきます。"""
+
         sum_ = int(card_number[-1])
         length = len(card_number)
         parity = length % 2
@@ -1795,8 +1778,8 @@ class PaymentCardNumber(str):
 
     @staticmethod
     def validate_brand(card_number: str) -> PaymentCardBrand:
-        """Validate length based on BIN for major brands:
-        https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN).
+        """主要ブランドのBINに基づいて長さを検証します:
+        https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN)
         """
         if card_number[0] == '4':
             brand = PaymentCardBrand.visa
@@ -1833,17 +1816,14 @@ class PaymentCardNumber(str):
 
 
 class ByteSize(int):
-    """Converts a string representing a number of bytes with units (such as `'1KB'` or `'11.5MiB'`) into an integer.
+    """単位付きのバイト数を表す文字列("1 KB"や"11.5 MiB"など)を整数に変換します。
 
-    You can use the `ByteSize` data type to (case-insensitively) convert a string representation of a number of bytes into
-    an integer, and also to print out human-readable strings representing a number of bytes.
+    `ByteSize`データ型を使用すると、バイト数の文字列表現を(大文字小文字を区別せずに)整数に変換したり、バイト数を表す人間が読める文字列を出力したりできます。
 
-    In conformance with [IEC 80000-13 Standard](https://en.wikipedia.org/wiki/ISO/IEC_80000) we interpret `'1KB'` to mean 1000 bytes,
-    and `'1KiB'` to mean 1024 bytes. In general, including a middle `'i'` will cause the unit to be interpreted as a power of 2,
-    rather than a power of 10 (so, for example, `'1 MB'` is treated as `1_000_000` bytes, whereas `'1 MiB'` is treated as `1_048_576` bytes).
+    [IEC 80000-13 Standard](https://en.wikipedia.org/wiki/ISO/IEC_80000)に準拠して、"1 KB"は1000バイトを意味し、"1 KiB"は1024バイトを意味すると解釈されます。一般に、中間の"i"を含めると、単位は10の累乗ではなく2の累乗として解釈されます(たとえば、"1 MB"は"1_000_000"バイトとして扱われ、"1 MiB"は"1_048_576"バイトとして扱われます)。
 
     !!! info
-        Note that `1b` will be parsed as "1 byte" and not "1 bit".
+        `1b`は"1 bit"ではなく"1 byte"として解析されることに注意してください。
 
     ```py
     from pydantic import BaseModel, ByteSize
@@ -1942,15 +1922,14 @@ class ByteSize(int):
         return cls(int(float(scalar) * unit_mult))
 
     def human_readable(self, decimal: bool = False, separator: str = '') -> str:
-        """Converts a byte size to a human readable string.
+        """バイトサイズを人間が読める文字列に変換します。
 
         Args:
-            decimal: If True, use decimal units (e.g. 1000 bytes per KB). If False, use binary units
-                (e.g. 1024 bytes per KiB).
-            separator: A string used to split the value and unit. Defaults to an empty string ('').
+            decimal: Trueの場合、10進単位(例:KBあたり1000バイト)を使用します。Falseの場合、バイナリ単位(例:KiBあたり1024バイト)を使用します。
+            separator: 値と単位の分割に使用される文字列。デフォルトは空の文字列('')です。
 
         Returns:
-            A human readable string representation of the byte size.
+            人間が判読可能なバイト・サイズの文字列表現。
         """
         if decimal:
             divisor = 1000
@@ -1973,16 +1952,17 @@ class ByteSize(int):
         return f'{num:0.1f}{separator}{final_unit}'
 
     def to(self, unit: str) -> float:
-        """Converts a byte size to another unit, including both byte and bit units.
+        """バイトサイズを、バイト単位とビット単位の両方を含む別の単位に変換します。
 
         Args:
-            unit: The unit to convert to. Must be one of the following: B, KB, MB, GB, TB, PB, EB,
-                KiB, MiB, GiB, TiB, PiB, EiB (byte units) and
+            unit: 変換先の単位。次のいずれかである必要があります。
+                B, KB, MB, GB, TB, PB, EB,
+                KiB, MiB, GiB, TiB, PiB, EiB (byte units)
                 bit, kbit, mbit, gbit, tbit, pbit, ebit,
                 kibit, mibit, gibit, tibit, pibit, eibit (bit units).
 
         Returns:
-            The byte size in the new unit.
+            新しい単位のバイトサイズ。
         """
         try:
             unit_div = self.byte_sizes[unit.lower()]
@@ -2006,7 +1986,7 @@ if TYPE_CHECKING:
 else:
 
     class PastDate:
-        """A date in the past."""
+        """過去の日付"""
 
         @classmethod
         def __get_pydantic_core_schema__(
@@ -2025,7 +2005,7 @@ else:
             return 'PastDate'
 
     class FutureDate:
-        """A date in the future."""
+        """未来の日付"""
 
         @classmethod
         def __get_pydantic_core_schema__(
@@ -2052,17 +2032,17 @@ def condate(
     lt: date | None = None,
     le: date | None = None,
 ) -> type[date]:
-    """A wrapper for date that adds constraints.
+    """制約を追加する日付のラッパ。
 
     Args:
-        strict: Whether to validate the date value in strict mode. Defaults to `None`.
-        gt: The value must be greater than this. Defaults to `None`.
-        ge: The value must be greater than or equal to this. Defaults to `None`.
-        lt: The value must be less than this. Defaults to `None`.
-        le: The value must be less than or equal to this. Defaults to `None`.
+        strict: 日付値をstrictモードで検証するかどうか。デフォルトは`None`です。
+        gt: この値より大きい必要があります。デフォルトは`None`です。
+        ge: この値以上でなければなりません。デフォルトは`None`です。
+        lt: 値はこれより小さくなければなりません。デフォルトは`None`です。
+        le: この値以下でなければなりません。デフォルトは`None`です。
 
     Returns:
-        A date type with the specified constraints.
+        指定された制約を持つ日付型。
     """
     return Annotated[  # pyright: ignore[reportReturnType]
         date,
@@ -2082,7 +2062,7 @@ if TYPE_CHECKING:
 else:
 
     class AwareDatetime:
-        """A datetime that requires timezone info."""
+        """タイムゾーン情報を必要とする日時。"""
 
         @classmethod
         def __get_pydantic_core_schema__(
@@ -2101,7 +2081,7 @@ else:
             return 'AwareDatetime'
 
     class NaiveDatetime:
-        """A datetime that doesn't require timezone info."""
+        """タイムゾーン情報を必要としない日時。"""
 
         @classmethod
         def __get_pydantic_core_schema__(
@@ -2120,7 +2100,7 @@ else:
             return 'NaiveDatetime'
 
     class PastDatetime:
-        """A datetime that must be in the past."""
+        """過去の日時。"""
 
         @classmethod
         def __get_pydantic_core_schema__(
@@ -2139,7 +2119,7 @@ else:
             return 'PastDatetime'
 
     class FutureDatetime:
-        """A datetime that must be in the future."""
+        """未来の日時"""
 
         @classmethod
         def __get_pydantic_core_schema__(
@@ -2162,54 +2142,54 @@ else:
 
 
 class EncoderProtocol(Protocol):
-    """Protocol for encoding and decoding data to and from bytes."""
+    """バイトとの間でデータをエンコードおよびデコードするためのプロトコル。"""
 
     @classmethod
     def decode(cls, data: bytes) -> bytes:
-        """Decode the data using the encoder.
+        """エンコーダを使用してデータをデコードします。
 
         Args:
-            data: The data to decode.
+            data: デコードするデータ。
 
         Returns:
-            The decoded data.
+            デコードされたデータ。
         """
         ...
 
     @classmethod
     def encode(cls, value: bytes) -> bytes:
-        """Encode the data using the encoder.
+        """エンコーダを使用してデータをエンコードします。
 
         Args:
-            value: The data to encode.
+            value: エンコードするデータ。
 
         Returns:
-            The encoded data.
+            エンコードされたデータ。
         """
         ...
 
     @classmethod
     def get_json_format(cls) -> str:
-        """Get the JSON format for the encoded data.
+        """エンコードされたデータのJSONフォーマットを取得します。
 
         Returns:
-            The JSON format for the encoded data.
+            エンコードされたデータのJSONフォーマット。
         """
         ...
 
 
 class Base64Encoder(EncoderProtocol):
-    """Standard (non-URL-safe) Base64 encoder."""
+    """標準(URLセーフではない)Base64エンコーダ。"""
 
     @classmethod
     def decode(cls, data: bytes) -> bytes:
-        """Decode the data from base64 encoded bytes to original bytes data.
+        """base64でエンコードされたバイトから元のバイトデータにデータをデコードします。
 
         Args:
-            data: The data to decode.
+            data: デコードするデータ。
 
         Returns:
-            The decoded data.
+            デコードされたデータ。
         """
         try:
             return base64.decodebytes(data)
@@ -2218,38 +2198,38 @@ class Base64Encoder(EncoderProtocol):
 
     @classmethod
     def encode(cls, value: bytes) -> bytes:
-        """Encode the data from bytes to a base64 encoded bytes.
+        """データをバイトからbase64エンコードされたバイトにエンコードします。
 
         Args:
-            value: The data to encode.
+            data: エンコードするデータ。
 
         Returns:
-            The encoded data.
+            エンコードされたデータ。
         """
         return base64.encodebytes(value)
 
     @classmethod
     def get_json_format(cls) -> Literal['base64']:
-        """Get the JSON format for the encoded data.
+        """エンコードされたデータのJSONフォーマットを取得します。
 
         Returns:
-            The JSON format for the encoded data.
+            エンコードされたデータのJSONフォーマット。
         """
         return 'base64'
 
 
 class Base64UrlEncoder(EncoderProtocol):
-    """URL-safe Base64 encoder."""
+    """URLセーフなBase64エンコーダ。"""
 
     @classmethod
     def decode(cls, data: bytes) -> bytes:
-        """Decode the data from base64 encoded bytes to original bytes data.
+        """base64でエンコードされたバイトから元のバイトデータにデータをデコードします。
 
         Args:
-            data: The data to decode.
+            data: デコードするデータ。
 
         Returns:
-            The decoded data.
+            デコードされたデータ。
         """
         try:
             return base64.urlsafe_b64decode(data)
@@ -2258,31 +2238,31 @@ class Base64UrlEncoder(EncoderProtocol):
 
     @classmethod
     def encode(cls, value: bytes) -> bytes:
-        """Encode the data from bytes to a base64 encoded bytes.
+        """データをバイトからbase64エンコードされたバイトにエンコードします。
 
         Args:
-            value: The data to encode.
+            value: エンコードするデータ。
 
         Returns:
-            The encoded data.
+            エンコードされたデータ。
         """
         return base64.urlsafe_b64encode(value)
 
     @classmethod
     def get_json_format(cls) -> Literal['base64url']:
-        """Get the JSON format for the encoded data.
+        """エンコードされたデータのJSONフォーマットを取得します。
 
         Returns:
-            The JSON format for the encoded data.
+            エンコードされたデータのJSONフォーマット。
         """
         return 'base64url'
 
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true)
 class EncodedBytes:
-    """A bytes type that is encoded and decoded using the specified encoder.
+    """指定されたエンコーダを使用してエンコードおよびデコードされるバイトタイプ。
 
-    `EncodedBytes` needs an encoder that implements `EncoderProtocol` to operate.
+    `EncodedBytes`を動作させるには、`EncoderProtocol`を実装したエンコーダが必要です。
 
     ```py
     from typing_extensions import Annotated
@@ -2350,24 +2330,24 @@ class EncodedBytes:
         )
 
     def decode(self, data: bytes, _: core_schema.ValidationInfo) -> bytes:
-        """Decode the data using the specified encoder.
+        """指定されたエンコーダを使用してデータをデコードします。
 
         Args:
-            data: The data to decode.
+            data: デコードするデータ。
 
         Returns:
-            The decoded data.
+            デコードされたデータ。
         """
         return self.encoder.decode(data)
 
     def encode(self, value: bytes) -> bytes:
-        """Encode the data using the specified encoder.
+        """指定されたエンコーダを使用してデータをエンコードします。
 
         Args:
-            value: The data to encode.
+            value: エンコードするデータ。
 
         Returns:
-            The encoded data.
+            エンコードされたデータ。
         """
         return self.encoder.encode(value)
 
@@ -2377,9 +2357,9 @@ class EncodedBytes:
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true)
 class EncodedStr(EncodedBytes):
-    """A str type that is encoded and decoded using the specified encoder.
+    """指定されたエンコーダを使用してエンコードおよびデコードされるstrタイプ。
 
-    `EncodedStr` needs an encoder that implements `EncoderProtocol` to operate.
+    `EncodedStr`を動作させるには、`EncoderProtocol`を実装したエンコーダが必要です。
 
     ```py
     from typing_extensions import Annotated
@@ -2438,24 +2418,24 @@ class EncodedStr(EncodedBytes):
         )
 
     def decode_str(self, data: bytes, _: core_schema.ValidationInfo) -> str:
-        """Decode the data using the specified encoder.
+        """指定されたエンコーダを使用してデータをデコードします。
 
         Args:
-            data: The data to decode.
+            data: デコードするデータ。
 
         Returns:
-            The decoded data.
+            デコードされたデータ。
         """
         return data.decode()
 
     def encode_str(self, value: str) -> str:
-        """Encode the data using the specified encoder.
+        """指定されたエンコーダを使用してデータをエンコードします。
 
         Args:
-            value: The data to encode.
+            value: エンコードするデータ。
 
         Returns:
-            The encoded data.
+            エンコードされたデータ。
         """
         return super(EncodedStr, self).encode(value=value.encode()).decode()  # noqa: UP008
 
@@ -2464,13 +2444,12 @@ class EncodedStr(EncodedBytes):
 
 
 Base64Bytes = Annotated[bytes, EncodedBytes(encoder=Base64Encoder)]
-"""A bytes type that is encoded and decoded using the standard (non-URL-safe) base64 encoder.
+"""標準の(URLセーフでない)base64エンコーダを使用してエンコードおよびデコードされるバイトタイプ。
 
 Note:
-    Under the hood, `Base64Bytes` use standard library `base64.encodebytes` and `base64.decodebytes` functions.
+    内部的には、`Base64Bytes`は標準ライブラリ`base64.encodebytes`と`base64.decodebytes`関数を使用します。
 
-    As a result, attempting to decode url-safe base64 data using the `Base64Bytes` type may fail or produce an incorrect
-    decoding.
+    その結果、`Base64Bytes`タイプを使用してURLセーフなbase64データをデコードしようとすると、失敗したり、不正なデコードが行われたりする可能性があります。
 
 ```py
 from pydantic import Base64Bytes, BaseModel, ValidationError
@@ -2502,13 +2481,12 @@ except ValidationError as e:
 ```
 """
 Base64Str = Annotated[str, EncodedStr(encoder=Base64Encoder)]
-"""A str type that is encoded and decoded using the standard (non-URL-safe) base64 encoder.
+"""標準の(URLセーフでない)base64エンコーダを使用してエンコードおよびデコードされるstrタイプ。
 
 Note:
-    Under the hood, `Base64Bytes` use standard library `base64.encodebytes` and `base64.decodebytes` functions.
+    内部的には、`Base64Bytes`は標準ライブラリ`base64.encodebytes`と`base64.decodebytes`関数を使用します。
 
-    As a result, attempting to decode url-safe base64 data using the `Base64Str` type may fail or produce an incorrect
-    decoding.
+    その結果、`Base64Str`型を使用してURLセーフなbase64データをデコードしようとすると、失敗したり、不正なデコードが行われたりする可能性があります。
 
 ```py
 from pydantic import Base64Str, BaseModel, ValidationError
@@ -2540,14 +2518,12 @@ except ValidationError as e:
 ```
 """
 Base64UrlBytes = Annotated[bytes, EncodedBytes(encoder=Base64UrlEncoder)]
-"""A bytes type that is encoded and decoded using the URL-safe base64 encoder.
+"""URLセーフなbase64エンコーダを使用してエンコードおよびデコードされるバイトタイプ。
 
 Note:
-    Under the hood, `Base64UrlBytes` use standard library `base64.urlsafe_b64encode` and `base64.urlsafe_b64decode`
-    functions.
+    内部的には、`Base64UrlBytes`は標準ライブラリ`base64.urlsafe_b64encode`および`base64.urlsafe_b64decode`関数を使用します。
 
-    As a result, the `Base64UrlBytes` type can be used to faithfully decode "vanilla" base64 data
-    (using `'+'` and `'/'`).
+    その結果、`Base64UrlBytes`型を使用して"普通の"base64データを忠実にデコードすることができます(`'+'`と`'/'`を使用)。
 
 ```py
 from pydantic import Base64UrlBytes, BaseModel
@@ -2562,13 +2538,12 @@ print(m)
 ```
 """
 Base64UrlStr = Annotated[str, EncodedStr(encoder=Base64UrlEncoder)]
-"""A str type that is encoded and decoded using the URL-safe base64 encoder.
+"""URLセーフなbase64エンコーダを使用してエンコードおよびデコードされるstrタイプ。
 
 Note:
-    Under the hood, `Base64UrlStr` use standard library `base64.urlsafe_b64encode` and `base64.urlsafe_b64decode`
-    functions.
+    内部的には、`Base64UrlStr`は標準ライブラリ`base64.urlsafe_b64encode`および`base64.urlsafe_b64decode`関数を使用します。
 
-    As a result, the `Base64UrlStr` type can be used to faithfully decode "vanilla" base64 data (using `'+'` and `'/'`).
+    その結果、`Base64UrlStr`型を使用して、"普通の"base64データを忠実にデコードすることができます(`'+'`と`'/'`を使用)。
 
 ```py
 from pydantic import Base64UrlStr, BaseModel
@@ -2589,14 +2564,14 @@ __getattr__ = getattr_migration(__name__)
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true)
 class GetPydanticSchema:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/types/#using-getpydanticschema-to-reduce-boilerplate
+    """Usage docs: ../concepts/types/#using-getpydanticschema-to-reduce-boilerplate
 
-    A convenience class for creating an annotation that provides pydantic custom type hooks.
+    pydanticカスタム型フックを提供する注釈を作成するための便利なクラスです。
 
-    This class is intended to eliminate the need to create a custom "marker" which defines the
-     `__get_pydantic_core_schema__` and `__get_pydantic_json_schema__` custom hook methods.
+    このクラスは、`__get_pydantic_core_schema__`および`__get_pydantic_json_schema__`カスタムフックメソッドを定義するカスタム"マーカー"を作成する必要性をなくすことを目的としています。
 
-    For example, to have a field treated by type checkers as `int`, but by pydantic as `Any`, you can do:
+    例えば、型チェッカーでは`int`として扱われますが、pydanticでは`Any`として扱われるようにするには、次のようにします。
+
     ```python
     from typing import Any
 
@@ -2637,17 +2612,14 @@ class GetPydanticSchema:
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true, frozen=True)
 class Tag:
-    """Provides a way to specify the expected tag to use for a case of a (callable) discriminated union.
+    """(呼び出し可能な)識別された結合の場合に使用する、予期されるタグを指定する方法を提供します。
 
-    Also provides a way to label a union case in error messages.
+    また、エラーメッセージ内のユニオンケースにラベルを付ける方法も提供します。
 
-    When using a callable `Discriminator`, attach a `Tag` to each case in the `Union` to specify the tag that
-    should be used to identify that case. For example, in the below example, the `Tag` is used to specify that
-    if `get_discriminator_value` returns `'apple'`, the input should be validated as an `ApplePie`, and if it
-    returns `'pumpkin'`, the input should be validated as a `PumpkinPie`.
+    呼び出し可能な`Discriminator`を使用する場合は、`Union`内の各ケースに`Tag`を付けて、そのケースを識別するために使用するタグを指定します。
+    例えば、以下の例では`Tag`を使用して、`get_discriminator_value`が`'apple'`を返す場合、入力は`ApplePie`として検証されるべきであり、`'pumpkin'`を返す場合、入力は`PumpkinPie`として検証されるべきであることを指定しています。
 
-    The primary role of the `Tag` here is to map the return value from the callable `Discriminator` function to
-    the appropriate member of the `Union` in question.
+    ここでの`Tag`の主な役割は、呼び出し可能な`Discriminator`関数からの戻り値を、問題の`Union`の適切なメンバーにマップすることです。
 
     ```py
     from typing import Any, Union
@@ -2704,11 +2676,9 @@ class Tag:
     ```
 
     !!! note
-        You must specify a `Tag` for every case in a `Tag` that is associated with a
-        callable `Discriminator`. Failing to do so will result in a `PydanticUserError` with code
-        [`callable-discriminator-no-tag`](../errors/usage_errors.md#callable-discriminator-no-tag).
+        呼び出し可能な`Discriminator`に関連付けられた`Tag`のすべてのケースに対して`Tag`を指定する必要があります。そうしないと、コード[`callable-discriminator-no-tag`](../errors/usage_errors.md#callable-discriminator-no-tag)で`PydantictUserError`が発生します。
 
-    See the [Discriminated Unions] concepts docs for more details on how to use `Tag`s.
+    `Tag`の使い方の詳細については、[Discriminated Unions]concepts docsを参照してください。
 
     [Discriminated Unions]: ../concepts/unions.md#discriminated-unions
     """
@@ -2725,18 +2695,14 @@ class Tag:
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true, frozen=True)
 class Discriminator:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/unions/#discriminated-unions-with-callable-discriminator
+    """Usage docs: ../concepts/unions/#discriminated-unions-with-callable-discriminator
 
-    Provides a way to use a custom callable as the way to extract the value of a union discriminator.
+    ユニオン識別子の値を抽出する方法として、カスタムの呼び出し可能オブジェクトを使用する方法を提供します。
 
-    This allows you to get validation behavior like you'd get from `Field(discriminator=<field_name>)`,
-    but without needing to have a single shared field across all the union choices. This also makes it
-    possible to handle unions of models and primitive types with discriminated-union-style validation errors.
-    Finally, this allows you to use a custom callable as the way to identify which member of a union a value
-    belongs to, while still seeing all the performance benefits of a discriminated union.
+    これにより、`Field(discriminator=<field_name>)`から得られるような検証動作を得ることができますが、すべてのUnionの選択にわたって単一の共有フィールドを持つ必要はありません。これにより、識別されたUnionスタイルの検証エラーを持つモデルとプリミティブ型のUnionを処理することも可能になります。
+    最後に、これにより、識別されたUnionのパフォーマンス上の利点をすべて確認しながら、値が属するUnionのメンバーを識別する方法として、カスタムの呼び出し可能オブジェクトを使用できます。
 
-    Consider this example, which is much more performant with the use of `Discriminator` and thus a `TaggedUnion`
-    than it would be as a normal `Union`.
+    この例を考えてみましょう。この例では、`Discriminator`と`TaggedUnion`を使用すると、通常の`Union`を使用する場合よりもはるかにパフォーマンスが向上します。
 
     ```py
     from typing import Any, Union
@@ -2792,25 +2758,24 @@ class Discriminator:
     '''
     ```
 
-    See the [Discriminated Unions] concepts docs for more details on how to use `Discriminator`s.
+    `Discriminator`の使い方の詳細については、[Discriminated Unions]concepts docsを参照してください。
 
     [Discriminated Unions]: ../concepts/unions.md#discriminated-unions
     """
 
     discriminator: str | Callable[[Any], Hashable]
-    """The callable or field name for discriminating the type in a tagged union.
+    """タグ付きUnionの型を識別するための呼び出し可能な名前またはフィールド名。
 
-    A `Callable` discriminator must extract the value of the discriminator from the input.
-    A `str` discriminator must be the name of a field to discriminate against.
+    "呼び出し可能な"識別子は、入力から識別子の値を抽出する必要があります。
+    `str`識別子は、識別するフィールドの名前でなければなりません。
     """
     custom_error_type: str | None = None
-    """Type to use in [custom errors](../errors/errors.md#custom-errors) replacing the standard discriminated union
-    validation errors.
+    """標準の識別されたユニオン検証エラーを置き換える[custom errors](../errors/errors.md#custom-errors)で使用するタイプ。
     """
     custom_error_message: str | None = None
-    """Message to use in custom errors."""
+    """カスタムエラーで使用するメッセージ。"""
     custom_error_context: dict[str, int | str | float] | None = None
-    """Context to use in custom errors."""
+    """カスタムエラーで使用するコンテキスト。"""
 
     def __get_pydantic_core_schema__(self, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
         origin = _typing_extra.get_origin(source_type)
@@ -2919,9 +2884,9 @@ if TYPE_CHECKING:
         float,
         None,
     ]
-    """A `JsonValue` is used to represent a value that can be serialized to JSON.
+    """`JsonValue`は、JSONにシリアライズできる値を表すために使用されます。
 
-    It may be one of:
+    次のいずれかになります。
 
     * `List['JsonValue']`
     * `Dict[str, 'JsonValue']`
@@ -2931,8 +2896,7 @@ if TYPE_CHECKING:
     * `float`
     * `None`
 
-    The following example demonstrates how to use `JsonValue` to validate JSON data,
-    and what kind of errors to expect when input data is not json serializable.
+    次の例は、`JsonValue`を使用してJSONデータを検証する方法と、入力データがJSONシリアライズ可能でない場合に予想されるエラーの種類を示しています。
 
     ```py
     import json
@@ -2996,21 +2960,19 @@ class _OnErrorOmit:
 
 OnErrorOmit = Annotated[T, _OnErrorOmit]
 """
-When used as an item in a list, the key type in a dict, optional values of a TypedDict, etc.
-this annotation omits the item from the iteration if there is any error validating it.
-That is, instead of a [`ValidationError`][pydantic_core.ValidationError] being propagated up and the entire iterable being discarded
-any invalid items are discarded and the valid ones are returned.
+リスト内の項目として使用される場合、dict内のキータイプ、TypedDictのオプションの値など。
+この注釈では、検証中にエラーが発生した場合に、その項目を繰り返し処理から除外します。
+つまり、[`ValidationError`][pydantic_core.ValidationError]が伝播されてiterable全体が破棄されるのではなく、無効な項目が破棄されて有効な項目が返されます。
 """
 
 
 @_dataclasses.dataclass
 class FailFast(_fields.PydanticMetadata, BaseMetadata):
-    """A `FailFast` annotation can be used to specify that validation should stop at the first error.
+    """`FailFast`アノテーションを使用して、最初のエラーで検証を停止するように指定できます。
 
-    This can be useful when you want to validate a large amount of data and you only need to know if it's valid or not.
+    これは、大量のデータを検証する必要があり、そのデータが有効かどうかを知るだけでよい場合に便利です。
 
-    You might want to enable this setting if you want to validate your data faster (basically, if you use this,
-    validation will be more performant with the caveat that you get less information).
+    データをより速く検証したい場合は、この設定を有効にすることができます(基本的に、これを使用すると、検証のパフォーマンスが向上しますが、取得する情報が少なくなります)。
 
     ```py
     from typing import List
