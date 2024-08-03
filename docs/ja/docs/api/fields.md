@@ -1,3 +1,5 @@
+{% include-markdown "../warning.md" %}
+
 ::: pydantic.fields
     options:
       group_by_category: false

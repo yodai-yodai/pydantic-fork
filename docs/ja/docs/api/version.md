@@ -1,3 +1,5 @@
+{% include-markdown "../warning.md" %}
+
 ::: pydantic.__version__
     options:
         show_root_heading: true

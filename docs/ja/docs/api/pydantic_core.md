@@ -1,3 +1,5 @@
+{% include-markdown "../warning.md" %}
+
 ::: pydantic_core
     options:
         allow_inspection: false

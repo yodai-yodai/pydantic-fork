@@ -1,3 +1,5 @@
+{% include-markdown "../warning.md" %}
+
 <!-- Pydantic models are simply classes which inherit from `BaseModel` and define fields as annotated attributes. -->
 Pydanticモデルは、単に`BaseModel`から継承し、フィールドを注釈付き属性として定義するクラスです。
 
