@@ -1,4 +1,4 @@
-"""The networks module contains types for common network-related fields."""
+"""ネットワークモジュールには、一般的なネットワーク関連フィールドのタイプが含まれています。"""
 
 from __future__ import annotations as _annotations
 
@@ -55,15 +55,15 @@ __all__ = [
 
 @_dataclasses.dataclass
 class UrlConstraints(_fields.PydanticMetadata):
-    """Url constraints.
+    """URLの制約。
 
     Attributes:
-        max_length: The maximum length of the url. Defaults to `None`.
-        allowed_schemes: The allowed schemes. Defaults to `None`.
-        host_required: Whether the host is required. Defaults to `None`.
-        default_host: The default host. Defaults to `None`.
-        default_port: The default port. Defaults to `None`.
-        default_path: The default path. Defaults to `None`.
+        max_length: URLの最大長。デフォルトは`None`です。
+        allowed_schemes: 許可されたスキーマ。デフォルトは`None`です。
+        host_required: ホストが必要です。かどうか。デフォルトは`None`です。
+        default_host: デフォルトのホスト。デフォルトは`None`です。
+        default_port: デフォルトのポート。デフォルトは`None`です。
+        default_path: デフォルトのパス。デフォルトは`None`です。
     """
 
     max_length: int | None = None
@@ -87,36 +87,35 @@ class UrlConstraints(_fields.PydanticMetadata):
 
 
 AnyUrl = Url
-"""Base type for all URLs.
+"""すべてのURLの基本タイプ。
 
-* Any scheme allowed
-* Top-level domain (TLD) not required
-* Host required
+* 任意のスキームを使用可能です。
+* トップレベルドメイン(TLD)は不要です。
+* ホストは必要です。
 
-Assuming an input URL of `http://samuel:pass@example.com:8000/the/path/?query=here#fragment=is;this=bit`,
-the types export the following properties:
+入力URLが`http://samuel:pass@example.com:8000/the/path/?query=here#fragment=is;this=bit`の場合、型は次のプロパティをエクスポートします。
 
-- `scheme`: the URL scheme (`http`), always set.
-- `host`: the URL host (`example.com`), always set.
-- `username`: optional username if included (`samuel`).
-- `password`: optional password if included (`pass`).
-- `port`: optional port (`8000`).
-- `path`: optional path (`/the/path/`).
-- `query`: optional URL query (for example, `GET` arguments or "search string", such as `query=here`).
-- `fragment`: optional fragment (`fragment=is;this=bit`).
+-`scheme`: URLスキーム(`http`)が常に設定されます。
+-`host`: URLホスト(`example.com`)で、常に設定されます。
+-`username`: オプションのユーザ名(`samuel`)がある場合。
+-`password`: オプションのパスワード(`pass`)がある場合。
+-`port`: オプションのポート(`8000`)です。
+-`path`: オプションのパス(`/the/path/`)。
+-`query`: オプションのURLクエリ(例えば`GET`引数や`query=here`のような"search string")。
+-`fragment`: オプションのfragment(`fragment=is;this=bit`)。
 """
 AnyHttpUrl = Annotated[Url, UrlConstraints(allowed_schemes=['http', 'https'])]
-"""A type that will accept any http or https URL.
+"""任意のhttpまたはhttps URLを受け入れるタイプ。
 
-* TLD not required
-* Host required
+* TLDは不要です。
+* ホストが必要です。
 """
 HttpUrl = Annotated[Url, UrlConstraints(max_length=2083, allowed_schemes=['http', 'https'])]
-"""A type that will accept any http or https URL.
+"""任意のhttpまたはhttps URLを受け入れるタイプ。
 
-* TLD not required
-* Host required
-* Max length 2083
+* TLDは不要です。
+* ホストが必要です。
+* 最大長2083です。
 
 ```py
 from pydantic import BaseModel, HttpUrl, ValidationError
@@ -149,11 +148,9 @@ except ValidationError as e:
     '''
 ```
 
-1. Note: mypy would prefer `m = MyModel(url=HttpUrl('http://www.example.com'))`, but Pydantic will convert the string to an HttpUrl instance anyway.
+1. 注意:mypyは`m=MyModel(url=HttpUrl('http://www.example.com'))`を好みますが、いずれにせよPydanticは文字列をHttpUrlインスタンスに変換します。
 
-"International domains" (e.g. a URL where the host or TLD includes non-ascii characters) will be encoded via
-[punycode](https://en.wikipedia.org/wiki/Punycode) (see
-[this article](https://www.xudongz.com/blog/2017/idn-phishing/) for a good description of why this is important):
+「International domains」(たとえば、ホストまたはTLDに非ASCII文字が含まれるURL)は、[punycode](https://en.wikipedia.org/wiki/Punycode)によってエンコードされます(これが重要である理由の適切な説明については、[this article](https://www.xudongz.com/blog/2017/idn-phishing/)を参照してください)。
 
 ```py
 from pydantic import BaseModel, HttpUrl
@@ -174,43 +171,41 @@ print(m3.url)
 
 
 !!! warning "Underscores in Hostnames"
-    In Pydantic, underscores are allowed in all parts of a domain except the TLD.
-    Technically this might be wrong - in theory the hostname cannot have underscores, but subdomains can.
+    Pydanticでは、TLDを除くドメインのすべての部分でアンダースコアを使用できます。
+    技術的には、これは間違っている可能性があります。理論的には、ホスト名にアンダースコアを付けることはできませんが、サブドメインにはアンダースコアを付けることができます。
 
-    To explain this; consider the following two cases:
+    これを説明するために、次の2つのケースを考えてみましょう。
 
-    - `exam_ple.co.uk`: the hostname is `exam_ple`, which should not be allowed since it contains an underscore.
-    - `foo_bar.example.com` the hostname is `example`, which should be allowed since the underscore is in the subdomain.
+    - `exam_ple.co.uk`:ホスト名は`exam_ple`ですが、アンダースコアが含まれているため許可されません。
+    - `foo_bar.example.com`ホスト名は`example`です。アンダースコアはサブドメインにあるので、これは許可されるべきです。
 
-    Without having an exhaustive list of TLDs, it would be impossible to differentiate between these two. Therefore
-    underscores are allowed, but you can always do further validation in a validator if desired.
+    TLDの網羅的なリストがなければ、これら2つを区別することは不可能であろう。したがって、アンダースコアは使用できますが、必要に応じていつでもバリデータでさらに検証を行うことができます。
 
-    Also, Chrome, Firefox, and Safari all currently accept `http://exam_ple.com` as a URL, so we're in good
-    (or at least big) company.
+    また、Chrome、Firefox、Safariは現在、URLとして`http://exam_ple.com`を受け入れているので、私たちは良い(あるいは少なくとも大きな)会社にいます。
 """
 AnyWebsocketUrl = Annotated[Url, UrlConstraints(allowed_schemes=['ws', 'wss'])]
-"""A type that will accept any ws or wss URL.
+"""任意のwsまたはwss URLを受け入れるタイプ。
 
-* TLD not required
-* Host required
+* TLDは不要です。
+* ホストが必要です。
 """
 WebsocketUrl = Annotated[Url, UrlConstraints(max_length=2083, allowed_schemes=['ws', 'wss'])]
-"""A type that will accept any ws or wss URL.
+"""任意のwsまたはwss URLを受け入れるタイプ。
 
-* TLD not required
-* Host required
-* Max length 2083
+* TLDは不要です。
+* ホストが必要です。
+* 最大長2083です。
 """
 FileUrl = Annotated[Url, UrlConstraints(allowed_schemes=['file'])]
-"""A type that will accept any file URL.
+"""任意のファイルURLを受け入れるタイプ。
 
-* Host not required
+* ホストは不要です。
 """
 FtpUrl = Annotated[Url, UrlConstraints(allowed_schemes=['ftp'])]
-"""A type that will accept ftp URL.
+"""ftp URLを受け入れるタイプ。
 
-* TLD not required
-* Host required
+* TLDは不要です。
+* ホストが必要です。
 """
 PostgresDsn = Annotated[
     MultiHostUrl,
@@ -229,14 +224,14 @@ PostgresDsn = Annotated[
         ],
     ),
 ]
-"""A type that will accept any Postgres DSN.
+"""任意のPostgres DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required
-* Supports multiple hosts
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。
+* 複数のホストをサポート
 
-If further validation is required, these properties can be used by validators to enforce specific behaviour:
+さらに検証が必要な場合は、これらのプロパティをバリデータで使用して、特定の動作を強制できます。
 
 ```py
 from pydantic import (
@@ -299,53 +294,52 @@ CockroachDsn = Annotated[
         ],
     ),
 ]
-"""A type that will accept any Cockroach DSN.
+"""任意のCockroach DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。
 """
 AmqpDsn = Annotated[Url, UrlConstraints(allowed_schemes=['amqp', 'amqps'])]
-"""A type that will accept any AMQP DSN.
+"""任意のAMQP DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。
 """
 RedisDsn = Annotated[
     Url,
     UrlConstraints(allowed_schemes=['redis', 'rediss'], default_host='localhost', default_port=6379, default_path='/0'),
 ]
-"""A type that will accept any Redis DSN.
+"""任意のRedis DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required (e.g., `rediss://:pass@localhost`)
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。(例:`rediss://:pass@localhost`)
 """
 MongoDsn = Annotated[MultiHostUrl, UrlConstraints(allowed_schemes=['mongodb', 'mongodb+srv'], default_port=27017)]
-"""A type that will accept any MongoDB DSN.
+"""任意のMongoDB DSNを受け入れる型。
 
-* User info not required
-* Database name not required
-* Port not required
-* User info may be passed without user part (e.g., `mongodb://mongodb0.example.com:27017`).
+* ユーザー情報は必要ありません
+* データベース名は必要ありません
+* ポートは不要です。
+* ユーザ情報はユーザパートなしで渡すことができます(例:`mongodb://mongodb0.example.com:27017`)。
 """
 KafkaDsn = Annotated[Url, UrlConstraints(allowed_schemes=['kafka'], default_host='localhost', default_port=9092)]
-"""A type that will accept any Kafka DSN.
+"""任意のKafka DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。
 """
 NatsDsn = Annotated[
     MultiHostUrl, UrlConstraints(allowed_schemes=['nats', 'tls', 'ws'], default_host='localhost', default_port=4222)
 ]
-"""A type that will accept any NATS DSN.
+"""任意のNATS DSNを受け入れるタイプ。
 
-NATS is a connective technology built for the ever increasingly hyper-connected world.
-It is a single technology that enables applications to securely communicate across
-any combination of cloud vendors, on-premise, edge, web and mobile, and devices.
-More: https://nats.io
+NATSは、ますます高度に接続される世界のために構築された接続技術です。
+これは、オンプレミス、エッジ、ウェブとモバイル、デバイスなど、クラウドベンダーのあらゆる組み合わせにわたって、アプリケーションが安全に通信できるようにする単一のテクノロジーです。
+詳細:https://nats.io
 """
 MySQLDsn = Annotated[
     Url,
@@ -363,11 +357,11 @@ MySQLDsn = Annotated[
         default_port=3306,
     ),
 ]
-"""A type that will accept any MySQL DSN.
+"""任意のMySQL DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required
+* ユーザー情報が必要です。。
+* TLDは不要です。
+* ホストが必要です。
 """
 MariaDBDsn = Annotated[
     Url,
@@ -376,11 +370,11 @@ MariaDBDsn = Annotated[
         default_port=3306,
     ),
 ]
-"""A type that will accept any MariaDB DSN.
+"""任意のMariaDB DSNを受け入れるタイプ。
 
-* User info required
-* TLD not required
-* Host required
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。
 """
 ClickHouseDsn = Annotated[
     Url,
@@ -392,11 +386,10 @@ ClickHouseDsn = Annotated[
 ]
 """A type that will accept any ClickHouse DSN.
 
-* User info required
-* TLD not required
-* Host required
+* ユーザー情報が必要です。
+* TLDは不要です。
+* ホストが必要です。
 """
-
 
 def import_email_validator() -> None:
     global email_validator
@@ -415,14 +408,13 @@ else:
     class EmailStr:
         """
         Info:
-            To use this type, you need to install the optional
-            [`email-validator`](https://github.com/JoshData/python-email-validator) package:
+            このタイプを使用するには、オプションの[`email-validator`](https://github.com/JoshData/python-email-validator)パッケージをインストールする必要があります。
 
             ```bash
             pip install email-validator
             ```
 
-        Validate email addresses.
+        電子メールアドレスを検証します。
 
         ```py
         from pydantic import BaseModel, EmailStr
@@ -460,18 +452,16 @@ else:
 class NameEmail(_repr.Representation):
     """
     Info:
-        To use this type, you need to install the optional
-        [`email-validator`](https://github.com/JoshData/python-email-validator) package:
+        このタイプを使用するには、オプションの[`email-validator`](https://github.com/JoshData/python-email-validator)パッケージをインストールする必要があります。
 
         ```bash
         pip install email-validator
         ```
 
-    Validate a name and email address combination, as specified by
-    [RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4).
+    [RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4)で指定されているように、名前と電子メールアドレスの組み合わせを検証します。
 
-    The `NameEmail` has two properties: `name` and `email`.
-    In case the `name` is not provided, it's inferred from the email address.
+    `NameEmail`には`name`と`email`という2つの属性があります。
+    `name`が指定されていない場合は、メールアドレスから推測されます。
 
     ```py
     from pydantic import BaseModel, NameEmail
@@ -547,7 +537,7 @@ class NameEmail(_repr.Representation):
 
 
 class IPvAnyAddress:
-    """Validate an IPv4 or IPv6 address.
+    """IPv4またはIPv6アドレスを検証します。
 
     ```py
     from pydantic import BaseModel
@@ -614,7 +604,7 @@ class IPvAnyAddress:
 
 
 class IPvAnyInterface:
-    """Validate an IPv4 or IPv6 interface."""
+    """IPv4またはIPv6インターフェイスを検証します。"""
 
     __slots__ = ()
 
@@ -660,12 +650,12 @@ if TYPE_CHECKING:
 else:
 
     class IPvAnyNetwork:
-        """Validate an IPv4 or IPv6 network."""
+        """IPv4またはIPv6ネットワークを検証します。"""
 
         __slots__ = ()
 
         def __new__(cls, value: NetworkType) -> IPvAnyNetworkType:
-            """Validate an IPv4 or IPv6 network."""
+            """IPv4またはIPv6ネットワークを検証します。"""
             # Assume IP Network is defined with a default value for `strict` argument.
             # Define your own class if you want to specify network address check strictness.
             try:
@@ -712,20 +702,20 @@ def _build_pretty_email_regex() -> re.Pattern[str]:
 pretty_email_regex = _build_pretty_email_regex()
 
 MAX_EMAIL_LENGTH = 2048
-"""Maximum length for an email.
-A somewhat arbitrary but very generous number compared to what is allowed by most implementations.
+"""電子メールの最大長。
+ほとんどの実装で許可されている数と比較して、多少任意ですが非常に寛大な数です。
 """
-
-
 def validate_email(value: str) -> tuple[str, str]:
-    """Email address validation using [email-validator](https://pypi.org/project/email-validator/).
+    """[email-validator](https://pypi.org/project/email-validator/)を使用した電子メールアドレスの検証。
 
     Note:
         Note that:
 
-        * Raw IP address (literal) domain parts are not allowed.
-        * `"John Doe <local_part@domain.com>"` style "pretty" email addresses are processed.
-        * Spaces are striped from the beginning and end of addresses, but no error is raised.
+        * 生のIPアドレス(リテラル)ドメイン部分は許可されません。
+        * `"John Doe<local_part@domain.com>"`スタイルの"pretty"電子メールアドレスが処理されます。
+        * スペースはアドレスの先頭と末尾からストライプされますが、エラーは発生しません。
+
+
     """
     if email_validator is None:
         import_email_validator()
