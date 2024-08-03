@@ -112,7 +112,7 @@ T = TypeVar('T')
 
 @_dataclasses.dataclass
 class Strict(_fields.PydanticMetadata, BaseMetadata):
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/strict_mode/#strict-mode-with-annotated-strict
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/strict_mode/#strict-mode-with-annotated-strict
 
     フィールドがstrictモードで検証される必要があることを示すフィールドメタデータクラス。
 
@@ -667,7 +667,7 @@ StrictBytes = Annotated[bytes, Strict()]
 
 @_dataclasses.dataclass(frozen=True)
 class StringConstraints(annotated_types.GroupedMetadata):
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/fields/#string-constraints
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/fields/#string-constraints
 
     `str`型に制約を適用します。
 
@@ -2564,7 +2564,7 @@ __getattr__ = getattr_migration(__name__)
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true)
 class GetPydanticSchema:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/types/#using-getpydanticschema-to-reduce-boilerplate
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/types/#using-getpydanticschema-to-reduce-boilerplate
 
     pydanticカスタム型フックを提供する注釈を作成するための便利なクラスです。
 
@@ -2695,7 +2695,7 @@ class Tag:
 
 @_dataclasses.dataclass(**_internal_dataclass.slots_true, frozen=True)
 class Discriminator:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/unions/#discriminated-unions-with-callable-discriminator
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/unions/#discriminated-unions-with-callable-discriminator
 
     Union識別子の値を抽出する方法として、カスタムの呼び出し可能オブジェクトを使用する方法を提供します。
 

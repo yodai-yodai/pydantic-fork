@@ -712,7 +712,7 @@ def Field(  # noqa: C901
     fail_fast: bool | None = _Unset,
     **extra: Unpack[_EmptyKwargs],
 ) -> Any:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/fields
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/fields
 
     設定可能なオブジェクトのフィールドを作成します。
 
@@ -937,7 +937,7 @@ def PrivateAttr(
     default_factory: typing.Callable[[], Any] | None = None,
     init: Literal[False] = False,
 ) -> Any:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/models/#private-model-attributes
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/models/#private-model-attributes
 
     属性がプライベートに使用され、通常の検証/シリアライゼーションでは処理されないことを示します。
 
@@ -1059,7 +1059,7 @@ def computed_field(
     repr: bool | None = None,
     return_type: Any = PydanticUndefined,
 ) -> PropertyT | typing.Callable[[PropertyT], PropertyT]:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/fields#the-computed_field-decorator
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/fields#the-computed_field-decorator
 
     モデルまたはデータクラスをシリアライズするときに`property`と`cached_property`を含めるデコレータ。
 

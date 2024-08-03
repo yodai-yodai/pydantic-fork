@@ -14,7 +14,7 @@ __all__ = ("AliasGenerator", "AliasPath", "AliasChoices")
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasPath:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/alias#aliaspath-and-aliaschoices
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/alias#aliaspath-and-aliaschoices
 
     エイリアスを作成するために`validation_alias`によって使用されるデータクラス。
 
@@ -55,7 +55,7 @@ class AliasPath:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasChoices:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/alias#aliaspath-and-aliaschoices
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/alias#aliaspath-and-aliaschoices
 
     エイリアスを作成するために`validation_alias`によって使用されるデータクラス。
 
@@ -87,7 +87,7 @@ class AliasChoices:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasGenerator:
-    """Usage docs: https://docs.pydantic.dev/2.9/pydantic-docs-ja/concepts/alias#using-an-aliasgenerator
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja//concepts/alias#using-an-aliasgenerator
 
     さまざまなエイリアスを簡単に作成するために`alias_generator`が使用するデータクラスです。
 
