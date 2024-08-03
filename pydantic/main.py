@@ -1,4 +1,4 @@
-"""Logic for creating models."""
+"""モデル作成ロジック"""
 
 from __future__ import annotations as _annotations
 
@@ -78,32 +78,29 @@ _object_setattr = _model_construction.object_setattr
 
 
 class BaseModel(metaclass=_model_construction.ModelMetaclass):
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/models/
+    """Usage docs: ../concepts/models/
 
-    A base class for creating Pydantic models.
+    Pydanticモデルを作成するための基本クラス。
 
     Attributes:
-        __class_vars__: The names of classvars defined on the model.
-        __private_attributes__: Metadata about the private attributes of the model.
-        __signature__: The signature for instantiating the model.
+        __class_vars__: モデルに定義されているクラス変数の名前。
+        __private_attributes__: モデルのプライベート属性に関するメタデータ。
+        __signature__: モデルをインスタンス化するためのシグニチャー。
 
-        __pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-        __pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-        __pydantic_custom_init__: Whether the model has a custom `__init__` function.
-        __pydantic_decorators__: Metadata containing the decorators defined on the model.
-            This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-        __pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-            __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-        __pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-        __pydantic_post_init__: The name of the post-init method for the model, if defined.
-        __pydantic_root_model__: Whether the model is a `RootModel`.
-        __pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-        __pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
+        __pydantic_complete__: モデルの構築が完了したかどうか、またはまだ未定義のフィールドがあるかどうか。
+        __pydantic_core_schema__: SchemaValidatorとSchemaSerializerの構築に使用されたpydantic-coreスキーマ。
+        __pydantic_custom_init__: モデルにカスタムの`__init__`関数があるかどうか。
+        __pydantic_decorators__: モデルで定義されたデコレータを含むメタデータ。これは、Pydantic V1の`Model.__validators__`と`Model.__root_validators__`を置き換えます。
+        __pydantic_generic_metadata__: ジェネリックモデル用のメタデータ。型モジュールジェネリックの__args__、__origin__、__parameters__と同様の目的で使用されるデータが含まれています。最終的にはこれらに置き換えられる可能性があります。
+        __pydantic_parent_namespace__: モデルの親ネームスペース。モデルの自動再構築に使用されます。
+        __pydantic_post_init__: モデルの初期化後のメソッドの名前(定義されている場合)。
+        __pydantic_root_model__: モデルが`RootModel`かどうか。
+        __pydantic_serializer__: モデルのインスタンスをダンプするために使用されるpydantic-core SchemaSerializer。
+        __pydantic_validator__: モデルのインスタンスを検証するために使用されるpydantic-core SchemaValidator。
 
-        __pydantic_extra__: An instance attribute with the values of extra fields from validation when
-            `model_config['extra'] == 'allow'`.
-        __pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-        __pydantic_private__: Instance attribute with the values of private attributes set on the model instance.
+        __pydantic_extra__: `model_config['extra']=='allow'`の場合に、検証からの追加フィールドの値を持つインスタンス属性。
+        __pydantic_fields_set__: フィールドの名前が明示的に設定されたインスタンス属性。
+        __pydantic_private__: モデルインスタンスに設定されたプライベート属性の値を持つインスタンス属性。
     """
 
     if TYPE_CHECKING:
@@ -115,19 +112,20 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         # Class attributes
         model_config: ClassVar[ConfigDict]
         """
-        Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+        モデルの設定は、[`ConfigDict`][pydantic.config.ConfigDict]に準拠した辞書でなければなりません。
         """
 
         model_fields: ClassVar[dict[str, FieldInfo]]
         """
-        Metadata about the fields defined on the model,
-        mapping of field names to [`FieldInfo`][pydantic.fields.FieldInfo].
+        モデルで定義されたフィールドに関するメタデータ、[`FieldInfo`][pydantic.fields.FieldInfo]へのフィールド名のマッピング。
 
-        This replaces `Model.__fields__` from Pydantic V1.
+        これはPydantic V1の`Model.__fields__`を置き換えます。
         """
 
         model_computed_fields: ClassVar[dict[str, ComputedFieldInfo]]
-        """A dictionary of computed field names and their corresponding `ComputedFieldInfo` objects."""
+        """計算されたフィールド名とそれに対応する`ComputedFieldInfo`オブジェクトの辞書。"""
+
+
 
         __class_vars__: ClassVar[set[str]]
         __private_attributes__: ClassVar[dict[str, ModelPrivateAttr]]
@@ -180,12 +178,11 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
     __pydantic_root_model__ = False
 
     def __init__(self, /, **data: Any) -> None:  # type: ignore
-        """Create a new model by parsing and validating input data from keyword arguments.
+        """キーワード引数からの入力データを解析および検証して、新しいモデルを作成します。
 
-        Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
-        validated to form a valid model.
+        入力データを検証して有効なモデルを作成できない場合は、[`ValidationError`][pydantic_core.ValidationError]が発生します。
 
-        `self` is explicitly positional-only to allow `self` as a field name.
+        `self`は、フィールド名として`self`を許可するために、明示的に定位置のみです。
         """
         # `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks
         __tracebackhide__ = True
@@ -196,43 +193,43 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
 
     @property
     def model_extra(self) -> dict[str, Any] | None:
-        """Get extra fields set during validation.
+        """検証中に追加フィールドセットを取得します。
 
         Returns:
-            A dictionary of extra fields, or `None` if `config.extra` is not set to `"allow"`.
+            追加フィールドの辞書、または`config.extra`が`"allow"`に設定されていない場合は`None`。
         """
         return self.__pydantic_extra__
 
     @property
     def model_fields_set(self) -> set[str]:
-        """Returns the set of fields that have been explicitly set on this model instance.
+        """このモデルインスタンスに明示的に設定されているフィールドのセットを返します。
 
         Returns:
-            A set of strings representing the fields that have been set,
-                i.e. that were not filled from defaults.
+            設定された(つまり、デフォルトから入力されなかった)フィールドを表す文字列のセット。
         """
         return self.__pydantic_fields_set__
 
     @classmethod
     def model_construct(cls, _fields_set: set[str] | None = None, **values: Any) -> Self:  # noqa: C901
-        """Creates a new instance of the `Model` class with validated data.
+        """検証されたデータを持つ`Model`クラスの新しいインスタンスを作成します。
 
-        Creates a new model setting `__dict__` and `__pydantic_fields_set__` from trusted or pre-validated data.
-        Default values are respected, but no other validation is performed.
+        信頼できるデータまたは事前に検証されたデータから、新しいモデル設定`__dict__`および`__pydantic_fields_set__`を作成します。
+        デフォルト値が使用されますが、その他の検証は実行されません。
 
         !!! note
-            `model_construct()` generally respects the `model_config.extra` setting on the provided model.
-            That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__`
-            and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
-            Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in
-            an error if extra values are passed, but they will be ignored.
+            # `model_construct()` generally respects the `model_config.extra` setting on the provided model.
+            # That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__` and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
+            # Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in an error if extra values are passed, but they will be ignored.
+            `model_construct()`は一般に、提供されたモデルの`model_config.extra`設定を尊重します。
+            つまり、`model_config.extra=='allow'`の場合、余分に渡された値はすべてモデルインスタンスの`__dict__`フィールドと`__pydantic_extra__`フィールドに追加されます。`model_config.extra=='ignore'`(デフォルト)の場合、余分に渡された値はすべて無視されます。
+            `model_construct()`を呼び出しても検証は行われないので、`model_config.extra=='forbid'`を指定しても、余分な値が渡されてもエラーにはなりませんが、無視されます。
 
         Args:
-            _fields_set: The set of field names accepted for the Model instance.
-            values: Trusted or pre-validated data dictionary.
+            _fields_set: Modelインスタンスに受け入れられるフィールド名のセット。
+            values: 信頼できるデータ辞書または事前に検証されたデータ辞書。
 
         Returns:
-            A new instance of the `Model` class with validated data.
+            検証されたデータを持つ`Model`クラスの新しいインスタンス。
         """
         m = cls.__new__(cls)
         fields_values: dict[str, Any] = {}
@@ -295,17 +292,16 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         return m
 
     def model_copy(self, *, update: dict[str, Any] | None = None, deep: bool = False) -> Self:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/serialization/#model_copy
+        """Usage docs: ../concepts/serialization/#model_copy
 
-        Returns a copy of the model.
+        モデルのコピーを返します。
 
         Args:
-            update: Values to change/add in the new model. Note: the data is not validated
-                before creating the new model. You should trust this data.
-            deep: Set to `True` to make a deep copy of the model.
+            update: 新しいモデルで変更または追加する値です。注意:新しいモデルを作成する前にデータは検証されません。このデータは信頼してください。
+            deep: モデルのディープコピーを作成するには`True`に設定します。
 
         Returns:
-            New model instance.
+            新しいモデルインスタンス。
         """
         copied = self.__deepcopy__() if deep else self.__copy__()
         if update:
@@ -337,28 +333,27 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         warnings: bool | Literal['none', 'warn', 'error'] = True,
         serialize_as_any: bool = False,
     ) -> dict[str, Any]:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/serialization/#modelmodel_dump
+        """Usage docs: ../concepts/serialization/#modelmodel_dump
 
-        Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.
+        モデルのディクショナリ表現を生成します。オプションで、含めるフィールドまたは除外するフィールドを指定します。
 
         Args:
-            mode: The mode in which `to_python` should run.
-                If mode is 'json', the output will only contain JSON serializable types.
-                If mode is 'python', the output may contain non-JSON-serializable Python objects.
-            include: A set of fields to include in the output.
-            exclude: A set of fields to exclude from the output.
-            context: Additional context to pass to the serializer.
-            by_alias: Whether to use the field's alias in the dictionary key if defined.
-            exclude_unset: Whether to exclude fields that have not been explicitly set.
-            exclude_defaults: Whether to exclude fields that are set to their default value.
-            exclude_none: Whether to exclude fields that have a value of `None`.
-            round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
-            warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
-                "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
-            serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+            mode: `to_python`が実行されるモード。
+                modeが'json'の場合、出力にはJSONシリアライザブル型のみが含まれます。
+                modeが'python'の場合、出力にはJSONシリアライズできないPythonオブジェクトが含まれる可能性があります。
+            include: 出力に含めるフィールドのセット。
+            exclude: 出力から除外するフィールドのセット。
+            context: シリアライザに渡す追加のコンテキスト。
+            by_alias: 定義されている場合に、ディクショナリ・キーでフィールドの別名を使用するかどうか。
+            exclude_unset: 明示的に設定されていないフィールドを除外するかどうか。
+            exclude_defaults: デフォルト値に設定されているフィールドを除外するかどうか。
+            exclude_none: `None`の値を持つフィールドを除外するかどうか。
+            round_trip: Trueの場合、ダンプされた値はJson[T]のようなべき等でない型の入力として有効であるべきです。
+            warnings: シリアライゼーションエラーの処理方法。False/"none"はエラーを無視します。True/"warn"はエラーをログに記録します。"error"は[`PydanticSerializationError`][pydantic_core.PydanticSerializationError]を発生させます。
+            serialize_as_any: ダック型のシリアライズ動作でフィールドをシリアライズするかどうか。
 
         Returns:
-            A dictionary representation of the model.
+            モデルのディクショナリ表現。
         """
         return self.__pydantic_serializer__.to_python(
             self,
@@ -390,26 +385,25 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         warnings: bool | Literal['none', 'warn', 'error'] = True,
         serialize_as_any: bool = False,
     ) -> str:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/serialization/#modelmodel_dump_json
+        """Usage docs: ../concepts/serialization/#modelmodel_dump_json
 
-        Generates a JSON representation of the model using Pydantic's `to_json` method.
+        Pydanticの`to_json`メソッドを使用してモデルのJSON表現を生成します。
 
         Args:
-            indent: Indentation to use in the JSON output. If None is passed, the output will be compact.
-            include: Field(s) to include in the JSON output.
-            exclude: Field(s) to exclude from the JSON output.
-            context: Additional context to pass to the serializer.
-            by_alias: Whether to serialize using field aliases.
-            exclude_unset: Whether to exclude fields that have not been explicitly set.
-            exclude_defaults: Whether to exclude fields that are set to their default value.
-            exclude_none: Whether to exclude fields that have a value of `None`.
-            round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
-            warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
-                "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
-            serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+            indent: JSON出力で使用するインデント。Noneが渡された場合、出力はコンパクトになります。
+            include: JSON出力に含めるフィールド。
+            exclude: JSON出力から除外するフィールド。
+            context: シリアライザに渡す追加のコンテキスト。
+            by_alias: フィールドエイリアスを使用してシリアライズするかどうか。
+            exclude_unset: 明示的に設定されていないフィールドを除外するかどうか。
+            exclude_defaults: デフォルト値に設定されているフィールドを除外するかどうか。
+            exclude_none: `None`の値を持つフィールドを除外するかどうか。
+            round_trip: Trueの場合、ダンプされた値はJson[T]のようなべき等でない型の入力として有効であるべきです。
+            warnings: シリアライゼーションエラーの処理方法。False/"none"はエラーを無視します。True/"warn"はエラーをログに記録します。"error"は[`PydanticSerializationError`][pydantic_core.PydanticSerializationError]を発生させます。
+            serialize_as_any: ダック型のシリアライズ動作でフィールドをシリアライズするかどうか。
 
         Returns:
-            A JSON string representation of the model.
+            モデルのJSON文字列表現。
         """
         return self.__pydantic_serializer__.to_json(
             self,
@@ -434,17 +428,17 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         schema_generator: type[GenerateJsonSchema] = GenerateJsonSchema,
         mode: JsonSchemaMode = 'validation',
     ) -> dict[str, Any]:
-        """Generates a JSON schema for a model class.
+        """モデルクラスのJSONスキーマを生成します。
 
         Args:
-            by_alias: Whether to use attribute aliases or not.
-            ref_template: The reference template.
-            schema_generator: To override the logic used to generate the JSON schema, as a subclass of
-                `GenerateJsonSchema` with your desired modifications
-            mode: The mode in which to generate the schema.
+            by_alias: 属性の別名を使用するかどうか。
+            ref_template:参照テンプレート。
+            schema_generator:JSONスキーマの生成に使用されるロジックを、`GenerateJsonSchema`のサブクラスとして、必要な変更を加えてオーバーライドします。
+            mode:スキーマを生成するモード。
 
         Returns:
-            The JSON schema for the given model class.
+            指定されたモデルクラスのJSONスキーマ。
+
         """
         return model_json_schema(
             cls, by_alias=by_alias, ref_template=ref_template, schema_generator=schema_generator, mode=mode
@@ -452,20 +446,19 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
 
     @classmethod
     def model_parametrized_name(cls, params: tuple[type[Any], ...]) -> str:
-        """Compute the class name for parametrizations of generic classes.
+        """ジェネリッククラスのパラメータ化のクラス名を計算します。
 
-        This method can be overridden to achieve a custom naming scheme for generic BaseModels.
+        このメソッドをオーバーライドして、汎用BaseModelsのカスタム命名スキームを実現できます。
 
         Args:
-            params: Tuple of types of the class. Given a generic class
-                `Model` with 2 type variables and a concrete model `Model[str, int]`,
-                the value `(str, int)` would be passed to `params`.
+            params: クラスの型のタプルです。2つの型変数を持つジェネリッククラス`Model`と具象モデル`Model[str, int]`が与えられると、値`(str, int)`が`params`に渡されます。
 
         Returns:
-            String representing the new class where `params` are passed to `cls` as type variables.
+            `params`が型変数として`cls`に渡される新しいクラスを表す文字列。
 
         Raises:
-            TypeError: Raised when trying to generate concrete names for non-generic models.
+            TypeError:非ジェネリックモデルの具象名を生成しようとしたときに発生します。
+
         """
         if not issubclass(cls, typing.Generic):
             raise TypeError('Concrete names should only be generated for generic models.')
@@ -478,8 +471,8 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         return f'{cls.__name__}[{params_component}]'
 
     def model_post_init(self, __context: Any) -> None:
-        """Override this method to perform additional initialization after `__init__` and `model_construct`.
-        This is useful if you want to do some validation that requires the entire model to be initialized.
+        """このメソッドをオーバーライドして、`__init__`と`model_construct`の後に追加の初期化を実行します。
+        これは、モデル全体を初期化する必要がある検証を行う場合に便利です。
         """
         pass
 
@@ -492,20 +485,20 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         _parent_namespace_depth: int = 2,
         _types_namespace: dict[str, Any] | None = None,
     ) -> bool | None:
-        """Try to rebuild the pydantic-core schema for the model.
+        """モデルのpydantic-coreスキーマを再構築してみてください。
 
-        This may be necessary when one of the annotations is a ForwardRef which could not be resolved during
-        the initial attempt to build the schema, and automatic rebuilding fails.
+        これは、最初にスキーマを構築しようとしたときに解決できなかったForwardRefが注釈の1つであり、自動再構築が失敗した場合に必要になることがあります。
 
         Args:
-            force: Whether to force the rebuilding of the model schema, defaults to `False`.
-            raise_errors: Whether to raise errors, defaults to `True`.
-            _parent_namespace_depth: The depth level of the parent namespace, defaults to 2.
-            _types_namespace: The types namespace, defaults to `None`.
+            force: モデルスキーマの再構築を強制するかどうか。デフォルトは`False`です。
+            raise_errors: エラーを発生させるかどうか。デフォルトは`True`です。
+            _parent_namespace_depth: 親ネームスペースのデプスレベル。デフォルトは2です。
+            _types_namespace: タイプの名前空間で、デフォルトは`None`です。
+
 
         Returns:
-            Returns `None` if the schema is already "complete" and rebuilding was not required.
-            If rebuilding _was_ required, returns `True` if rebuilding was successful, otherwise `False`.
+            スキーマが既に"完了"していて、再構築が必要なかった場合は`None`を返します。
+            rebuilding_was_requiredの場合、再構築が成功した場合は`True`を返し、それ以外の場合は`False`を返します。
         """
         if not force and cls.__pydantic_complete__:
             return None
@@ -548,19 +541,19 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         from_attributes: bool | None = None,
         context: Any | None = None,
     ) -> Self:
-        """Validate a pydantic model instance.
+        """pydanticモデルインスタンスを検証します。
 
         Args:
-            obj: The object to validate.
-            strict: Whether to enforce types strictly.
-            from_attributes: Whether to extract data from object attributes.
-            context: Additional context to pass to the validator.
+            obj: 検証するオブジェクト。
+            strict: 型を厳密に適用するかどうか。
+            from_attributes: オブジェクト属性からデータを抽出するかどうか。
+            context: バリデータに渡す追加のコンテキスト。
 
         Raises:
-            ValidationError: If the object could not be validated.
+            ValidationError: オブジェクトを検証できなかった場合。
 
         Returns:
-            The validated model instance.
+            検証されたモデルインスタンスです。
         """
         # `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks
         __tracebackhide__ = True
@@ -576,20 +569,20 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         strict: bool | None = None,
         context: Any | None = None,
     ) -> Self:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/json/#json-parsing
+        """Usage docs: ../concepts/json/#json-parsing
 
-        Validate the given JSON data against the Pydantic model.
+        指定されたJSONデータをPydanticモデルに対して検証します。
 
         Args:
-            json_data: The JSON data to validate.
-            strict: Whether to enforce types strictly.
-            context: Extra variables to pass to the validator.
+            json_data: 検証するJSONデータ。
+            strict: 型を厳密に適用するかどうか。
+            context: バリデータに渡す追加の変数。
 
         Returns:
-            The validated Pydantic model.
+            検証されたPydanticモデル。
 
         Raises:
-            ValidationError: If `json_data` is not a JSON string or the object could not be validated.
+            ValidationError: `json_data`がJSON文字列でないか、オブジェクトを検証できなかった場合。
         """
         # `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks
         __tracebackhide__ = True
@@ -603,15 +596,16 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         strict: bool | None = None,
         context: Any | None = None,
     ) -> Self:
-        """Validate the given object with string data against the Pydantic model.
+        """文字列データを持つ指定されたオブジェクトをPydanticモデルに対して検証します。
 
         Args:
-            obj: The object containing string data to validate.
-            strict: Whether to enforce types strictly.
-            context: Extra variables to pass to the validator.
+            obj: 検証するストリング・データを含むオブジェクト。
+            strict: 型を厳密に適用するかどうか。
+            context: バリデータに渡す追加の変数。
 
         Returns:
-            The validated Pydantic model.
+            検証されたPydanticモデル。
+
         """
         # `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks
         __tracebackhide__ = True
@@ -619,15 +613,15 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[BaseModel], handler: GetCoreSchemaHandler, /) -> CoreSchema:
-        """Hook into generating the model's CoreSchema.
+        """モデルのCoreSchemaの生成にフックします。
 
         Args:
-            source: The class we are generating a schema for.
-                This will generally be the same as the `cls` argument if this is a classmethod.
-            handler: A callable that calls into Pydantic's internal CoreSchema generation logic.
+            source: スキーマを生成しているクラス。
+            クラスメソッドの場合、これは通常`cls`引数と同じになります。
+            handler: Pydanticの内部CoreSchema生成ロジックを呼び出す呼び出し可能オブジェクトです。
 
         Returns:
-            A `pydantic-core` `CoreSchema`.
+            `pydantic-core``CoreSchema`です。
         """
         # Only use the cached value from this _exact_ class; we don't want one from a parent class
         # This is why we check `cls.__dict__` and don't use `cls.__pydantic_core_schema__` or similar.
@@ -648,41 +642,30 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         handler: GetJsonSchemaHandler,
         /,
     ) -> JsonSchemaValue:
-        """Hook into generating the model's JSON schema.
+        """モデルのJSONスキーマの生成にフックします。
 
         Args:
-            core_schema: A `pydantic-core` CoreSchema.
-                You can ignore this argument and call the handler with a new CoreSchema,
-                wrap this CoreSchema (`{'type': 'nullable', 'schema': current_schema}`),
-                or just call the handler with the original schema.
-            handler: Call into Pydantic's internal JSON schema generation.
-                This will raise a `pydantic.errors.PydanticInvalidForJsonSchema` if JSON schema
-                generation fails.
-                Since this gets called by `BaseModel.model_json_schema` you can override the
-                `schema_generator` argument to that function to change JSON schema generation globally
-                for a type.
+            core_schema: `pydantic-core`CoreSchemaです。
+                この引数を無視して、新しいCoreSchemaでハンドラを呼び出すか、このCoreSchemaをラップ(`{'type':'nullable','schema':current_schema}`)するか、あるいは単に元のスキーマでハンドラを呼び出すことができます。
+            handler: Pydanticの内部JSONスキーマ生成を呼び出します。
+                JSONスキーマの生成に失敗した場合、`pydantic.errors.PydanticInvalidForJsonSchema`が発生します。
+                これは`BaseModel.model_json_schema`によって呼び出されるので、その関数の`schema_generator`引数をオーバーライドして、型のJSONスキーマ生成をグローバルに変更できます。
 
         Returns:
-            A JSON schema, as a Python object.
+            PythonオブジェクトとしてのJSONスキーマ。
         """
         return handler(core_schema)
 
     @classmethod
     def __pydantic_init_subclass__(cls, **kwargs: Any) -> None:
-        """This is intended to behave just like `__init_subclass__`, but is called by `ModelMetaclass`
-        only after the class is actually fully initialized. In particular, attributes like `model_fields` will
-        be present when this is called.
+        """これは`__init_subclass__`と同じように動作することを意図していますが、クラスが実際に完全に初期化された後にのみ`ModelMetaclass`によって呼び出されます。特に、`model_fields`のような属性は、これが呼び出されたときに存在します。
 
-        This is necessary because `__init_subclass__` will always be called by `type.__new__`,
-        and it would require a prohibitively large refactor to the `ModelMetaclass` to ensure that
-        `type.__new__` was called in such a manner that the class would already be sufficiently initialized.
+        これが必要なのは、`__init_subclass__`は常に`type.__new__`によって呼び出され、`type.__new__`がクラスがすでに十分に初期化されているような方法で呼び出されるようにするためには、`ModelMetaclass`に対して非常に大きなリファクタリングが必要になるからです。
 
-        This will receive the same `kwargs` that would be passed to the standard `__init_subclass__`, namely,
-        any kwargs passed to the class definition that aren't used internally by pydantic.
+        これは、標準の`__init_subclass__`に渡されるのと同じ`kwargs`、つまり、pydanticが内部的に使用していないクラス定義に渡されたkwargsを受け取ります。
 
         Args:
-            **kwargs: Any keyword arguments passed to the class definition that aren't used internally
-                by pydantic.
+            **kwargs: クラス定義に渡されるキーワード引数で、pydanticが内部的に使用しないもの。
         """
         pass
 
@@ -751,7 +734,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         return submodel
 
     def __copy__(self) -> Self:
-        """Returns a shallow copy of the model."""
+        """モデルのシャローコピーを返します。"""
         cls = type(self)
         m = cls.__new__(cls)
         _object_setattr(m, '__dict__', copy(self.__dict__))
@@ -770,7 +753,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         return m
 
     def __deepcopy__(self, memo: dict[int, Any] | None = None) -> Self:
-        """Returns a deep copy of the model."""
+        """モデルのディープコピーを返します。"""
         cls = type(self)
         m = cls.__new__(cls)
         _object_setattr(m, '__dict__', deepcopy(self.__dict__, memo=memo))
@@ -989,8 +972,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         # subclass initialization.
 
         def __init_subclass__(cls, **kwargs: Unpack[ConfigDict]):
-            """This signature is included purely to help type-checkers check arguments to class declaration, which
-            provides a way to conveniently set model_config key/value pairs.
+            """このシグネチャは、型チェッカーがクラス宣言の引数をチェックするのを助けるためだけに含まれており、model_configのキーと値のペアを簡単に設定する方法を提供します。
 
             ```py
             from pydantic import BaseModel
@@ -999,20 +981,17 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
                 ...
             ```
 
-            However, this may be deceiving, since the _actual_ calls to `__init_subclass__` will not receive any
-            of the config arguments, and will only receive any keyword arguments passed during class initialization
-            that are _not_ expected keys in ConfigDict. (This is due to the way `ModelMetaclass.__new__` works.)
+            しかし、`__init_subclass__`の_actual_callsはconfig引数を受け取らず、クラスの初期化中に渡されたConfigDictの_not_expectedキーであるキーワード引数のみを受け取るので、これはごまかしかもしれません(これは`ModelMetaclass.__new__`の動作によるものです)。
 
             Args:
-                **kwargs: Keyword arguments passed to the class definition, which set model_config
+                **kwargs: クラス定義に渡されるキーワード引数で、model_config
 
             Note:
-                You may want to override `__pydantic_init_subclass__` instead, which behaves similarly but is called
-                *after* the class is fully initialized.
+                代わりに`__pydantic_init_subclass__`をオーバーライドすることもできます。これは同様に動作しますが、クラスが完全に初期化された*後*に呼び出されます。
             """
 
     def __iter__(self) -> TupleGenerator:
-        """So `dict(model)` works."""
+        """dict(model)`は動作します。"""
         yield from [(k, v) for (k, v) in self.__dict__.items() if not k.startswith('_')]
         extra = self.__pydantic_extra__
         if extra:
@@ -1256,12 +1235,12 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         update: Dict[str, Any] | None = None,  # noqa UP006
         deep: bool = False,
     ) -> Self:  # pragma: no cover
-        """Returns a copy of the model.
+        """モデルのコピーを戻します。
 
         !!! warning "Deprecated"
-            This method is now deprecated; use `model_copy` instead.
+            このメソッドは廃止されました。代わりに`model_copy`を使用してください。
 
-        If you need `include` or `exclude`, use:
+        `include`または`exclude`が必要な場合は、次のようにします。
 
         ```py
         data = self.model_dump(include=include, exclude=exclude, round_trip=True)
@@ -1270,13 +1249,13 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         ```
 
         Args:
-            include: Optional set or mapping specifying which fields to include in the copied model.
-            exclude: Optional set or mapping specifying which fields to exclude in the copied model.
-            update: Optional dictionary of field-value pairs to override field values in the copied model.
-            deep: If True, the values of fields that are Pydantic models will be deep-copied.
+            include: コピーされたモデルに含めるフィールドを指定するオプションのセットまたはマッピング。
+            exclude: コピーされたモデルで除外するフィールドを指定するオプションのセットまたはマッピング。
+            update: コピーされたモデルのフィールド値を上書きするためのフィールド値ペアのオプション辞書。
+            deep: Trueの場合、Pydanticモデルであるフィールドの値がディープコピーされます。
 
         Returns:
-            A copy of the model with included, excluded and updated fields as specified.
+            指定されたフィールドが含まれ、除外され、更新されたモデルのコピー。
         """
         warnings.warn(
             'The `copy` method is deprecated; use `model_copy` instead. '
@@ -1469,32 +1448,29 @@ def create_model(  # noqa: C901
     __slots__: tuple[str, ...] | None = None,
     **field_definitions: Any,
 ) -> type[ModelT]:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/models/#dynamic-model-creation
+    """Usage docs: ../concepts/models/#dynamic-model-creation
 
-    Dynamically creates and returns a new Pydantic model, in other words, `create_model` dynamically creates a
-    subclass of [`BaseModel`][pydantic.BaseModel].
+    新しいPydanticモデルを動的に作成して返します。言い換えれば、`create_model`は[`BaseModel`][pydantic.BaseModel]のサブクラスを動的に作成します。
 
     Args:
-        model_name: The name of the newly created model.
-        __config__: The configuration of the new model.
-        __doc__: The docstring of the new model.
-        __base__: The base class or classes for the new model.
-        __module__: The name of the module that the model belongs to;
-            if `None`, the value is taken from `sys._getframe(1)`
-        __validators__: A dictionary of methods that validate fields. The keys are the names of the validation methods to
-            be added to the model, and the values are the validation methods themselves. You can read more about functional
-            validators [here](https://docs.pydantic.dev/2.8/concepts/validators/#field-validators).
-        __cls_kwargs__: A dictionary of keyword arguments for class creation, such as `metaclass`.
-        __slots__: Deprecated. Should not be passed to `create_model`.
-        **field_definitions: Attributes of the new model. They should be passed in the format:
-            `<name>=(<type>, <default value>)`, `<name>=(<type>, <FieldInfo>)`, or `typing.Annotated[<type>, <FieldInfo>]`.
-            Any additional metadata in `typing.Annotated[<type>, <FieldInfo>, ...]` will be ignored.
+        model_name: 新しく作成されたモデルの名前。
+        __config__: 新しいモデルの構成。
+        __doc__: 新しいモデルのdocstring。
+        __base__: 新しいモデルの1つまたは複数の基本クラス。
+        __module__: モデルが属するモジュールの名前。
+        `None`の場合、値は`sys._getframe(1)`から取得されます。
+        __validators__: フィールドを検証するメソッドのディクショナリです。キーはモデルに追加される検証メソッドの名前で、値は検証メソッド自体です。関数型バリデータの詳細については、[ここ](https: //docs.pydantic.dev/2.8/concepts/validators/#field-validators)を参照してください。
+        __cls_kwargs__: `metaclass`など、クラスを作成するためのキーワード引数の辞書です。
+        __slots__: 非推奨です。`create_model`に渡すべきではありません。
+        **field_definitions: 新しいモデルの属性です。次の形式で渡されます。
+        `<name>=(<type>,<default value>)`、`<name>=(<type>,<FieldInfo>)`、`typing.Annotated[<type>,<FieldInfo>]`のいずれかです。
+        `typing.Annotated[<type>,<FieldInfo>,...]`の追加のメタデータは無視されます。
 
     Returns:
-        The new [model][pydantic.BaseModel].
+        新しい[model][pydantic.BaseModel]です。
 
     Raises:
-        PydanticUserError: If `__base__` and `__config__` are both passed.
+        PydantictUserError: `__base__`と`__config__`の両方が渡された場合。
     """
     if __slots__ is not None:
         # __slots__ will be ignored from here on

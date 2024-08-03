@@ -1,4 +1,4 @@
-"""This module includes classes and functions designed specifically for use with the mypy plugin."""
+"""このモジュールには、mypyプラグインで使用するために特別に設計されたクラスと関数が含まれています。"""
 
 from __future__ import annotations
 
@@ -113,22 +113,21 @@ __version__ = 2
 
 
 def plugin(version: str) -> type[Plugin]:
-    """`version` is the mypy version string.
+    """`version`はmypyのバージョン文字列です。
 
-    We might want to use this to print a warning if the mypy version being used is
-    newer, or especially older, than we expect (or need).
+    使用されているmypyのバージョンが予想(あるいは必要)よりも新しい、あるいは特に古い場合に、これを使用して警告を出力することができます。
 
     Args:
-        version: The mypy version string.
+        version: mypyのバージョン文字列。
 
     Return:
-        The Pydantic mypy plugin type.
+        Pydantic mypyプラグイン型です。
     """
     return PydanticPlugin
 
 
 class PydanticPlugin(Plugin):
-    """The Pydantic mypy plugin."""
+    """Pydantic mypyプラグイン"""
 
     def __init__(self, options: Options) -> None:
         self.plugin_config = PydanticPluginConfig(options)
@@ -136,7 +135,7 @@ class PydanticPlugin(Plugin):
         super().__init__(options)
 
     def get_base_class_hook(self, fullname: str) -> Callable[[ClassDefContext], bool] | None:
-        """Update Pydantic model class."""
+        """Pydanticモデルクラスを更新します。"""
         sym = self.lookup_fully_qualified(fullname)
         if sym and isinstance(sym.node, TypeInfo):  # pragma: no branch
             # No branching may occur if the mypy cache has not been cleared
@@ -145,37 +144,37 @@ class PydanticPlugin(Plugin):
         return None
 
     def get_metaclass_hook(self, fullname: str) -> Callable[[ClassDefContext], None] | None:
-        """Update Pydantic `ModelMetaclass` definition."""
+        """Pydanticの`ModelMetaclass`定義を更新します。"""
         if fullname == MODEL_METACLASS_FULLNAME:
             return self._pydantic_model_metaclass_marker_callback
         return None
 
     def get_function_hook(self, fullname: str) -> Callable[[FunctionContext], Type] | None:
-        """Adjust the return type of the `Field` function."""
+        """`Field`関数の戻り値の型を調整します。"""
         sym = self.lookup_fully_qualified(fullname)
         if sym and sym.fullname == FIELD_FULLNAME:
             return self._pydantic_field_callback
         return None
 
     def get_method_hook(self, fullname: str) -> Callable[[MethodContext], Type] | None:
-        """Adjust return type of `from_orm` method call."""
+        """`from_orm`メソッド呼び出しの戻り値の型を調整します。"""
         if fullname.endswith('.from_orm'):
             return from_attributes_callback
         return None
 
     def get_class_decorator_hook(self, fullname: str) -> Callable[[ClassDefContext], None] | None:
-        """Mark pydantic.dataclasses as dataclass.
+        """pydantic.dataclassesをdataclassとしてマークします。
 
-        Mypy version 1.1.1 added support for `@dataclass_transform` decorator.
+        Mypyバージョン1.1.1では、`@dataclass_transform`デコレータのサポートが追加されました。
         """
         if fullname == DATACLASS_FULLNAME and MYPY_VERSION_TUPLE < (1, 1):
             return dataclasses.dataclass_class_maker_callback  # type: ignore[return-value]
         return None
 
     def report_config_data(self, ctx: ReportConfigContext) -> dict[str, Any]:
-        """Return all plugin config data.
+        """すべてのプラグイン構成データを返します。
 
-        Used by mypy to determine if cache needs to be discarded.
+        キャッシュを破棄する必要があるかどうかを判断するためにmypyが使用します。
         """
         return self._plugin_data
 
@@ -184,10 +183,9 @@ class PydanticPlugin(Plugin):
         return transformer.transform()
 
     def _pydantic_model_metaclass_marker_callback(self, ctx: ClassDefContext) -> None:
-        """Reset dataclass_transform_spec attribute of ModelMetaclass.
+        """ModelMetaclassのdataclass_transform_spec属性をリセットします。
 
-        Let the plugin handle it. This behavior can be disabled
-        if 'debug_dataclass_transform' is set to True', for testing purposes.
+        プラグインに処理させます。'debug_dataclass_transform'がTrueに設定されている場合、テストのためにこの動作を無効にできます。
         """
         if self.plugin_config.debug_dataclass_transform:
             return
@@ -197,12 +195,12 @@ class PydanticPlugin(Plugin):
             info_metaclass.type.dataclass_transform_spec = None
 
     def _pydantic_field_callback(self, ctx: FunctionContext) -> Type:
-        """Extract the type of the `default` argument from the Field function, and use it as the return type.
+        """Field関数から`default`引数の型を抽出し、それを戻り値の型として使用します。
 
-        In particular:
-        * Check whether the default and default_factory argument is specified.
-        * Output an error if both are specified.
-        * Retrieve the type of the argument which is specified, and use it as return type for the function.
+        具体的には次のとおりです。
+        *default引数とdefault_factory引数が指定されているかどうかを確認します。
+        *両方が指定された場合、エラーを出力します。
+        *指定された引数の型を取得し、関数の戻り値の型として使用します。
         """
         default_any_type = ctx.default_return_type
 
@@ -246,14 +244,13 @@ class PydanticPlugin(Plugin):
 
 
 class PydanticPluginConfig:
-    """A Pydantic mypy plugin config holder.
+    """Pydantic mypyプラグインの設定ホルダー。
 
     Attributes:
-        init_forbid_extra: Whether to add a `**kwargs` at the end of the generated `__init__` signature.
-        init_typed: Whether to annotate fields in the generated `__init__`.
-        warn_required_dynamic_aliases: Whether to raise required dynamic aliases error.
-        debug_dataclass_transform: Whether to not reset `dataclass_transform_spec` attribute
-            of `ModelMetaclass` for testing purposes.
+        init_forbid_extra: 生成された`__init__`シグネチャの最後に`**kwargs`を追加するかどうか。
+        init_typed: 生成された`__init__`のフィールドに注釈を付けるかどうか。
+        warn_required_dynamic_aliases: 必要な動的別名エラーを発生させるかどうか。
+        debug_dataclass_transform: テストのために`ModelMetaclass`の`dataclass_transform_spec`属性をリセットしないかどうか。
     """
 
     __slots__ = (
@@ -292,7 +289,7 @@ class PydanticPluginConfig:
 
 
 def from_attributes_callback(ctx: MethodContext) -> Type:
-    """Raise an error if from_attributes is not enabled."""
+    """from_attributesが有効になっていない場合は、エラーが発生します。"""
     model_type: Instance
     ctx_type = ctx.type
     if isinstance(ctx_type, TypeType):
@@ -315,7 +312,7 @@ def from_attributes_callback(ctx: MethodContext) -> Type:
 
 
 class PydanticModelField:
-    """Based on mypy.plugins.dataclasses.DataclassAttribute."""
+    """mypy.plugins.dataclasses.DataclassAttributeに基づいています。"""
 
     def __init__(
         self,
@@ -349,7 +346,7 @@ class PydanticModelField:
         force_typevars_invariant: bool,
         is_root_model_root: bool,
     ) -> Argument:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.to_argument."""
+        """mypy.plugins.dataclasses.DataclassAttribute.to_argumentに基づきます。"""
         variable = self.to_var(current_info, api, use_alias, force_typevars_invariant)
         type_annotation = self.expand_type(current_info, api) if typed else AnyType(TypeOfAny.explicit)
         return Argument(
@@ -364,7 +361,7 @@ class PydanticModelField:
     def expand_type(
         self, current_info: TypeInfo, api: SemanticAnalyzerPluginInterface, force_typevars_invariant: bool = False
     ) -> Type | None:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.expand_type."""
+        """mypy.plugins.dataclasses.DataclassAttribute.expand_typeに基づきます。"""
         # The getattr in the next line is used to prevent errors in legacy versions of mypy without this attribute
         if force_typevars_invariant:
             # In some cases, mypy will emit an error "Cannot use a covariant type variable as a parameter"
@@ -397,7 +394,7 @@ class PydanticModelField:
         use_alias: bool,
         force_typevars_invariant: bool = False,
     ) -> Var:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.to_var."""
+        """mypy.plugins.dataclasses.DataclassAttribute.to_varに基づいています。"""
         if use_alias and self.alias is not None:
             name = self.alias
         else:
@@ -406,7 +403,7 @@ class PydanticModelField:
         return Var(name, self.expand_type(current_info, api, force_typevars_invariant))
 
     def serialize(self) -> JsonDict:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.serialize."""
+        """mypy.plugins.dataclasses.DataclassAttribute.serializeに基づいています。"""
         assert self.type
         return {
             'name': self.name,
@@ -421,14 +418,13 @@ class PydanticModelField:
 
     @classmethod
     def deserialize(cls, info: TypeInfo, data: JsonDict, api: SemanticAnalyzerPluginInterface) -> PydanticModelField:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.deserialize."""
+        """mypy.plugins.dataclasses.DataclassAttribute.デシリアライズに基づきます。"""
         data = data.copy()
         typ = deserialize_and_fixup_type(data.pop('type'), api)
         return cls(type=typ, info=info, **data)
 
     def expand_typevar_from_subtype(self, sub_type: TypeInfo, api: SemanticAnalyzerPluginInterface) -> None:
-        """Expands type vars in the context of a subtype when an attribute is inherited
-        from a generic super type.
+        """属性がジェネリックスーパータイプから継承される場合に、サブタイプのコンテキストでタイプ変数を展開します。
         """
         if self.type is not None:
             with state.strict_optional_set(api.options.strict_optional):
@@ -436,12 +432,12 @@ class PydanticModelField:
 
 
 class PydanticModelClassVar:
-    """Based on mypy.plugins.dataclasses.DataclassAttribute.
+    """mypy.plugins.dataclasses.DataclassAttributeに基づいています。
 
-    ClassVars are ignored by subclasses.
+    ClassVarはサブクラスでは無視されます。
 
     Attributes:
-        name: the ClassVar name
+        name: ClassVar名
     """
 
     def __init__(self, name):
@@ -449,22 +445,22 @@ class PydanticModelClassVar:
 
     @classmethod
     def deserialize(cls, data: JsonDict) -> PydanticModelClassVar:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.deserialize."""
+        """mypy.plugins.dataclasses.DataclassAttribute.デシリアライズに基づきます。"""
         data = data.copy()
         return cls(**data)
 
     def serialize(self) -> JsonDict:
-        """Based on mypy.plugins.dataclasses.DataclassAttribute.serialize."""
+        """mypy.plugins.dataclasses.DataclassAttribute.serializeに基づいています。"""
         return {
             'name': self.name,
         }
 
 
 class PydanticModelTransformer:
-    """Transform the BaseModel subclass according to the plugin settings.
+    """プラグインの設定に従ってBaseModelサブクラスを変換します。
 
     Attributes:
-        tracked_config_fields: A set of field configs that the plugin has to track their value.
+        tracked_config_fields: プラグインが値を追跡するために必要なフィールド設定のセット。
     """
 
     tracked_config_fields: set[str] = {
@@ -489,14 +485,15 @@ class PydanticModelTransformer:
         self.plugin_config = plugin_config
 
     def transform(self) -> bool:
-        """Configures the BaseModel subclass according to the plugin settings.
+        """プラグインの設定に従ってBaseModelサブクラスを構成します。
 
-        In particular:
+        具体的には次のとおりです。
 
-        * determines the model config and fields,
-        * adds a fields-aware signature for the initializer and construct methods
-        * freezes the class if frozen = True
-        * stores the fields, config, and if the class is settings in the mypy metadata for access by subclasses
+        * モデルの設定とフィールドを決定します。
+        * イニシャライザおよび構成メソッドに対して、フィールドを認識するシグネチャを追加します。
+        * frozen=Trueの場合、クラスをフリーズします。
+        * サブクラスによるアクセスのために、フィールド、config、およびクラスが設定であるかどうかをmypyメタデータに格納します。
+
         """
         info = self._cls.info
         is_root_model = any(ROOT_MODEL_FULLNAME in base.fullname for base in info.mro[:-1])
@@ -525,12 +522,9 @@ class PydanticModelTransformer:
         return True
 
     def adjust_decorator_signatures(self) -> None:
-        """When we decorate a function `f` with `pydantic.validator(...)`, `pydantic.field_validator`
-        or `pydantic.serializer(...)`, mypy sees `f` as a regular method taking a `self` instance,
-        even though pydantic internally wraps `f` with `classmethod` if necessary.
+        """関数`f`を`pydantic.validator(.)`、`pydantic.field_validator`または`pydantic.serializer(.)`で装飾すると、pydanticは必要に応じて`f`を`classmethod`で内部的にラップしますが、mypyは`f`を`self`インスタンスを取る通常のメソッドと見なします。
 
-        Teach mypy this by marking any function whose outermost decorator is a `validator()`,
-        `field_validator()` or `serializer()` call as a `classmethod`.
+        一番外側のデコレータが`validator()`、`field_validator()`または`serializer()`呼び出しである関数を`classmethod`としてマークすることで、mypyにこれを教えてください。
         """
         for name, sym in self._cls.info.names.items():
             if isinstance(sym.node, Decorator):
@@ -552,7 +546,7 @@ class PydanticModelTransformer:
                     sym.node.func.is_class = True
 
     def collect_config(self) -> ModelConfigData:  # noqa: C901 (ignore complexity)
-        """Collects the values of the config attributes that are used by the plugin, accounting for parent classes."""
+        """親クラスを考慮して、プラグインで使用される構成属性の値を収集します。"""
         cls = self._cls
         config = ModelConfigData()
 
@@ -630,7 +624,7 @@ class PydanticModelTransformer:
     def collect_fields_and_class_vars(
         self, model_config: ModelConfigData, is_root_model: bool
     ) -> tuple[list[PydanticModelField] | None, list[PydanticModelClassVar] | None]:
-        """Collects the fields for the model, accounting for parent classes."""
+        """親クラスを考慮して、モデルのフィールドを収集します。"""
         cls = self._cls
 
         # First, collect fields and ClassVars belonging to any class in the MRO, ignoring duplicates.
@@ -709,15 +703,15 @@ class PydanticModelTransformer:
     def collect_field_or_class_var_from_stmt(  # noqa C901
         self, stmt: AssignmentStmt, model_config: ModelConfigData, class_vars: dict[str, PydanticModelClassVar]
     ) -> PydanticModelField | PydanticModelClassVar | None:
-        """Get pydantic model field from statement.
+        """ステートメントからPydanticモデルフィールドを取得します。
 
         Args:
-            stmt: The statement.
-            model_config: Configuration settings for the model.
-            class_vars: ClassVars already known to be defined on the model.
+            stmt: ステートメント。
+            model_config: モデルのコンフィギュレーション設定。
+            class_vars: モデルに定義されていることがすでにわかっているClassVars。
 
         Returns:
-            A pydantic model field if it could find the field in statement. Otherwise, `None`.
+            ステートメント内でフィールドが見つかった場合は、pydanticモデルフィールド。それ以外の場合は`None`。
         """
         cls = self._cls
 
@@ -834,9 +828,9 @@ class PydanticModelTransformer:
         )
 
     def _infer_dataclass_attr_init_type(self, sym: SymbolTableNode, name: str, context: Context) -> Type | None:
-        """Infer __init__ argument type for an attribute.
+        """属性の__init__引数タイプを推測します。
 
-        In particular, possibly use the signature of __set__.
+        特に、__set__のシグネチャを使用することができます。
         """
         default = sym.type
         if sym.implicit:
@@ -874,9 +868,9 @@ class PydanticModelTransformer:
     def add_initializer(
         self, fields: list[PydanticModelField], config: ModelConfigData, is_settings: bool, is_root_model: bool
     ) -> None:
-        """Adds a fields-aware `__init__` method to the class.
+        """フィールドを認識する`__init__`メソッドをクラスに追加します。
 
-        The added `__init__` will be annotated with types vs. all `Any` depending on the plugin settings.
+        追加された`__init__`には、プラグインの設定に応じて、型とすべての`Any`の注釈が付けられます。
         """
         if '__init__' in self._cls.info.names and not self._cls.info.names['__init__'].plugin_generated:
             return  # Don't generate an __init__ if one already exists
@@ -925,10 +919,9 @@ class PydanticModelTransformer:
         is_settings: bool,
         is_root_model: bool,
     ) -> None:
-        """Adds a fully typed `model_construct` classmethod to the class.
+        """完全に型指定された`model_construct`クラスメソッドをクラスに追加します。
 
-        Similar to the fields-aware __init__ method, but always uses the field names (not aliases),
-        and does not treat settings fields as optional.
+        fields-aware__init__メソッドに似ていますが、常に(エイリアスではなく)フィールド名を使用し、設定フィールドをオプションとして扱いません。
         """
         set_str = self._api.named_type(f'{BUILTINS_NAME}.set', [self._api.named_type(f'{BUILTINS_NAME}.str')])
         optional_set_str = UnionType([set_str, NoneType()])
@@ -958,9 +951,9 @@ class PydanticModelTransformer:
         )
 
     def set_frozen(self, fields: list[PydanticModelField], api: SemanticAnalyzerPluginInterface, frozen: bool) -> None:
-        """Marks all fields as properties so that attempts to set them trigger mypy errors.
+        """すべてのフィールドをプロパティとしてマークし、それらを設定しようとするとmypyエラーが発生するようにします。
 
-        This is the same approach used by the attrs and dataclasses plugins.
+        これはattrsおよびdataclassesプラグインで使用されているのと同じ方法です。
         """
         info = self._cls.info
         for field in fields:
@@ -989,9 +982,9 @@ class PydanticModelTransformer:
                 info.names[var.name] = SymbolTableNode(MDEF, var)
 
     def get_config_update(self, name: str, arg: Expression, lax_extra: bool = False) -> ModelConfigData | None:
-        """Determines the config update due to a single kwarg in the ConfigDict definition.
+        """ConfigDict定義内の1つのkwargによる構成の更新を決定します。
 
-        Warns if a tracked config attribute is set to a value the plugin doesn't know how to interpret (e.g., an int)
+        追跡対象の設定属性が、プラグインが解釈できない値(intなど)に設定されている場合に警告します。
         """
         if name not in self.tracked_config_fields:
             return None
@@ -1025,7 +1018,7 @@ class PydanticModelTransformer:
 
     @staticmethod
     def get_has_default(stmt: AssignmentStmt) -> bool:
-        """Returns a boolean indicating whether the field defined in `stmt` is a required field."""
+        """`stmt`で定義されたフィールドが必須フィールドかどうかを示すブール値を返します。"""
         expr = stmt.rvalue
         if isinstance(expr, TempNode):
             # TempNode means annotation-only, so has no default
@@ -1047,10 +1040,10 @@ class PydanticModelTransformer:
 
     @staticmethod
     def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:
-        """Returns a pair (alias, has_dynamic_alias), extracted from the declaration of the field defined in `stmt`.
+        """`stmt`で定義されたフィールドの宣言から抽出されたペア(alias, has_dynamic_alias)を返します。
 
-        `has_dynamic_alias` is True if and only if an alias is provided, but not as a string literal.
-        If `has_dynamic_alias` is True, `alias` will be None.
+        `has_dynamic_alias`は、文字列リテラルではなくエイリアスが指定された場合にのみTrueです。
+        `has_dynamic_alias`がTrueの場合、`alias`はNoneになります。
         """
         expr = stmt.rvalue
         if isinstance(expr, TempNode):
@@ -1075,11 +1068,10 @@ class PydanticModelTransformer:
 
     @staticmethod
     def is_field_frozen(stmt: AssignmentStmt) -> bool:
-        """Returns whether the field is frozen, extracted from the declaration of the field defined in `stmt`.
+        """フィールドが凍結されているかどうかを返します。これは`stmt`で定義されたフィールドの宣言から抽出されます。
 
-        Note that this is only whether the field was declared to be frozen in a `<field_name> = Field(frozen=True)`
-        sense; this does not determine whether the field is frozen because the entire model is frozen; that is
-        handled separately.
+        これは、フィールドが`<field_name>=Field(frozen=True)`の意味で凍結されていると宣言されたかどうかだけであることに注意してください。
+        モデル全体がフリーズされているので、フィールドがフリーズされているかどうかは判断されません。フリーズは個別に処理されます。
         """
         expr = stmt.rvalue
         if isinstance(expr, TempNode):
@@ -1108,9 +1100,9 @@ class PydanticModelTransformer:
         is_root_model: bool,
         force_typevars_invariant: bool = False,
     ) -> list[Argument]:
-        """Helper function used during the construction of the `__init__` and `model_construct` method signatures.
+        """`__init__`および`model_construct`メソッドシグネチャの構築中に使用されるヘルパー関数。
 
-        Returns a list of mypy Argument instances for use in the generated signatures.
+        生成されたシグニチャで使用するmypy Argumentインスタンスのリストを返します。
         """
         info = self._cls.info
         arguments = [
@@ -1129,10 +1121,9 @@ class PydanticModelTransformer:
         return arguments
 
     def should_init_forbid_extra(self, fields: list[PydanticModelField], config: ModelConfigData) -> bool:
-        """Indicates whether the generated `__init__` should get a `**kwargs` at the end of its signature.
+        """生成された`__init__`がその署名の最後に`**kwargs`を取得すべきかどうかを示します。
 
-        We disallow arbitrary kwargs if the extra config setting is "forbid", or if the plugin config says to,
-        *unless* a required dynamic alias is present (since then we can't determine a valid signature).
+        追加のconfig設定が「forbid」である場合、またはプラグインのconfigがtoを指定している場合は、必要な動的エイリアスが存在しない限り、任意のkwargsを許可しません(その場合、有効な署名を判断できません)。
         """
         if not config.populate_by_name:
             if self.is_dynamic_alias_present(fields, bool(config.has_alias_generator)):
@@ -1143,8 +1134,7 @@ class PydanticModelTransformer:
 
     @staticmethod
     def is_dynamic_alias_present(fields: list[PydanticModelField], has_alias_generator: bool) -> bool:
-        """Returns whether any fields on the model have a "dynamic alias", i.e., an alias that cannot be
-        determined during static analysis.
+        """モデル上のいずれかのフィールドに"動的エイリアス"(つまり、静解析中に判別できないエイリアス)があるかどうかを返します。
         """
         for field in fields:
             if field.has_dynamic_alias:
@@ -1157,7 +1147,7 @@ class PydanticModelTransformer:
 
 
 class ModelConfigData:
-    """Pydantic mypy plugin model config class."""
+    """Pydantic mypy pluginモデルコンフィグクラス。"""
 
     def __init__(
         self,
@@ -1174,21 +1164,22 @@ class ModelConfigData:
         self.has_alias_generator = has_alias_generator
 
     def get_values_dict(self) -> dict[str, Any]:
-        """Returns a dict of Pydantic model config names to their values.
+        """Pydanticモデル構成名の辞書をその値に戻します。
 
-        It includes the config if config value is not `None`.
+        configの値が`None`でない場合は、configも含まれます。
         """
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
     def update(self, config: ModelConfigData | None) -> None:
-        """Update Pydantic model config values."""
+        """Pydanticモデルの構成値を更新します。"""
+
         if config is None:
             return
         for k, v in config.get_values_dict().items():
             setattr(self, k, v)
 
     def setdefault(self, key: str, value: Any) -> None:
-        """Set default value for Pydantic model config if config value is `None`."""
+        """構成値が`None`の場合、Pydanticモデル構成のデフォルト値を設定します。"""
         if getattr(self, key) is None:
             setattr(self, key, value)
 
@@ -1203,19 +1194,19 @@ ERROR_EXTRA_FIELD_ROOT_MODEL = ErrorCode('pydantic-field', 'Extra field on RootM
 
 
 def error_from_attributes(model_name: str, api: CheckerPluginInterface, context: Context) -> None:
-    """Emits an error when the model does not have `from_attributes=True`."""
+    """モデルに`from_attributes=True`がない場合、エラーを発生します。"""
     api.fail(f'"{model_name}" does not have from_attributes=True', context, code=ERROR_ORM)
 
 
 def error_invalid_config_value(name: str, api: SemanticAnalyzerPluginInterface, context: Context) -> None:
-    """Emits an error when the config value is invalid."""
+    """構成値が無効な場合にエラーを発生します。"""
     api.fail(f'Invalid value for "Config.{name}"', context, code=ERROR_CONFIG)
 
 
 def error_required_dynamic_aliases(api: SemanticAnalyzerPluginInterface, context: Context) -> None:
-    """Emits required dynamic aliases error.
+    """必要な動的エイリアスエラーが発生します。
 
-    This will be called when `warn_required_dynamic_aliases=True`.
+    これは`warn_required_dynamic_aliases=True`のときに呼び出されます。
     """
     api.fail('Required dynamic aliases disallowed', context, code=ERROR_ALIAS)
 
@@ -1223,7 +1214,7 @@ def error_required_dynamic_aliases(api: SemanticAnalyzerPluginInterface, context
 def error_unexpected_behavior(
     detail: str, api: CheckerPluginInterface | SemanticAnalyzerPluginInterface, context: Context
 ) -> None:  # pragma: no cover
-    """Emits unexpected behavior error."""
+    """予期しないことがあると、エラーが発生します。"""
     # Can't think of a good way to test this, but I confirmed it renders as desired by adding to a non-error path
     link = 'https://github.com/pydantic/pydantic/issues/new/choose'
     full_message = f'The pydantic mypy plugin ran into unexpected behavior: {detail}\n'
@@ -1232,17 +1223,17 @@ def error_unexpected_behavior(
 
 
 def error_untyped_fields(api: SemanticAnalyzerPluginInterface, context: Context) -> None:
-    """Emits an error when there is an untyped field in the model."""
+    """モデルに型指定されていないフィールドがあると、エラーが発生します。"""
     api.fail('Untyped fields disallowed', context, code=ERROR_UNTYPED)
 
 
 def error_extra_fields_on_root_model(api: CheckerPluginInterface, context: Context) -> None:
-    """Emits an error when there is more than just a root field defined for a subclass of RootModel."""
+    """RootModelのサブクラスに対して定義されたルートフィールドが1つだけでない場合は、エラーが発生します。"""
     api.fail('Only `root` is allowed as a field of a `RootModel`', context, code=ERROR_EXTRA_FIELD_ROOT_MODEL)
 
 
 def error_default_and_default_factory_specified(api: CheckerPluginInterface, context: Context) -> None:
-    """Emits an error when `Field` has both `default` and `default_factory` together."""
+    """`Field`に`default`と`default_factory`の両方が一緒にある場合、エラーを発生します。"""
     api.fail('Field default and default_factory cannot be specified together', context, code=ERROR_FIELD_DEFAULTS)
 
 
@@ -1256,7 +1247,7 @@ def add_method(
     tvar_def: TypeVarDef | None = None,
     is_classmethod: bool = False,
 ) -> None:
-    """Very closely related to `mypy.plugins.common.add_method_to_class`, with a few pydantic-specific changes."""
+    """`mypy.plugins.common.add_method_to_class`と非常に密接に関連していますが、pydantic固有の変更がいくつかあります。"""
     info = cls.info
 
     # First remove any previously generated methods with the same name
@@ -1335,9 +1326,9 @@ def add_method(
 
 
 def parse_toml(config_file: str) -> dict[str, Any] | None:
-    """Returns a dict of config keys to values.
+    """dictのキーを値にして返します。
 
-    It reads configs from toml file and returns `None` if the file is not a toml file.
+    tomlファイルからconfigを読み込み、ファイルがtomlファイルでない場合は`None`を返します。
     """
     if not config_file.endswith('.toml'):
         return None
