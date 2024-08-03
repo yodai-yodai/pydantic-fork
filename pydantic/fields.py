@@ -598,7 +598,7 @@ class FieldInfo(_repr.Representation):
 
         Args:
             typevars_map: 型変数をその具象型にマップする辞書。
-            types_namespace(dict None): アノテーションが付けられた型に関連する型を含む辞書。
+            types_namespace: アノテーションが付けられた型に関連する型を含む辞書。
 
         See Also:
             pydantic._internal._generics.replace_typesは、typevarを具象型に置き換えるために使用されます。

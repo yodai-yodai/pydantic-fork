@@ -1045,7 +1045,7 @@ def condecimal(
         multiple_of: 値はthisの倍数でなければなりません。デフォルトは`None`です。
         max_digits: 最大桁数。デフォルトは`None`です。
         decimal_places: 小数点以下の桁数。デフォルトは`None`です。
-        allow_inf_NaN: 無限大とNaNを許可するかどうか。デフォルトは`None`です。
+        allow_inf_nan: 無限大とNaNを許可するかどうか。デフォルトは`None`です。
 
     ```py
     from decimal import Decimal
@@ -2201,7 +2201,7 @@ class Base64Encoder(EncoderProtocol):
         """データをバイトからbase64エンコードされたバイトにエンコードします。
 
         Args:
-            data: エンコードするデータ。
+            value: エンコードするデータ。
 
         Returns:
             エンコードされたデータ。

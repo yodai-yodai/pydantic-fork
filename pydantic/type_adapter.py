@@ -551,8 +551,8 @@ class TypeAdapter(Generic[T]):
         Returns:
             次の条件を満たすタプル:
 
-            - 最初の要素は、JSONスキーマ・キー・タイプとJSONモードのタプルをキーとし、その入力ペアに対応するJSONスキーマを値とする辞書です(これらのスキーマは、2番目に返された要素で定義されている定義へのJsonRef参照を持つ場合があります)。
-            - 2番目の要素は、最初に返された要素で参照されるすべての定義と、オプションのtitleおよびdescriptionキーを含むJSONスキーマです。
+                - 最初の要素は、JSONスキーマ・キー・タイプとJSONモードのタプルをキーとし、その入力ペアに対応するJSONスキーマを値とする辞書です(これらのスキーマは、2番目に返された要素で定義されている定義へのJsonRef参照を持つ場合があります)。
+                - 2番目の要素は、最初に返された要素で参照されるすべての定義と、オプションのtitleおよびdescriptionキーを含むJSONスキーマです。
         """
         schema_generator_instance = schema_generator(by_alias=by_alias, ref_template=ref_template)
 

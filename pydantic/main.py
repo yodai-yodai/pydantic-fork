@@ -1457,14 +1457,11 @@ def create_model(  # noqa: C901
         __config__: 新しいモデルの構成。
         __doc__: 新しいモデルのdocstring。
         __base__: 新しいモデルの1つまたは複数の基本クラス。
-        __module__: モデルが属するモジュールの名前。
-        `None`の場合、値は`sys._getframe(1)`から取得されます。
+        __module__: モデルが属するモジュールの名前。`None`の場合、値は`sys._getframe(1)`から取得されます。
         __validators__: フィールドを検証するメソッドのディクショナリです。キーはモデルに追加される検証メソッドの名前で、値は検証メソッド自体です。関数型バリデータの詳細については、[ここ](https: //docs.pydantic.dev/2.8/concepts/validators/#field-validators)を参照してください。
         __cls_kwargs__: `metaclass`など、クラスを作成するためのキーワード引数の辞書です。
         __slots__: 非推奨です。`create_model`に渡すべきではありません。
-        **field_definitions: 新しいモデルの属性です。次の形式で渡されます。
-        `<name>=(<type>,<default value>)`、`<name>=(<type>,<FieldInfo>)`、`typing.Annotated[<type>,<FieldInfo>]`のいずれかです。
-        `typing.Annotated[<type>,<FieldInfo>,...]`の追加のメタデータは無視されます。
+        **field_definitions: 新しいモデルの属性です。次の形式で渡されます。`<name>=(<type>,<default value>)`、`<name>=(<type>,<FieldInfo>)`、`typing.Annotated[<type>,<FieldInfo>]`のいずれかです。`typing.Annotated[<type>,<FieldInfo>,...]`の追加のメタデータは無視されます。
 
     Returns:
         新しい[model][pydantic.BaseModel]です。

@@ -1449,7 +1449,7 @@ class GenerateJsonSchema:
         """JsonSchemaValueが$refスキーマである場合は、非refスキーマに解決します。
 
         Args:
-            schema: コア・スキーマ。
+            json_schema: コア・スキーマ。
 
         Returns:
             生成されたJSONスキーマ。
@@ -1490,10 +1490,10 @@ class GenerateJsonSchema:
         """生成されたJSONスキーマにフィールドを含めるかどうか。
 
         Args:
-            schema: コア・スキーマ。
+            field: フィールド自体のスキーマ。
 
         Returns:
-            生成されたJSONスキーマ。
+            フィールドが生成されたJSONスキーマに含まれる場合はTrue、含まれない場合はFalse。
         """
         if self.mode == 'serialization':
             # If you still want to include the field in the generated JSON schema,
@@ -1619,7 +1619,7 @@ class GenerateJsonSchema:
         """関数のキーワード引数を定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: コア・スキーマ。
+            arguments: コア・スキーマ。
 
         Returns:
             生成されたJSONスキーマ。
@@ -1656,7 +1656,7 @@ class GenerateJsonSchema:
         """関数の位置引数を定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: コア・スキーマ。
+            arguments: コア・スキーマ。
 
         Returns:
             生成されたJSONスキーマ。
@@ -1694,7 +1694,7 @@ class GenerateJsonSchema:
         """引数の名前を取得します。
 
         Args:
-            schema: コア・スキーマ。
+            argument: コア・スキーマ。
 
         Returns:
             生成されたJSONスキーマ。
@@ -1844,13 +1844,13 @@ class GenerateJsonSchema:
     # ### Utility methods
 
     def get_title_from_name(self, name: str) -> str:
-        """名前からタイトルを取得します。
+        """引数名を取得します。
 
         Args:
-            schema: コア・スキーマ。
+            name: タイトルの取得元の名前。
 
         Returns:
-            生成されたJSONスキーマ。
+            引数名。
         """
         return name.title().replace('_', ' ')
 
