@@ -1,12 +1,9 @@
 """
-Usage docs: https://docs.pydantic.dev/2.5/concepts/json_schema/
+Usage docs: ../concepts/json_schema/
 
-The `json_schema` module contains classes and functions to allow the way [JSON Schema](https://json-schema.org/)
-is generated to be customized.
+`json_schema`モジュールには、[JSON Schema](https://json-schema.org/)の生成方法をカスタマイズできるようにするクラスと関数が含まれています。
 
-In general you shouldn't need to use this module directly; instead, you can use
-[`BaseModel.model_json_schema`][pydantic.BaseModel.model_json_schema] and
-[`TypeAdapter.json_schema`][pydantic.TypeAdapter.json_schema].
+一般的に、このモジュールを直接使用する必要はありません。代わりに、[`BaseModel.model_json_schema`][pydantic.BaseModel.model_json_schema]と[`TypeAdapter.json_schema`][pydantic.TypeAdapter.json_schema]を使用できます。
 """
 
 from __future__ import annotations as _annotations
@@ -68,24 +65,21 @@ if TYPE_CHECKING:
 
 CoreSchemaOrFieldType = Literal[core_schema.CoreSchemaType, core_schema.CoreSchemaFieldType]
 """
-A type alias for defined schema types that represents a union of
-`core_schema.CoreSchemaType` and
-`core_schema.CoreSchemaFieldType`.
+`core_schema.CoreSchemaType`と`core_schema.CoreSchemaFieldType`の和集合を表す、定義済みスキーマ型の型エイリアスです。
 """
 
 JsonSchemaValue = Dict[str, Any]
 """
-A type alias for a JSON schema value. This is a dictionary of string keys to arbitrary JSON values.
+JSONスキーマ値の型の別名。任意のJSON値に対する文字列キーのディクショナリです。
 """
 
 JsonSchemaMode = Literal['validation', 'serialization']
 """
-A type alias that represents the mode of a JSON schema; either 'validation' or 'serialization'.
+JSONスキーマのモードを表す型エイリアス。"検証"または"シリアライゼーション"のいずれか。
 
-For some types, the inputs to validation differ from the outputs of serialization. For example,
-computed fields will only be present when serializing, and should not be provided when
-validating. This flag provides a way to indicate whether you want the JSON schema required
-for validation inputs, or that will be matched by serialization outputs.
+タイプによっては、検証への入力がシリアライゼーションの出力と異なる場合があります。
+たとえば、計算フィールドはシリアライズ時にのみ存在し、検証時には提供されません。
+このフラグは、検証入力に必要なJSONスキーマを必要とするか、直列化出力によって一致させるかを示す方法を提供します。
 """
 
 _MODE_TITLE_MAPPING: dict[JsonSchemaMode, str] = {'validation': 'Input', 'serialization': 'Output'}
@@ -96,16 +90,16 @@ _MODE_TITLE_MAPPING: dict[JsonSchemaMode, str] = {'validation': 'Input', 'serial
     category=None,
 )
 def update_json_schema(schema: JsonSchemaValue, updates: dict[str, Any]) -> JsonSchemaValue:
-    """Update a JSON schema in-place by providing a dictionary of updates.
+    """更新の辞書を提供して、JSONスキーマをインプレースで更新します。
 
-    This function sets the provided key-value pairs in the schema and returns the updated schema.
+    この関数は、指定されたキーと値のペアをスキーマに設定し、更新されたスキーマを返します。
 
     Args:
-        schema: The JSON schema to update.
-        updates: A dictionary of key-value pairs to set in the schema.
+        schema: 更新するJSONスキーマ。
+        updates: スキーマに設定するキーと値のペアのディクショナリ。
 
     Returns:
-        The updated JSON schema.
+        更新されたJSONスキーマ。
     """
     schema.update(updates)
     return schema
@@ -113,24 +107,21 @@ def update_json_schema(schema: JsonSchemaValue, updates: dict[str, Any]) -> Json
 
 JsonSchemaWarningKind = Literal['skipped-choice', 'non-serializable-default']
 """
-A type alias representing the kinds of warnings that can be emitted during JSON schema generation.
+JSONスキーマ生成時に発生する可能性のある警告の種類を表す型エイリアス。
 
-See [`GenerateJsonSchema.render_warning_message`][pydantic.json_schema.GenerateJsonSchema.render_warning_message]
-for more details.
+詳細については、[`GenerateJsonSchema.render_warning_message`][pydantic.json_schema.GenerateJsonSchema.render_warning_message]を参照してください。
 """
 
 
 class PydanticJsonSchemaWarning(UserWarning):
-    """This class is used to emit warnings produced during JSON schema generation.
-    See the [`GenerateJsonSchema.emit_warning`][pydantic.json_schema.GenerateJsonSchema.emit_warning] and
-    [`GenerateJsonSchema.render_warning_message`][pydantic.json_schema.GenerateJsonSchema.render_warning_message]
-    methods for more details; these can be overridden to control warning behavior.
+    """このクラスは、JSONスキーマの生成中に生成される警告を発行するために使用されます。
+    詳細については、[`GenerateJsonSchema.emit_warning`][pydantic.json_schema.GenerateJsonSchema.emit_warning]および[`GenerateJsonSchema.render_warning_message`][pydantic.json_schema.GenerateJsonSchema.render_warning_message]メソッドを参照してください。これらのメソッドは、警告の動作を制御するためにオーバーライドできます。
     """
 
 
 # ##### JSON Schema Generation #####
 DEFAULT_REF_TEMPLATE = '#/$defs/{model}'
-"""The default format string used to generate reference names."""
+"""参照名の生成に使用されるデフォルトのフォーマット文字列。"""
 
 # There are three types of references relevant to building JSON schemas:
 #   1. core_schema "ref" values; these are not exposed as part of the JSON schema
@@ -160,8 +151,7 @@ class _DefinitionsRemapping:
         definitions: dict[DefsRef, JsonSchemaValue],
     ) -> _DefinitionsRemapping:
         """
-        This function should produce a remapping that replaces complex DefsRef with the simpler ones from the
-        prioritized_choices such that applying the name remapping would result in an equivalent JSON schema.
+        この関数は、複雑なDefsRefをprioritized_choicesの単純なものに置き換える再マッピングを生成し、名前の再マッピングを適用すると同等のJSONスキーマになるようにする必要がある。
         """
         # We need to iteratively simplify the definitions until we reach a fixed point.
         # The reason for this is that outer definitions may reference inner definitions that get simplified
@@ -208,7 +198,7 @@ class _DefinitionsRemapping:
 
     def remap_json_schema(self, schema: Any) -> Any:
         """
-        Recursively update the JSON schema replacing all $refs
+        すべての$refを置き換えて、JSONスキーマを再帰的に更新します。
         """
         if isinstance(schema, str):
             # Note: this may not really be a JsonRef; we rely on having no collisions between JsonRefs and other strings
@@ -230,36 +220,30 @@ class _DefinitionsRemapping:
 
 
 class GenerateJsonSchema:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/json_schema/#customizing-the-json-schema-generation-process
+    """Usage docs: ../concepts/json_schema/#customizing-the-json-schema-generation-process
 
-    A class for generating JSON schemas.
+    JSONスキーマを生成するためのクラス。
 
-    This class generates JSON schemas based on configured parameters. The default schema dialect
-    is [https://json-schema.org/draft/2020-12/schema](https://json-schema.org/draft/2020-12/schema).
-    The class uses `by_alias` to configure how fields with
-    multiple names are handled and `ref_template` to format reference names.
+    このクラスは、設定されたパラメータに基づいてJSONスキーマを生成します。デフォルトのスキーマダイアレクトは[https://json-schema.org/draft/2020-12/schema](https://json-schema.org/draft/2020-12/schema)です。
+    このクラスは、複数の名前を持つフィールドの処理方法を設定するために`by_alias`を使用し、参照名をフォーマットするために`ref_template`を使用します。
 
     Attributes:
-        schema_dialect: The JSON schema dialect used to generate the schema. See
-            [Declaring a Dialect](https://json-schema.org/understanding-json-schema/reference/schema.html#id4)
-            in the JSON Schema documentation for more information about dialects.
-        ignored_warning_kinds: Warnings to ignore when generating the schema. `self.render_warning_message` will
-            do nothing if its argument `kind` is in `ignored_warning_kinds`;
-            this value can be modified on subclasses to easily control which warnings are emitted.
-        by_alias: Whether to use field aliases when generating the schema.
-        ref_template: The format string used when generating reference names.
-        core_to_json_refs: A mapping of core refs to JSON refs.
-        core_to_defs_refs: A mapping of core refs to definition refs.
-        defs_to_core_refs: A mapping of definition refs to core refs.
-        json_to_defs_refs: A mapping of JSON refs to definition refs.
-        definitions: Definitions in the schema.
+        schema_dialect: スキーマの生成に使用されるJSONスキーマダイアレクト。ダイアレクトの詳細については、JSONスキーマのドキュメントの[Declaring a Dialect](https: //json-schema. org/understanding-json-schema/reference/schema. html#id4)を参照してください。
+        ignored_warning_kind: スキーマの生成時に無視される警告。`self.render_warning_message`は、引数`kind`が`ignored_warning_kind`にある場合は何もしません。この値は、どの警告が出されるかを簡単に制御するためにサブクラスで変更できます。
+        by_alias: スキーマの生成時にフィールドの別名を使用するかどうか。
+        ref_template: 参照名を生成するときに使用されるフォーマット文字列。
+        core_to_json_refs: コア参照からJSON参照へのマッピングです。
+        core_to_defs_refs: コア参照から定義参照へのマッピング。
+        defs_to_core_refs: 定義参照からコア参照へのマッピング。
+        json_to_defs_refs: JSON参照から定義参照へのマッピングです。
+        definitions: スキーマ内の定義。
 
     Args:
-        by_alias: Whether to use field aliases in the generated schemas.
-        ref_template: The format string to use when generating reference names.
+        by_alias: 生成されたスキーマでフィールドの別名を使用するかどうか。
+        ref_template: 参照名を生成するときに使用するフォーマット文字列。
 
     Raises:
-        JsonSchemaError: If the instance of the class is inadvertently re-used after generating a schema.
+        JsonSchemaError: スキーマの生成後にクラスのインスタンスが誤って再利用された場合。
     """
 
     schema_dialect = 'https://json-schema.org/draft/2020-12/schema'
@@ -318,13 +302,13 @@ class GenerateJsonSchema:
     def build_schema_type_to_method(
         self,
     ) -> dict[CoreSchemaOrFieldType, Callable[[CoreSchemaOrField], JsonSchemaValue]]:
-        """Builds a dictionary mapping fields to methods for generating JSON schemas.
+        """JSONスキーマを生成するメソッドにフィールドをマッピングする辞書を構築します。
 
         Returns:
-            A dictionary containing the mapping of `CoreSchemaOrFieldType` to a handler method.
+            ハンドラメソッドへの`CoreSchemaOrFieldType`のマッピングを含むディクショナリです。
 
         Raises:
-            TypeError: If no method has been defined for generating a JSON schema for a given pydantic core schema type.
+            TypeError: 指定されたpydanticコアスキーマタイプのJSONスキーマを生成するためのメソッドが定義されていない場合。
         """
         mapping: dict[CoreSchemaOrFieldType, Callable[[CoreSchemaOrField], JsonSchemaValue]] = {}
         core_schema_types: list[CoreSchemaOrFieldType] = _typing_extra.all_literal_values(
@@ -344,27 +328,23 @@ class GenerateJsonSchema:
     def generate_definitions(
         self, inputs: Sequence[tuple[JsonSchemaKeyT, JsonSchemaMode, core_schema.CoreSchema]]
     ) -> tuple[dict[tuple[JsonSchemaKeyT, JsonSchemaMode], JsonSchemaValue], dict[DefsRef, JsonSchemaValue]]:
-        """Generates JSON schema definitions from a list of core schemas, pairing the generated definitions with a
-        mapping that links the input keys to the definition references.
+        """コアスキーマのリストからJSONスキーマ定義を生成し、生成された定義を、入力キーを定義参照にリンクするマッピングと組み合わせます。
 
         Args:
-            inputs: A sequence of tuples, where:
+            inputs:タプルのシーケンス。
 
-                - The first element is a JSON schema key type.
-                - The second element is the JSON mode: either 'validation' or 'serialization'.
-                - The third element is a core schema.
+                - 最初の要素はJSONスキーマのキー型です。
+                - 2番目の要素はJSONモードで、"検証"または"シリアライゼーション"のいずれかです。
+                - 3番目の要素はコア・スキーマです。
 
         Returns:
-            A tuple where:
+            次の条件を満たすタプル:
 
-                - The first element is a dictionary whose keys are tuples of JSON schema key type and JSON mode, and
-                    whose values are the JSON schema corresponding to that pair of inputs. (These schemas may have
-                    JsonRef references to definitions that are defined in the second returned element.)
-                - The second element is a dictionary whose keys are definition references for the JSON schemas
-                    from the first returned element, and whose values are the actual JSON schema definitions.
+                - 最初の要素は、JSONスキーマ・キー・タイプとJSONモードのタプルをキーとし、その入力ペアに対応するJSONスキーマを値とする辞書です(これらのスキーマは、2番目に返された要素で定義されている定義へのJsonRef参照を持つ場合があります)。
+                - 2番目の要素は、最初に返された要素からのJSONスキーマの定義参照をキーとし、実際のJSONスキーマ定義を値とする辞書です。
 
         Raises:
-            PydanticUserError: Raised if the JSON schema generator has already been used to generate a JSON schema.
+            PydantictUserError: JSONスキーマジェネレータがすでにJSONスキーマの生成に使用されている場合に発生します。
         """
         if self._used:
             raise PydanticUserError(
@@ -391,17 +371,17 @@ class GenerateJsonSchema:
         return json_schemas_map, _sort_json_schema(json_schema['$defs'])  # type: ignore
 
     def generate(self, schema: CoreSchema, mode: JsonSchemaMode = 'validation') -> JsonSchemaValue:
-        """Generates a JSON schema for a specified schema in a specified mode.
+        """指定されたスキーマのJSONスキーマを指定されたモードで生成します。
 
         Args:
-            schema: A Pydantic model.
-            mode: The mode in which to generate the schema. Defaults to 'validation'.
+            schema: Pydanticモデル。
+            mode: スキーマを生成するモード。デフォルトは"検証"です。
 
         Returns:
-            A JSON schema representing the specified schema.
+            指定されたスキーマを表すJSONスキーマ。
 
         Raises:
-            PydanticUserError: If the JSON schema generator has already been used to generate a JSON schema.
+            PydantictUserError: JSONスキーマジェネレータがすでにJSONスキーマの生成に使用されている場合。
         """
         self._mode = mode
         if self._used:
@@ -443,13 +423,13 @@ class GenerateJsonSchema:
         return _sort_json_schema(json_schema)
 
     def generate_inner(self, schema: CoreSchemaOrField) -> JsonSchemaValue:  # noqa: C901
-        """Generates a JSON schema for a given core schema.
+        """指定されたコアスキーマのJSONスキーマを生成します。
 
         Args:
-            schema: The given core schema.
+            schema: 指定されたコアスキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         # If a schema with the same CoreRef has been handled, just return a reference to it
         # Note that this assumes that it will _never_ be the case that the same CoreRef is used
@@ -488,16 +468,16 @@ class GenerateJsonSchema:
             return json_schema
 
         def handler_func(schema_or_field: CoreSchemaOrField) -> JsonSchemaValue:
-            """Generate a JSON schema based on the input schema.
+            """入力スキーマに基づいてJSONスキーマを生成します。
 
             Args:
-                schema_or_field: The core schema to generate a JSON schema from.
+                schema_or_field: JSONスキーマを生成するためのコア・スキーマです。
 
             Returns:
-                The generated JSON schema.
+                生成されたJSONスキーマ。
 
             Raises:
-                TypeError: If an unexpected schema type is encountered.
+                TypeError: 予期しないスキーマ・タイプが検出された場合。
             """
             # Generate the core-schema-type-specific bits of the schema generation:
             json_schema: JsonSchemaValue | None = None
@@ -558,13 +538,13 @@ class GenerateJsonSchema:
 
     # ### Schema generation methods
     def any_schema(self, schema: core_schema.AnySchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches any value.
+        """任意の値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return {}
 
@@ -580,24 +560,24 @@ class GenerateJsonSchema:
         return {'type': 'null'}
 
     def bool_schema(self, schema: core_schema.BoolSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a bool value.
+        """bool値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return {'type': 'boolean'}
 
     def int_schema(self, schema: core_schema.IntSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches an int value.
+        """int値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema: dict[str, Any] = {'type': 'integer'}
         self.update_with_validations(json_schema, schema, self.ValidationsMapping.numeric)
@@ -605,13 +585,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def float_schema(self, schema: core_schema.FloatSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a float value.
+        """float値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema: dict[str, Any] = {'type': 'number'}
         self.update_with_validations(json_schema, schema, self.ValidationsMapping.numeric)
@@ -619,13 +599,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def decimal_schema(self, schema: core_schema.DecimalSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a decimal value.
+        """decimal値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema = self.str_schema(core_schema.str_schema())
         if self.mode == 'validation':
@@ -652,13 +632,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def str_schema(self, schema: core_schema.StringSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a string value.
+        """string値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema = {'type': 'string'}
         self.update_with_validations(json_schema, schema, self.ValidationsMapping.string)
@@ -668,74 +648,74 @@ class GenerateJsonSchema:
         return json_schema
 
     def bytes_schema(self, schema: core_schema.BytesSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a bytes value.
+        """bytes値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema = {'type': 'string', 'format': 'base64url' if self._config.ser_json_bytes == 'base64' else 'binary'}
         self.update_with_validations(json_schema, schema, self.ValidationsMapping.bytes)
         return json_schema
 
     def date_schema(self, schema: core_schema.DateSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a date value.
+        """date値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema = {'type': 'string', 'format': 'date'}
         self.update_with_validations(json_schema, schema, self.ValidationsMapping.date)
         return json_schema
 
     def time_schema(self, schema: core_schema.TimeSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a time value.
+        """time値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return {'type': 'string', 'format': 'time'}
 
     def datetime_schema(self, schema: core_schema.DatetimeSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a datetime value.
+        """datetime値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return {'type': 'string', 'format': 'date-time'}
 
     def timedelta_schema(self, schema: core_schema.TimedeltaSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a timedelta value.
+        """timedelta値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         if self._config.ser_json_timedelta == 'float':
             return {'type': 'number'}
         return {'type': 'string', 'format': 'duration'}
 
     def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a literal value.
+        """literal値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         expected = [v.value if isinstance(v, Enum) else v for v in schema['expected']]
         # jsonify the expected values
@@ -761,13 +741,13 @@ class GenerateJsonSchema:
         return result
 
     def enum_schema(self, schema: core_schema.EnumSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches an Enum value.
+        """Enum値に一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         enum_type = schema['cls']
         description = None if not enum_type.__doc__ else inspect.cleandoc(enum_type.__doc__)
@@ -799,53 +779,54 @@ class GenerateJsonSchema:
         return result
 
     def is_instance_schema(self, schema: core_schema.IsInstanceSchema) -> JsonSchemaValue:
-        """Handles JSON schema generation for a core schema that checks if a value is an instance of a class.
+        """値がクラスのインスタンスであるかどうかをチェックするコアスキーマのJSONスキーマ生成を処理します。
 
-        Unless overridden in a subclass, this raises an error.
+        サブクラスでオーバーライドされない限り、エラーが発生します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.handle_invalid_for_json_schema(schema, f'core_schema.IsInstanceSchema ({schema["cls"]})')
 
     def is_subclass_schema(self, schema: core_schema.IsSubclassSchema) -> JsonSchemaValue:
-        """Handles JSON schema generation for a core schema that checks if a value is a subclass of a class.
+        """値がクラスのサブクラスであるかどうかをチェックするコアスキーマのJSONスキーマ生成を処理します。
 
-        For backwards compatibility with v1, this does not raise an error, but can be overridden to change this.
+        v1との下位互換性のため、これによってエラーが発生することはありませんが、オーバーライドして変更できます。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
+
         """
         # Note: This is for compatibility with V1; you can override if you want different behavior.
         return {}
 
     def callable_schema(self, schema: core_schema.CallableSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a callable value.
+        """呼び出し可能な値に一致するJSONスキーマを生成します。
 
-        Unless overridden in a subclass, this raises an error.
+        サブクラスでオーバーライドされない限り、エラーが発生します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.handle_invalid_for_json_schema(schema, 'core_schema.CallableSchema')
 
     def list_schema(self, schema: core_schema.ListSchema) -> JsonSchemaValue:
-        """Returns a schema that matches a list schema.
+        """リストスキーマに一致するスキーマを返します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         items_schema = {} if 'items_schema' not in schema else self.generate_inner(schema['items_schema'])
         json_schema = {'type': 'array', 'items': items_schema}
@@ -875,14 +856,13 @@ class GenerateJsonSchema:
         return self.tuple_schema(schema)
 
     def tuple_schema(self, schema: core_schema.TupleSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a tuple schema e.g. `Tuple[int,
-        str, bool]` or `Tuple[int, ...]`.
+        """タプルスキーマに一致するJSONスキーマを生成します。例えば、`Tuple[int, str, bool]`や`Tuple[int, .]`などです。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema: JsonSchemaValue = {'type': 'array'}
         if 'variadic_item_index' in schema:
@@ -910,24 +890,24 @@ class GenerateJsonSchema:
         return json_schema
 
     def set_schema(self, schema: core_schema.SetSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a set schema.
+        """setスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self._common_set_schema(schema)
 
     def frozenset_schema(self, schema: core_schema.FrozenSetSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a frozenset schema.
+        """frozensetスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self._common_set_schema(schema)
 
@@ -938,13 +918,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def generator_schema(self, schema: core_schema.GeneratorSchema) -> JsonSchemaValue:
-        """Returns a JSON schema that represents the provided GeneratorSchema.
+        """指定されたGeneratorSchemaを表すJSONスキーマを返します。
 
         Args:
-            schema: The schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         items_schema = {} if 'items_schema' not in schema else self.generate_inner(schema['items_schema'])
         json_schema = {'type': 'array', 'items': items_schema}
@@ -952,13 +932,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def dict_schema(self, schema: core_schema.DictSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a dict schema.
+        """dictスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema: JsonSchemaValue = {'type': 'object'}
 
@@ -991,57 +971,57 @@ class GenerateJsonSchema:
         )
 
     def function_before_schema(self, schema: core_schema.BeforeValidatorFunctionSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a function-before schema.
+        """function-beforeスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self._function_schema(schema)
 
     def function_after_schema(self, schema: core_schema.AfterValidatorFunctionSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a function-after schema.
+        """function-afterスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self._function_schema(schema)
 
     def function_plain_schema(self, schema: core_schema.PlainValidatorFunctionSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a function-plain schema.
+        """function-plainスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self._function_schema(schema)
 
     def function_wrap_schema(self, schema: core_schema.WrapValidatorFunctionSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a function-wrap schema.
+        """function-wrapスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self._function_schema(schema)
 
     def default_schema(self, schema: core_schema.WithDefaultSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema with a default value.
+        """デフォルト値を持つスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema = self.generate_inner(schema['schema'])
 
@@ -1088,13 +1068,13 @@ class GenerateJsonSchema:
             return json_schema
 
     def nullable_schema(self, schema: core_schema.NullableSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that allows null values.
+        """null値を許可するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         null_schema = {'type': 'null'}
         inner_json_schema = self.generate_inner(schema['schema'])
@@ -1107,13 +1087,14 @@ class GenerateJsonSchema:
             return self.get_flattened_anyof([inner_json_schema, null_schema])
 
     def union_schema(self, schema: core_schema.UnionSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that allows values matching any of the given schemas.
+        """指定されたスキーマのいずれかに一致する値を許可するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
+
         """
         generated: list[JsonSchemaValue] = []
 
@@ -1132,15 +1113,13 @@ class GenerateJsonSchema:
         return self.get_flattened_anyof(generated)
 
     def tagged_union_schema(self, schema: core_schema.TaggedUnionSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that allows values matching any of the given schemas, where
-        the schemas are tagged with a discriminator field that indicates which schema should be used to validate
-        the value.
+        """指定されたスキーマのいずれかに一致する値を許可するスキーマに一致するJSONスキーマを生成します。スキーマには、値の検証に使用するスキーマを示す識別子フィールドのタグが付けられます。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         generated: dict[str, JsonSchemaValue] = {}
         for k, v in schema['choices'].items():
@@ -1171,8 +1150,8 @@ class GenerateJsonSchema:
     def _extract_discriminator(
         self, schema: core_schema.TaggedUnionSchema, one_of_choices: list[JsonDict]
     ) -> str | None:
-        """Extract a compatible OpenAPI discriminator from the schema and one_of choices that end up in the final
-        schema."""
+        """スキーマから互換性のあるOpenAPI識別子を抽出し、最終的なスキーマになる1つの選択肢を抽出します。"""
+
         openapi_discriminator: str | None = None
 
         if isinstance(schema['discriminator'], str):
@@ -1209,29 +1188,28 @@ class GenerateJsonSchema:
         return openapi_discriminator
 
     def chain_schema(self, schema: core_schema.ChainSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a core_schema.ChainSchema.
+        """core_schema.ChainSchemaに一致するJSONスキーマを生成します。
 
-        When generating a schema for validation, we return the validation JSON schema for the first step in the chain.
-        For serialization, we return the serialization JSON schema for the last step in the chain.
+        検証のためのスキーマを生成するとき、チェーンの最初のステップの検証JSONスキーマを返します。
+        シリアライゼーションでは、チェーンの最後のステップのシリアライゼーションJSONスキーマを返します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         step_index = 0 if self.mode == 'validation' else -1  # use first step for validation, last for serialization
         return self.generate_inner(schema['steps'][step_index])
 
     def lax_or_strict_schema(self, schema: core_schema.LaxOrStrictSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that allows values matching either the lax schema or the
-        strict schema.
+        """laxスキーマまたはstrictスキーマのいずれかに一致する値を許可するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         # TODO: Need to read the default value off of model config or whatever
         use_strict = schema.get('strict', False)  # TODO: replace this default False
@@ -1243,28 +1221,26 @@ class GenerateJsonSchema:
             return self.generate_inner(schema['lax_schema'])
 
     def json_or_python_schema(self, schema: core_schema.JsonOrPythonSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that allows values matching either the JSON schema or the
-        Python schema.
+        """JSONスキーマまたはPythonスキーマのいずれかに一致する値を許可するスキーマに一致するJSONスキーマを生成します。
 
-        The JSON schema is used instead of the Python schema. If you want to use the Python schema, you should override
-        this method.
+        Pythonスキーマの代わりにJSONスキーマが使用されます。Pythonスキーマを使用する場合は、このメソッドをオーバーライドする必要があります。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.generate_inner(schema['json_schema'])
 
     def typed_dict_schema(self, schema: core_schema.TypedDictSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a typed dict.
+        """型付きdictを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         total = schema.get('total', True)
         named_required_fields: list[tuple[str, bool, CoreSchemaField]] = [
@@ -1348,57 +1324,58 @@ class GenerateJsonSchema:
         return name
 
     def typed_dict_field_schema(self, schema: core_schema.TypedDictField) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a typed dict field.
+        """型指定されたdictフィールドを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
+
         """
         return self.generate_inner(schema['schema'])
 
     def dataclass_field_schema(self, schema: core_schema.DataclassField) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a dataclass field.
+        """データクラスフィールドを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.generate_inner(schema['schema'])
 
     def model_field_schema(self, schema: core_schema.ModelField) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a model field.
+        """モデルフィールドを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.generate_inner(schema['schema'])
 
     def computed_field_schema(self, schema: core_schema.ComputedField) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a computed field.
+        """計算フィールドを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.generate_inner(schema['return_schema'])
 
     def model_schema(self, schema: core_schema.ModelSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a model.
+        """モデルを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         # We do not use schema['model'].model_json_schema() here
         # because it could lead to inconsistent refs handling, etc.
@@ -1469,13 +1446,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def resolve_schema_to_update(self, json_schema: JsonSchemaValue) -> JsonSchemaValue:
-        """Resolve a JsonSchemaValue to the non-ref schema if it is a $ref schema.
+        """JsonSchemaValueが$refスキーマである場合は、非refスキーマに解決します。
 
         Args:
-            json_schema: The schema to resolve.
+            schema: コア・スキーマ。
 
         Returns:
-            The resolved schema.
+            生成されたJSONスキーマ。
         """
         if '$ref' in json_schema:
             schema_to_update = self.get_schema_from_definitions(JsonRef(json_schema['$ref']))
@@ -1487,13 +1464,13 @@ class GenerateJsonSchema:
         return schema_to_update
 
     def model_fields_schema(self, schema: core_schema.ModelFieldsSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a model's fields.
+        """モデルのフィールドを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         named_required_fields: list[tuple[str, bool, CoreSchemaField]] = [
             (name, self.field_is_required(field, total=True), field)
@@ -1510,13 +1487,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def field_is_present(self, field: CoreSchemaField) -> bool:
-        """Whether the field should be included in the generated JSON schema.
+        """生成されたJSONスキーマにフィールドを含めるかどうか。
 
         Args:
-            field: The schema for the field itself.
+            schema: コア・スキーマ。
 
         Returns:
-            `True` if the field should be included in the generated JSON schema, `False` otherwise.
+            生成されたJSONスキーマ。
         """
         if self.mode == 'serialization':
             # If you still want to include the field in the generated JSON schema,
@@ -1532,17 +1509,16 @@ class GenerateJsonSchema:
         field: core_schema.ModelField | core_schema.DataclassField | core_schema.TypedDictField,
         total: bool,
     ) -> bool:
-        """Whether the field should be marked as required in the generated JSON schema.
-        (Note that this is irrelevant if the field is not present in the JSON schema.).
+        """生成されたJSONスキーマでフィールドが必須としてマークされるかどうか。
+        (フィールドがJSONスキーマに存在しない場合、これは無関係であることに注意してください。
 
         Args:
-            field: The schema for the field itself.
-            total: Only applies to `TypedDictField`s.
-                Indicates if the `TypedDict` this field belongs to is total, in which case any fields that don't
-                explicitly specify `required=False` are required.
+            field: フィールド自体のスキーマ。
+            total: `TypedDictField`にのみ適用されます。
+                このフィールドが属する`TypedDict`が合計かどうかを示します。この場合、`required=False`を明示的に指定していないフィールドはすべて必要です。
 
         Returns:
-            `True` if the field should be marked as required in the generated JSON schema, `False` otherwise.
+            生成されたJSONスキーマでフィールドがrequiredとマークされる場合は`True`、それ以外の場合は`False`です。
         """
         if self.mode == 'serialization' and self._config.json_schema_serialization_defaults_required:
             return not field.get('serialization_exclude')
@@ -1553,13 +1529,13 @@ class GenerateJsonSchema:
                 return field['schema']['type'] != 'default'
 
     def dataclass_args_schema(self, schema: core_schema.DataclassArgsSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a dataclass's constructor arguments.
+        """データクラスのコンストラクタ引数を定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         named_required_fields: list[tuple[str, bool, CoreSchemaField]] = [
             (field['name'], self.field_is_required(field, total=True), field)
@@ -1571,13 +1547,13 @@ class GenerateJsonSchema:
         return self._named_required_fields_schema(named_required_fields)
 
     def dataclass_schema(self, schema: core_schema.DataclassSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a dataclass.
+        """データクラスを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         cls = schema['cls']
         config: ConfigDict = getattr(cls, '__pydantic_config__', cast('ConfigDict', {}))
@@ -1601,13 +1577,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def arguments_schema(self, schema: core_schema.ArgumentsSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a function's arguments.
+        """関数の引数を定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         metadata = _core_metadata.CoreMetadataHandler(schema).metadata
         prefer_positional = metadata.get('pydantic_js_prefer_positional_arguments')
@@ -1640,13 +1616,13 @@ class GenerateJsonSchema:
     def kw_arguments_schema(
         self, arguments: list[core_schema.ArgumentsParameter], var_kwargs_schema: CoreSchema | None
     ) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a function's keyword arguments.
+        """関数のキーワード引数を定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            arguments: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         properties: dict[str, JsonSchemaValue] = {}
         required: list[str] = []
@@ -1677,13 +1653,13 @@ class GenerateJsonSchema:
     def p_arguments_schema(
         self, arguments: list[core_schema.ArgumentsParameter], var_args_schema: CoreSchema | None
     ) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a function's positional arguments.
+        """関数の位置引数を定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            arguments: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         prefix_items: list[JsonSchemaValue] = []
         min_items = 0
@@ -1715,13 +1691,13 @@ class GenerateJsonSchema:
         return json_schema
 
     def get_argument_name(self, argument: core_schema.ArgumentsParameter) -> str:
-        """Retrieves the name of an argument.
+        """引数の名前を取得します。
 
         Args:
-            argument: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The name of the argument.
+            生成されたJSONスキーマ。
         """
         name = argument['name']
         if self.by_alias:
@@ -1733,35 +1709,35 @@ class GenerateJsonSchema:
         return name
 
     def call_schema(self, schema: core_schema.CallSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a function call.
+        """関数呼び出しを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.generate_inner(schema['arguments_schema'])
 
     def custom_error_schema(self, schema: core_schema.CustomErrorSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a custom error.
+        """カスタムエラーを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return self.generate_inner(schema['schema'])
 
     def json_schema(self, schema: core_schema.JsonSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a JSON object.
+        """JSONオブジェクトを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         content_core_schema = schema.get('schema') or core_schema.any_schema()
         content_json_schema = self.generate_inner(content_core_schema)
@@ -1772,26 +1748,26 @@ class GenerateJsonSchema:
             return content_json_schema
 
     def url_schema(self, schema: core_schema.UrlSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a URL.
+        """URLを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         json_schema = {'type': 'string', 'format': 'uri', 'minLength': 1}
         self.update_with_validations(json_schema, schema, self.ValidationsMapping.string)
         return json_schema
 
     def multi_host_url_schema(self, schema: core_schema.MultiHostUrlSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a URL that can be used with multiple hosts.
+        """複数のホストで使用できるURLを定義するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         # Note: 'multi-host-uri' is a custom/pydantic-specific format, not part of the JSON Schema spec
         json_schema = {'type': 'string', 'format': 'multi-host-uri', 'minLength': 1}
@@ -1799,24 +1775,24 @@ class GenerateJsonSchema:
         return json_schema
 
     def uuid_schema(self, schema: core_schema.UuidSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a UUID.
+        """UUIDに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         return {'type': 'string', 'format': 'uuid'}
 
     def definitions_schema(self, schema: core_schema.DefinitionsSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that defines a JSON object with definitions.
+        """定義を持つJSONオブジェクトを定義するスキーマと一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         for definition in schema['definitions']:
             try:
@@ -1828,13 +1804,13 @@ class GenerateJsonSchema:
         return self.generate_inner(schema['schema'])
 
     def definition_ref_schema(self, schema: core_schema.DefinitionReferenceSchema) -> JsonSchemaValue:
-        """Generates a JSON schema that matches a schema that references a definition.
+        """定義を参照するスキーマに一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         core_ref = CoreRef(schema['schema_ref'])
         _, ref_json_schema = self.get_cache_defs_ref_schema(core_ref)
@@ -1843,13 +1819,13 @@ class GenerateJsonSchema:
     def ser_schema(
         self, schema: core_schema.SerSchema | core_schema.IncExSeqSerSchema | core_schema.IncExDictSerSchema
     ) -> JsonSchemaValue | None:
-        """Generates a JSON schema that matches a schema that defines a serialized object.
+        """シリアライズされたオブジェクトを定義するスキーマと一致するJSONスキーマを生成します。
 
         Args:
-            schema: The core schema.
+            schema: コア・スキーマ。
 
         Returns:
-            The generated JSON schema.
+            生成されたJSONスキーマ。
         """
         schema_type = schema['type']
         if schema_type == 'function-plain' or schema_type == 'function-wrap':
@@ -1868,27 +1844,26 @@ class GenerateJsonSchema:
     # ### Utility methods
 
     def get_title_from_name(self, name: str) -> str:
-        """Retrieves a title from a name.
+        """名前からタイトルを取得します。
 
         Args:
-            name: The name to retrieve a title from.
+            schema: コア・スキーマ。
 
         Returns:
-            The title.
+            生成されたJSONスキーマ。
         """
         return name.title().replace('_', ' ')
 
     def field_title_should_be_set(self, schema: CoreSchemaOrField) -> bool:
-        """Returns true if a field with the given schema should have a title set based on the field name.
+        """指定されたスキーマを持つフィールドに、フィールド名に基づいたタイトルセットが必要な場合、trueを返します。
 
-        Intuitively, we want this to return true for schemas that wouldn't otherwise provide their own title
-        (e.g., int, float, str), and false for those that would (e.g., BaseModel subclasses).
+        直感的には、他の方法では独自のタイトルを提供しないスキーマ(int、float、strなど)に対してはtrueを返し、独自のタイトルを提供するスキーマ(BaseModelサブクラスなど)に対してはfalseを返すようにします。
 
         Args:
-            schema: The schema to check.
+            schema: チェックするスキーマ。
 
         Returns:
-            `True` if the field should have a title set, `False` otherwise.
+            フィールドにタイトルを設定する必要がある場合は`True`、そうでない場合は`False`です。
         """
         if _core_utils.is_core_schema_field(schema):
             if schema['type'] == 'computed-field':
@@ -1914,24 +1889,24 @@ class GenerateJsonSchema:
             raise PydanticInvalidForJsonSchema(f'Unexpected schema type: schema={schema}')  # pragma: no cover
 
     def normalize_name(self, name: str) -> str:
-        """Normalizes a name to be used as a key in a dictionary.
+        """名前を正規化して、辞書のキーとして使用します。
 
         Args:
-            name: The name to normalize.
+            name: 正規化する名前。
 
         Returns:
-            The normalized name.
-        """
+            正規化された名前。
+       """
         return re.sub(r'[^a-zA-Z0-9.\-_]', '_', name).replace('.', '__')
 
     def get_defs_ref(self, core_mode_ref: CoreModeRef) -> DefsRef:
-        """Override this method to change the way that definitions keys are generated from a core reference.
+        """このメソッドをオーバーライドして、コア参照から定義キーを生成する方法を変更します。
 
         Args:
-            core_mode_ref: The core reference.
+            core_mode_ref: コアへの参照。
 
         Returns:
-            The definitions key.
+            定義キー。
         """
         # Split the core ref into "components"; generic origins and arguments are each separate components
         core_ref, mode = core_mode_ref
@@ -1973,14 +1948,13 @@ class GenerateJsonSchema:
         return module_qualname_occurrence_mode
 
     def get_cache_defs_ref_schema(self, core_ref: CoreRef) -> tuple[DefsRef, JsonSchemaValue]:
-        """This method wraps the get_defs_ref method with some cache-lookup/population logic,
-        and returns both the produced defs_ref and the JSON schema that will refer to the right definition.
+        """このメソッドは、get_defs_refメソッドをキャッシュ・ルックアップ/ポピュレーション・ロジックでラップし、生成されたdefs_refと、適切な定義を参照するJSONスキーマの両方を返します。
 
         Args:
-            core_ref: The core reference to get the definitions reference for.
+            core_ref: 定義リファレンスを取得するためのコアリファレンス。
 
         Returns:
-            A tuple of the definitions reference and the JSON schema that will refer to it.
+            定義参照と、それを参照するJSONスキーマのタプル。
         """
         core_mode_ref = (core_ref, self.mode)
         maybe_defs_ref = self.core_to_defs_refs.get(core_mode_ref)
@@ -2001,14 +1975,13 @@ class GenerateJsonSchema:
         return defs_ref, ref_json_schema
 
     def handle_ref_overrides(self, json_schema: JsonSchemaValue) -> JsonSchemaValue:
-        """It is not valid for a schema with a top-level $ref to have sibling keys.
+        """最上位の$refを持つスキーマが兄弟キーを持つことは無効です。
 
-        During our own schema generation, we treat sibling keys as overrides to the referenced schema,
-        but this is not how the official JSON schema spec works.
+        During our own schema generation, we treat sibling keys as overrides to the referenced schema, but this is not how the official JSON schema spec works.
+        自身のスキーマ生成では、兄弟キーを参照されるスキーマに対するオーバーライドとして扱いますが、これは公式のJSONスキーマ仕様の動作方法ではありません。
 
-        Because of this, we first remove any sibling keys that are redundant with the referenced schema, then if
-        any remain, we transform the schema from a top-level '$ref' to use allOf to move the $ref out of the top level.
-        (See bottom of https://swagger.io/docs/specification/using-ref/ for a reference about this behavior)
+        このため、まず、参照されるスキーマと重複する兄弟キーを削除し、残っている場合は、最上位の'$ref'からスキーマを変換し、allOfを使用して$refを最上位から移動します。
+        (この動作については、https://swagger.io/docs/specification/using-ref/の下部を参照してください)。
         """
         if '$ref' in json_schema:
             # prevent modifications to the input; this copy may be safe to drop if there is significant overhead
@@ -2048,15 +2021,15 @@ class GenerateJsonSchema:
         return self.definitions.get(def_ref, None)
 
     def encode_default(self, dft: Any) -> Any:
-        """Encode a default value to a JSON-serializable value.
+        """デフォルト値をJSONシリアル化可能な値にエンコードします。
 
-        This is used to encode default values for fields in the generated JSON schema.
+        これは、生成されたJSONスキーマのフィールドのデフォルト値をエンコードするために使用されます。
 
         Args:
-            dft: The default value to encode.
+            dft: エンコードするデフォルト値。
 
         Returns:
-            The encoded default value.
+            エンコードされたデフォルト値。
         """
         from .type_adapter import TypeAdapter, _type_has_config
 
@@ -2079,23 +2052,20 @@ class GenerateJsonSchema:
     def update_with_validations(
         self, json_schema: JsonSchemaValue, core_schema: CoreSchema, mapping: dict[str, str]
     ) -> None:
-        """Update the json_schema with the corresponding validations specified in the core_schema,
-        using the provided mapping to translate keys in core_schema to the appropriate keys for a JSON schema.
+        """提供されたマッピングを使用してcore_schema内のキーをJSONスキーマの適切なキーに変換し、core_schemaで指定された対応する検証でjson_schemaを更新します。
 
         Args:
-            json_schema: The JSON schema to update.
-            core_schema: The core schema to get the validations from.
-            mapping: A mapping from core_schema attribute names to the corresponding JSON schema attribute names.
+            json_schema: 更新するJSONスキーマ。
+            core_schema: 検証を取得するコア・スキーマ。
+            mapping: core_schema属性名から対応するJSONスキーマ属性名へのマッピングです。
         """
         for core_key, json_schema_key in mapping.items():
             if core_key in core_schema:
                 json_schema[json_schema_key] = core_schema[core_key]
 
     class ValidationsMapping:
-        """This class just contains mappings from core_schema attribute names to the corresponding
-        JSON schema attribute names. While I suspect it is unlikely to be necessary, you can in
-        principle override this class in a subclass of GenerateJsonSchema (by inheriting from
-        GenerateJsonSchema.ValidationsMapping) to change these mappings.
+        """このクラスには、core_schema属性名から対応するJSONスキーマ属性名へのマッピングだけが含まれています。
+        必要になる可能性は低いと思いますが、原則として、GenerateJsonSchemaのサブクラスでこのクラスをオーバーライドして(GenerateJsonSchema.Validation Mappingから継承することによって)、これらのマッピングを変更することができます。
         """
 
         numeric = {
@@ -2142,7 +2112,7 @@ class GenerateJsonSchema:
         return {'anyOf': members}
 
     def get_json_ref_counts(self, json_schema: JsonSchemaValue) -> dict[JsonRef, int]:
-        """Get all values corresponding to the key '$ref' anywhere in the json_schema."""
+        """json_schema内の任意の場所にあるキー'$ref'に対応するすべての値を取得します。"""
         json_refs: dict[JsonRef, int] = Counter()
 
         def _add_json_refs(schema: Any) -> None:
@@ -2173,27 +2143,28 @@ class GenerateJsonSchema:
         raise PydanticInvalidForJsonSchema(f'Cannot generate a JsonSchema for {error_info}')
 
     def emit_warning(self, kind: JsonSchemaWarningKind, detail: str) -> None:
-        """This method simply emits PydanticJsonSchemaWarnings based on handling in the `warning_message` method."""
+        """このメソッドは、`warning_message`メソッドでの処理に基づいて、単にPydantictJsonSchemaWarningsを生成します。"""
         message = self.render_warning_message(kind, detail)
         if message is not None:
             warnings.warn(message, PydanticJsonSchemaWarning)
 
     def render_warning_message(self, kind: JsonSchemaWarningKind, detail: str) -> str | None:
-        """This method is responsible for ignoring warnings as desired, and for formatting the warning messages.
+        """このメソッドは、必要に応じて警告を無視し、警告メッセージをフォーマットします。
 
-        You can override the value of `ignored_warning_kinds` in a subclass of GenerateJsonSchema
-        to modify what warnings are generated. If you want more control, you can override this method;
-        just return None in situations where you don't want warnings to be emitted.
+        GenerateJsonSchemaのサブクラスの`ignored_warning_kind`の値をオーバーライドして、生成される警告を変更することができます。
+        より詳細な制御が必要な場合は、このメソッドをオーバーライドできます。
+        警告を表示したくない場合は、Noneを返してください。
 
         Args:
-            kind: The kind of warning to render. It can be one of the following:
+            kind: 表示する警告の種類。次のいずれかになります。
 
-                - 'skipped-choice': A choice field was skipped because it had no valid choices.
-                - 'non-serializable-default': A default value was skipped because it was not JSON-serializable.
-            detail: A string with additional details about the warning.
+                - 'skipped-choice': 有効な選択肢がないため、選択肢フィールドがスキップされました。
+                - 'non-serializable-default': JSONシリアル化できなかったため、デフォルト値がスキップされました。
+
+            detail:警告に関する追加の詳細を含む文字列。
 
         Returns:
-            The formatted warning message, or `None` if no warning should be emitted.
+            書式設定された警告メッセージ。警告を表示しない場合は`None`。
         """
         if kind in self.ignored_warning_kinds:
             return None
@@ -2234,21 +2205,19 @@ def model_json_schema(
     schema_generator: type[GenerateJsonSchema] = GenerateJsonSchema,
     mode: JsonSchemaMode = 'validation',
 ) -> dict[str, Any]:
-    """Utility function to generate a JSON Schema for a model.
+    """モデルのJSONスキーマを生成するユーティリティ関数。
 
     Args:
-        cls: The model class to generate a JSON Schema for.
-        by_alias: If `True` (the default), fields will be serialized according to their alias.
-            If `False`, fields will be serialized according to their attribute name.
-        ref_template: The template to use for generating JSON Schema references.
-        schema_generator: The class to use for generating the JSON Schema.
-        mode: The mode to use for generating the JSON Schema. It can be one of the following:
-
-            - 'validation': Generate a JSON Schema for validating data.
-            - 'serialization': Generate a JSON Schema for serializing data.
+        cls: JSONスキーマを生成するためのモデル・クラスです。
+        by_alias: `True`(デフォルト)の場合、フィールドはエイリアスに従ってシリアライズされます。`False`の場合、フィールドは属性名に従ってシリアライズされます。
+        ref_template: JSONスキーマ参照の生成に使用するテンプレートです。
+        schema_generator: JSONスキーマの生成に使用するクラス。
+        mode: JSONスキーマの生成に使用するモード。次のいずれかになります。
+            - 'validation':データを検証するためのJSONスキーマを生成します。
+            - 'serialization':データをシリアライズするためのJSONスキーマを生成します。
 
     Returns:
-        The generated JSON Schema.
+        生成されたJSONスキーマ。
     """
     from .main import BaseModel
 
@@ -2273,23 +2242,20 @@ def models_json_schema(
     ref_template: str = DEFAULT_REF_TEMPLATE,
     schema_generator: type[GenerateJsonSchema] = GenerateJsonSchema,
 ) -> tuple[dict[tuple[type[BaseModel] | type[PydanticDataclass], JsonSchemaMode], JsonSchemaValue], JsonSchemaValue]:
-    """Utility function to generate a JSON Schema for multiple models.
+    """複数のモデルのJSONスキーマを生成するユーティリティ関数。
 
     Args:
-        models: A sequence of tuples of the form (model, mode).
-        by_alias: Whether field aliases should be used as keys in the generated JSON Schema.
-        title: The title of the generated JSON Schema.
-        description: The description of the generated JSON Schema.
-        ref_template: The reference template to use for generating JSON Schema references.
-        schema_generator: The schema generator to use for generating the JSON Schema.
+        by_alias: 生成されたJSONスキーマでフィールドのエイリアスをキーとして使用するかどうか。
+        title: 生成されたJSONスキーマのタイトル。
+        description: 生成されたJSONスキーマの説明。
+        ref_template: JSONスキーマ参照の生成に使用する参照テンプレートです。
+        schema_generator: JSONスキーマの生成に使用するスキーマ・ジェネレーターです。
 
     Returns:
-        A tuple where:
-            - The first element is a dictionary whose keys are tuples of JSON schema key type and JSON mode, and
-                whose values are the JSON schema corresponding to that pair of inputs. (These schemas may have
-                JsonRef references to definitions that are defined in the second returned element.)
-            - The second element is a JSON schema containing all definitions referenced in the first returned
-                    element, along with the optional title and description keys.
+        次の条件を満たすタプル:
+            - 最初の要素は、JSONスキーマ・キー・タイプとJSONモードのタプルをキーとし、その入力ペアに対応するJSONスキーマを値とする辞書です
+            (これらのスキーマは、2番目に返された要素で定義されている定義へのJsonRef参照を持つ場合があります)。
+            - 2番目の要素は、最初に返された要素で参照されるすべての定義と、オプションのtitleおよびdescriptionキーを含むJSONスキーマです。
     """
     for cls, _ in models:
         if isinstance(cls.__pydantic_core_schema__, _mock_val_ser.MockCoreSchema):
@@ -2353,17 +2319,14 @@ def _sort_json_schema(value: JsonSchemaValue, parent_key: str | None = None) -> 
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class WithJsonSchema:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/json_schema/#withjsonschema-annotation
+    """Usage docs: ../concepts/json_schema/#withjsonschema-annotation
 
-    Add this as an annotation on a field to override the (base) JSON schema that would be generated for that field.
-    This provides a way to set a JSON schema for types that would otherwise raise errors when producing a JSON schema,
-    such as Callable, or types that have an is-instance core schema, without needing to go so far as creating a
-    custom subclass of pydantic.json_schema.GenerateJsonSchema.
-    Note that any _modifications_ to the schema that would normally be made (such as setting the title for model fields)
-    will still be performed.
+    これをフィールドのアノテーションとして追加し、そのフィールドに対して生成される(ベース)JSONスキーマをオーバーライドします。
+    これにより、pydantic.json_schema.GenerateJsonSchemaのカスタムサブクラスを作成しなくても、CallableなどのJSONスキーマの生成時にエラーが発生する型や、is-instanceコアスキーマを持つ型に対してJSONスキーマを設定する方法が提供される。
+    通常行われるスキーマへの変更(モデルフィールドのタイトルの設定など)は
+    が実行されます。
 
-    If `mode` is set this will only apply to that schema generation mode, allowing you
-    to set different json schemas for validation and serialization.
+    `mode`が設定されている場合、これはそのスキーマ生成モードにのみ適用され、検証とシリアライゼーションのために異なるjsonスキーマを設定できます。
     """
 
     json_schema: JsonSchemaValue | None
@@ -2387,13 +2350,11 @@ class WithJsonSchema:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class Examples:
-    """Add examples to a JSON schema.
+    """JSONスキーマに例を追加します。
 
-    Examples should be a map of example names (strings)
-    to example values (any valid JSON).
+    例は、例の名前(文字列)から例の値(任意の有効なJSON)へのマップである必要があります。
 
-    If `mode` is set this will only apply to that schema generation mode,
-    allowing you to add different examples for validation and serialization.
+    `mode`が設定されている場合、これはそのスキーマ生成モードにのみ適用され、検証とシリアライゼーションのために別の例を追加できます。
     """
 
     examples: dict[str, Any]
@@ -2444,9 +2405,9 @@ else:
 
     @dataclasses.dataclass(**_internal_dataclass.slots_true)
     class SkipJsonSchema:
-        """Usage docs: https://docs.pydantic.dev/2.9/concepts/json_schema/#skipjsonschema-annotation
+        """Usage docs: ../concepts/json_schema/#skipjsonschema-annotation
 
-        Add this as an annotation on a field to skip generating a JSON schema for that field.
+        これをアノテーションとしてフィールドに追加すると、そのフィールドのJSONスキーマの生成がスキップされます。
 
         Example:
             ```py
@@ -2488,9 +2449,9 @@ else:
             '''
             ```
 
-            1. The integer and null types are both included in the schema for `a`.
-            2. The integer type is the only type included in the schema for `b`.
-            3. The entirety of the `c` field is omitted from the schema.
+            1. integer型とnull型はどちらも`a`のスキーマに含まれています。
+            2. integer型は、`b`のスキーマに含まれる唯一の型です。
+            3. `c`フィールド全体がスキーマから省略されます。
         """
 
         def __class_getitem__(cls, item: AnyType) -> AnyType:
