@@ -1,4 +1,6 @@
-"""RootModel class and type definitions."""
+"""RootModelクラスとタイプの定義。"""
+
+
 
 from __future__ import annotations as _annotations
 
@@ -33,16 +35,15 @@ RootModelRootType = typing.TypeVar('RootModelRootType')
 
 
 class RootModel(BaseModel, typing.Generic[RootModelRootType], metaclass=_RootModelMetaclass):
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/models/#rootmodel-and-custom-root-types
+    """Usage docs: ../concepts/models/#rootmodel-and-custom-root-types
 
-    A Pydantic `BaseModel` for the root object of the model.
+    モデルのルートオブジェクト用のPydantic`BaseModel`です。
 
     Attributes:
-        root: The root object of the model.
-        __pydantic_root_model__: Whether the model is a RootModel.
-        __pydantic_private__: Private fields in the model.
-        __pydantic_extra__: Extra fields in the model.
-
+        root: モデルのルートオブジェクト。
+        __pydantic_root_model__: モデルがRootModelであるかどうか。
+        __pydantic_private__: モデル内のprivateフィールド。
+        __pydantic_extra__: モデル内の追加フィールド。
     """
 
     __pydantic_root_model__ = True
@@ -73,17 +74,17 @@ class RootModel(BaseModel, typing.Generic[RootModelRootType], metaclass=_RootMod
 
     @classmethod
     def model_construct(cls, root: RootModelRootType, _fields_set: set[str] | None = None) -> Self:  # type: ignore
-        """Create a new model using the provided root object and update fields set.
+        """指定されたルートオブジェクトを使用して新しいモデルを作成し、フィールドセットを更新します。
 
         Args:
-            root: The root object of the model.
-            _fields_set: The set of fields to be updated.
+            root: モデルのルートオブジェクト。
+            _fields_set: 更新されるフィールドのセット。
 
         Returns:
-            The new model.
+            新しいモデル。
 
         Raises:
-            NotImplemented: If the model is not a subclass of `RootModel`.
+            NotImplemented: モデルが`RootModel`のサブクラスでない場合。
         """
         return super().model_construct(root=root, _fields_set=_fields_set)
 
@@ -98,7 +99,7 @@ class RootModel(BaseModel, typing.Generic[RootModelRootType], metaclass=_RootMod
         _object_setattr(self, '__dict__', state['__dict__'])
 
     def __copy__(self) -> Self:
-        """Returns a shallow copy of the model."""
+        """モデルのシャローコピーを返します。"""
         cls = type(self)
         m = cls.__new__(cls)
         _object_setattr(m, '__dict__', copy(self.__dict__))
@@ -106,7 +107,7 @@ class RootModel(BaseModel, typing.Generic[RootModelRootType], metaclass=_RootMod
         return m
 
     def __deepcopy__(self, memo: dict[int, Any] | None = None) -> Self:
-        """Returns a deep copy of the model."""
+        """モデルのディープコピーを返します。"""
         cls = type(self)
         m = cls.__new__(cls)
         _object_setattr(m, '__dict__', deepcopy(self.__dict__, memo=memo))
@@ -132,16 +133,13 @@ class RootModel(BaseModel, typing.Generic[RootModelRootType], metaclass=_RootMod
             warnings: bool | Literal['none', 'warn', 'error'] = True,
             serialize_as_any: bool = False,
         ) -> Any:
-            """This method is included just to get a more accurate return type for type checkers.
-            It is included in this `if TYPE_CHECKING:` block since no override is actually necessary.
+            """このメソッドは、型チェッカーの戻り値の型をより正確に取得するためだけに含まれています。
+            実際には上書きが必要ないので、この`if TYPE_CHECKING:`ブロックに含まれています。
 
-            See the documentation of `BaseModel.model_dump` for more details about the arguments.
+            引数の詳細については、`BaseModel.model_dump`のドキュメントを参照してください。
 
-            Generally, this method will have a return type of `RootModelRootType`, assuming that `RootModelRootType` is
-            not a `BaseModel` subclass. If `RootModelRootType` is a `BaseModel` subclass, then the return
-            type will likely be `dict[str, Any]`, as `model_dump` calls are recursive. The return type could
-            even be something different, in the case of a custom serializer.
-            Thus, `Any` is used here to catch all of these cases.
+            一般に、`RootModelRootType`が`BaseModel`サブクラスではないと仮定すると、このメソッドの戻り値の型は`RootModelRootType`になります。`RootModelRootType`が`BaseModel`サブクラスである場合、戻り値の型は`dict[str, Any]`になります。これは`model_dump`呼び出しが再帰的であるためです。カスタムシリアライザの場合、戻り値の型は別のものになることもあります。
+            したがって、ここでは「Any」を使用して、これらのケースをすべてキャッチします。
             """
             ...
 
