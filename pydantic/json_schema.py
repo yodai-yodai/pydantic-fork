@@ -220,7 +220,7 @@ class _DefinitionsRemapping:
 
 
 class GenerateJsonSchema:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/json_schema/#customizing-the-json-schema-generation-process
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/json_schema/#customizing-the-json-schema-generation-process
 
     JSONスキーマを生成するためのクラス。
 
@@ -2319,7 +2319,7 @@ def _sort_json_schema(value: JsonSchemaValue, parent_key: str | None = None) -> 
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class WithJsonSchema:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/json_schema/#withjsonschema-annotation
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/json_schema/#withjsonschema-annotation
 
     これをフィールドのアノテーションとして追加し、そのフィールドに対して生成される(ベース)JSONスキーマをオーバーライドします。
     これにより、pydantic.json_schema.GenerateJsonSchemaのカスタムサブクラスを作成しなくても、CallableなどのJSONスキーマの生成時にエラーが発生する型や、is-instanceコアスキーマを持つ型に対してJSONスキーマを設定する方法が提供される。
@@ -2405,7 +2405,7 @@ else:
 
     @dataclasses.dataclass(**_internal_dataclass.slots_true)
     class SkipJsonSchema:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/json_schema/#skipjsonschema-annotation
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/json_schema/#skipjsonschema-annotation
 
         これをアノテーションとしてフィールドに追加すると、そのフィールドのJSONスキーマの生成がスキップされます。
 

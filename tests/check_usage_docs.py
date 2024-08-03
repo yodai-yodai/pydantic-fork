@@ -15,7 +15,7 @@ version = re.search(rb"VERSION = '(.*)'", version_file.read_bytes()).group(1)
 # version_major_minor = b'.'.join(version.split(b'.')[:2])
 # expected_base = b'https://docs.pydantic.dev/' + version_major_minor + b'/'
 version_major_minor = b'pydantic-docs-ja'
-expected_base = b'https://yodai-yodai.github.io/translated' + version_major_minor + b'/'
+expected_base = b'https://yodai-yodai.github.io/translated/' + version_major_minor + b'/'
 
 paths = sys.argv[1:]
 error_count = 0
