@@ -1,4 +1,6 @@
-"""The `error_wrappers` module is a backport module from V1."""
+"""`error_wrappers`モジュールはV1からのバックポートモジュールです。"""
+
+
 
 from ._migration import getattr_migration
 

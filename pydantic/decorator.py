@@ -1,4 +1,4 @@
-"""The `decorator` module is a backport module from V1."""
+"""`decorator`モジュールはV1からのバックポートモジュールです。"""
 
 from ._migration import getattr_migration
 

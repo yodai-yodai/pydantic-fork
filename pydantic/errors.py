@@ -1,4 +1,4 @@
-"""Pydantic-specific errors."""
+"""Pydantic固有のエラー"""
 
 from __future__ import annotations as _annotations
 
@@ -69,11 +69,11 @@ PydanticErrorCodes = Literal[
 
 
 class PydanticErrorMixin:
-    """A mixin class for common functionality shared by all Pydantic-specific errors.
+    """すべてのPydantic固有のエラーによって共有される共通機能のためのミックスインクラス。
 
     Attributes:
-        message: A message describing the error.
-        code: An optional error code from PydanticErrorCodes enum.
+        message: エラーを説明するメッセージ。
+        code: PydanticErrorCodes列挙型からのオプションのエラーコード。
     """
 
     def __init__(self, message: str, *, code: PydanticErrorCodes | None) -> None:
@@ -88,15 +88,15 @@ class PydanticErrorMixin:
 
 
 class PydanticUserError(PydanticErrorMixin, TypeError):
-    """An error raised due to incorrect use of Pydantic."""
+    """Pydanticの使用が正しくないために発生したエラーです。"""
 
 
 class PydanticUndefinedAnnotation(PydanticErrorMixin, NameError):
-    """A subclass of `NameError` raised when handling undefined annotations during `CoreSchema` generation.
+    """`CoreSchema`の生成中に未定義の注釈を処理すると、`NameError`のサブクラスが発生します。
 
     Attributes:
-        name: Name of the error.
-        message: Description of the error.
+        name: エラーの名前。
+        message: エラーの説明。
     """
 
     def __init__(self, name: str, message: str) -> None:
@@ -105,13 +105,13 @@ class PydanticUndefinedAnnotation(PydanticErrorMixin, NameError):
 
     @classmethod
     def from_name_error(cls, name_error: NameError) -> Self:
-        """Convert a `NameError` to a `PydanticUndefinedAnnotation` error.
+        """`NameError`を`PydanticUndefinedAnnotation`エラーに変換します。
 
         Args:
-            name_error: `NameError` to be converted.
+            name_error: `NameError`を変換します。
 
         Returns:
-            Converted `PydanticUndefinedAnnotation` error.
+            `PydanticUndefinedAnnotation`エラーを変換しました。
         """
         try:
             name = name_error.name  # type: ignore  # python > 3.10
@@ -121,10 +121,10 @@ class PydanticUndefinedAnnotation(PydanticErrorMixin, NameError):
 
 
 class PydanticImportError(PydanticErrorMixin, ImportError):
-    """An error raised when an import fails due to module changes between V1 and V2.
+    """V1とV2の間でモジュールが変更されたためにインポートが失敗した場合に発生するエラー。
 
     Attributes:
-        message: Description of the error.
+        message: エラーの説明。
     """
 
     def __init__(self, message: str) -> None:
@@ -132,10 +132,10 @@ class PydanticImportError(PydanticErrorMixin, ImportError):
 
 
 class PydanticSchemaGenerationError(PydanticUserError):
-    """An error raised during failures to generate a `CoreSchema` for some type.
+    """あるタイプの`CoreSchema`の生成に失敗したときに発生したエラー。
 
     Attributes:
-        message: Description of the error.
+        message: エラーの説明。
     """
 
     def __init__(self, message: str) -> None:
@@ -143,10 +143,10 @@ class PydanticSchemaGenerationError(PydanticUserError):
 
 
 class PydanticInvalidForJsonSchema(PydanticUserError):
-    """An error raised during failures to generate a JSON schema for some `CoreSchema`.
+    """一部の`CoreSchema`のJSONスキーマの生成に失敗したときに発生したエラー。
 
     Attributes:
-        message: Description of the error.
+        message: エラーの説明。
     """
 
     def __init__(self, message: str) -> None:

@@ -1,4 +1,5 @@
-"""The `datetime_parse` module is a backport module from V1."""
+"""`datetime_parse`モジュールはV1からのバックポートモジュールです。"""
+
 
 from ._migration import getattr_migration
 

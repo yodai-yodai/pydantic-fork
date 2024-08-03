@@ -131,8 +131,6 @@ def dataclass(
 
     Raises:
         AssertionError: `init`が`False`でない場合、または`validate_on_init`が`False`の場合に発生します。
-
-
     """
     assert init is False, "pydantic.dataclasses.dataclass only supports init=False"
     assert (
@@ -145,11 +143,7 @@ def dataclass(
         kwargs = {}
 
     def make_pydantic_fields_compatible(cls: type[Any]) -> None:
-        """Make sure that stdlib `dataclasses` understands `Field` kwargs like `kw_only`
-        To do that, we simply change
-          `x: int = pydantic.Field(..., kw_only=True)`
-        into
-          `x: int = dataclasses.field(default=pydantic.Field(..., kw_only=True), kw_only=True)`
+        """stdlib`dataclasses`が`kw_only`のような`Field`kwargsを処理することを確認してください。そのためには、単に`x:int=pydantic.Field(.,kw_only=True)`を`x:int=dataclasses.field(default=pydantic.Field(.,kw_only=True),kw_only=True)`に変更します。
         """
         for annotation_cls in cls.__mro__:
             # In Python < 3.9, `__annotations__` might not be present if there are no fields.
@@ -180,13 +174,13 @@ def dataclass(
                 cls.__annotations__[field_name] = annotations[field_name]
 
     def create_dataclass(cls: type[Any]) -> type[PydanticDataclass]:
-        """Create a Pydantic dataclass from a regular dataclass.
+        """通常のデータクラスからPydanticデータクラスを作成します。
 
         Args:
-            cls: The class to create the Pydantic dataclass from.
+            cls: Pydanticデータ・クラスの作成元のクラス。
 
         Returns:
-            A Pydantic dataclass.
+            Pydanticデータクラス。
         """
         from ._internal._utils import is_model_class
 
@@ -258,9 +252,7 @@ if (3, 8) <= sys.version_info < (3, 11):
     # Starting in 3.11, typing.get_type_hints will not raise an error if the retrieved type hints are not callable.
 
     def _call_initvar(*args: Any, **kwargs: Any) -> NoReturn:
-        """This function does nothing but raise an error that is as similar as possible to what you'd get
-        if you were to try calling `InitVar[int]()` without this monkeypatch. The whole purpose is just
-        to ensure typing._type_check does not error if the type hint evaluates to `InitVar[<parameter>]`.
+        """この関数は、このmonkeypatchなしで`InitVar[int]()`を呼び出した場合に発生するエラーと可能な限り類似したエラーを発生させるだけです。全体の目的は、型指定を確実にすることだけです。型ヒントが`InitVar[<parameter>]`と評価された場合、_type_checkはエラーになりません。
         """
         raise TypeError("'InitVar' object is not callable")
 
@@ -275,23 +267,22 @@ def rebuild_dataclass(
     _parent_namespace_depth: int = 2,
     _types_namespace: dict[str, Any] | None = None,
 ) -> bool | None:
-    """Try to rebuild the pydantic-core schema for the dataclass.
+    """データクラスのpydantic-coreスキーマを再構築してみてください。
 
-    This may be necessary when one of the annotations is a ForwardRef which could not be resolved during
-    the initial attempt to build the schema, and automatic rebuilding fails.
+    これは、最初にスキーマを構築しようとしたときに解決できなかったForwardRefが注釈の1つであり、自動再構築が失敗した場合に必要になることがあります。
 
-    This is analogous to `BaseModel.model_rebuild`.
+    これは`BaseModel.model_rebuild`と似ています。
 
     Args:
-        cls: The class to rebuild the pydantic-core schema for.
-        force: Whether to force the rebuilding of the schema, defaults to `False`.
-        raise_errors: Whether to raise errors, defaults to `True`.
-        _parent_namespace_depth: The depth level of the parent namespace, defaults to 2.
-        _types_namespace: The types namespace, defaults to `None`.
+        cls: pydantic-coreスキーマを再構築するクラス。
+        force: スキーマの再構築を強制するかどうか。デフォルトは`False`です。
+        raise_errors: エラーを発生させるかどうか。デフォルトは`True`です。
+        _parent_namespace_depth: 親ネームスペースのデプスレベル。デフォルトは2です。
+        _types_namespace: タイプの名前空間で、デフォルトは`None`です。
 
     Returns:
-        Returns `None` if the schema is already "complete" and rebuilding was not required.
-        If rebuilding _was_ required, returns `True` if rebuilding was successful, otherwise `False`.
+        スキーマが既に"完了"していて、再構築が必要なかった場合は`None`を返します。
+        rebuilding_was_requiredの場合、再構築が成功した場合は`True`を返し、それ以外の場合は`False`を返します。
     """
     if not force and cls.__pydantic_complete__:
         return None
@@ -324,13 +315,13 @@ def rebuild_dataclass(
 
 
 def is_pydantic_dataclass(class_: type[Any], /) -> TypeGuard[type[PydanticDataclass]]:
-    """Whether a class is a pydantic dataclass.
+    """クラスが暗号化されたデータクラスかどうか。
 
     Args:
-        class_: The class.
+        class_: クラス。
 
     Returns:
-        `True` if the class is a pydantic dataclass, `False` otherwise.
+        クラスがpydanticデータクラスであれば`True`、そうでなければ`False`です。
     """
     try:
         return "__pydantic_validator__" in class_.__dict__ and dataclasses.is_dataclass(

@@ -30,8 +30,8 @@ format: .pdm
 
 .PHONY: lint  ## Lint python source files
 lint: .pdm
-	pdm run ruff check $(sources)
-	pdm run ruff format --check $(sources)
+	pdm run ruff check --fix $(sources)
+	pdm run ruff format $(sources)
 
 .PHONY: codespell  ## Use Codespell to do spellchecking
 codespell: .pre-commit

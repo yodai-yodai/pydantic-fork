@@ -45,7 +45,7 @@ else:
 
 
 class _FromFieldInfoInputs(typing_extensions.TypedDict, total=False):
-    """This class exists solely to add type checking for the `**kwargs` in `FieldInfo.from_field`."""
+    """このクラスは、`FieldInfo.from_field`の`**kwargs`の型チェックを追加するためだけに存在します。"""
 
     annotation: type[Any] | None
     default_factory: typing.Callable[[], Any] | None
@@ -85,45 +85,42 @@ class _FromFieldInfoInputs(typing_extensions.TypedDict, total=False):
 
 
 class _FieldInfoInputs(_FromFieldInfoInputs, total=False):
-    """This class exists solely to add type checking for the `**kwargs` in `FieldInfo.__init__`."""
+    """このクラスは、`FieldInfo.__init__`の`**kwargs`の型チェックを追加するためだけに存在します。"""
 
     default: Any
 
 
 class FieldInfo(_repr.Representation):
-    """This class holds information about a field.
+    """このクラスはフィールドに関する情報を保持します。
 
-    `FieldInfo` is used for any field definition regardless of whether the [`Field()`][pydantic.fields.Field]
-    function is explicitly used.
+    `FieldInfo`は、[`Field()`][pydantic.fields.Field]関数が明示的に使用されているかどうかにかかわらず、すべてのフィールド定義に使用されます。
 
     !!! warning
-        You generally shouldn't be creating `FieldInfo` directly, you'll only need to use it when accessing
-        [`BaseModel`][pydantic.main.BaseModel] `.model_fields` internals.
+        一般的には`FieldInfo`を直接作成すべきではありません。[`BaseModel`][pydantic.main.BaseModel]`.model_fields`内部にアクセスするときにのみ使用する必要があります。
 
     Attributes:
-        annotation: The type annotation of the field.
-        default: The default value of the field.
-        default_factory: The factory function used to construct the default for the field.
-        alias: The alias name of the field.
-        alias_priority: The priority of the field's alias.
-        validation_alias: The validation alias of the field.
-        serialization_alias: The serialization alias of the field.
-        title: The title of the field.
-        field_title_generator: A callable that takes a field name and returns title for it.
-        description: The description of the field.
-        examples: List of examples of the field.
-        exclude: Whether to exclude the field from the model serialization.
-        discriminator: Field name or Discriminator for discriminating the type in a tagged union.
-        deprecated: A deprecation message, an instance of `warnings.deprecated` or the `typing_extensions.deprecated` backport,
-            or a boolean. If `True`, a default deprecation message will be emitted when accessing the field.
-        json_schema_extra: A dict or callable to provide extra JSON schema properties.
-        frozen: Whether the field is frozen.
-        validate_default: Whether to validate the default value of the field.
-        repr: Whether to include the field in representation of the model.
-        init: Whether the field should be included in the constructor of the dataclass.
-        init_var: Whether the field should _only_ be included in the constructor of the dataclass, and not stored.
-        kw_only: Whether the field should be a keyword-only argument in the constructor of the dataclass.
-        metadata: List of metadata constraints.
+        annotation: フィールドの型注釈。
+        default: フィールドのデフォルト値。
+        default_factory: フィールドのデフォルトを構成するために使用されるファクトリ関数。
+        alias: フィールドのエイリアス名。
+        alias_priority: フィールドのエイリアスの優先度。
+        validation_alias: フィールドの検証エイリアス。
+        serialization_alias: フィールドのシリアル化エイリアス。
+        title: フィールドのタイトル。
+        field_title_generator: フィールド名を受け取り、そのタイトルを返す呼び出し可能オブジェクト。
+        description: フィールドの説明。
+        examples: フィールドの例のリスト。
+        exclude: モデルのシリアライゼーションからフィールドを除外するかどうか。
+        discriminator: タグ付き共用体の型を識別するためのフィールド名または識別子。
+        deprecated: 非推奨メッセージ、`warnings.deprecated`または`typing_extensions.deprecated`バックポートのインスタンス、またはブール値。`True`の場合、フィールドにアクセスするとデフォルトの非推奨メッセージが出力されます。
+        json_schema_extra: 追加のJSONスキーマ・プロパティーを提供するためのdictまたはcallable。
+        frozen: フィールドが凍結されているかどうか。
+        validate_default: フィールドのデフォルト値を検証するかどうか。
+        repr: モデルの表現にフィールドを含めるかどうか。
+        init: フィールドをデータクラスのコンストラクタに含めるかどうか。
+        init_var: フィールドがデータ・クラスのコンストラクターに含まれ、保管されないようにするかどうか。
+        kw_only: データクラスのコンストラクタで、フィールドをキーワードのみの引数にするかどうか。
+        metadata: メタデータ制約のリスト。
     """
 
     annotation: type[Any] | None
@@ -196,10 +193,9 @@ class FieldInfo(_repr.Representation):
     }
 
     def __init__(self, **kwargs: Unpack[_FieldInfoInputs]) -> None:
-        """This class should generally not be initialized directly; instead, use the `pydantic.fields.Field` function
-        or one of the constructor classmethods.
+        """このクラスは通常、直接初期化すべきではありません。代わりに、`pydantic.fields.Field`関数またはコンストラクタクラスメソッドの1つを使用してください。
 
-        See the signature of `pydantic.fields.Field` for more details about the expected arguments.
+        期待される引数の詳細については、`pydantic.fields.Field`のシグネチャを参照してください。
         """
         self._attributes_set = {k: v for k, v in kwargs.items() if v is not _Unset}
         kwargs = {k: _DefaultValues.get(k) if v is _Unset else v for k, v in kwargs.items()}  # type: ignore
@@ -242,20 +238,20 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def from_field(default: Any = PydanticUndefined, **kwargs: Unpack[_FromFieldInfoInputs]) -> FieldInfo:
-        """Create a new `FieldInfo` object with the `Field` function.
+        """`Field`関数を使用して新しい`FieldInfo`オブジェクトを作成します。
 
         Args:
-            default: The default value for the field. Defaults to Undefined.
-            **kwargs: Additional arguments dictionary.
+            default: フィールドのデフォルト値。デフォルトは「未定義」です。
+            **kwargs: 追加引数の辞書。
 
         Raises:
-            TypeError: If 'annotation' is passed as a keyword argument.
+            TypeError: 'annotation'がキーワード引数として渡された場合。
 
         Returns:
-            A new FieldInfo object with the given parameters.
+            指定されたパラメータを持つ新しいFieldInfoオブジェクト。
 
         Example:
-            This is how you can create a field with default value like this:
+            次のようにして、デフォルト値を持つフィールドを作成できます。
 
             ```python
             import pydantic
@@ -270,9 +266,9 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def from_annotation(annotation: type[Any]) -> FieldInfo:
-        """Creates a `FieldInfo` instance from a bare annotation.
+        """生の注釈から`FieldInfo`インスタンスを作成します。
 
-        This function is used internally to create a `FieldInfo` from a bare annotation like this:
+        この関数は、次のような生の注釈から`FieldInfo`を作成するために内部的に使用されます。
 
         ```python
         import pydantic
@@ -281,8 +277,7 @@ class FieldInfo(_repr.Representation):
             foo: int  # <-- like this
         ```
 
-        We also account for the case where the annotation can be an instance of `Annotated` and where
-        one of the (not first) arguments in `Annotated` is an instance of `FieldInfo`, e.g.:
+        また、注釈が`Annotated`のインスタンスである可能性があり、`Annotated`の(最初ではない)引数の1つが`FieldInfo`のインスタンスである場合についても説明します。次に例を示します。
 
         ```python
         import annotated_types
@@ -296,10 +291,10 @@ class FieldInfo(_repr.Representation):
         ```
 
         Args:
-            annotation: An annotation object.
+            annotation: 注釈オブジェクト。
 
         Returns:
-            An instance of the field metadata.
+            フィールドメタデータのインスタンス。
         """
         final = False
         if _typing_extra.is_finalvar(annotation):
@@ -332,9 +327,9 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def from_annotated_attribute(annotation: type[Any], default: Any) -> FieldInfo:
-        """Create `FieldInfo` from an annotation with a default value.
+        """デフォルト値を持つ注釈から`FieldInfo`を作成します。
 
-        This is used in cases like the following:
+        これは、次のような場合に使用されます。
 
         ```python
         import annotated_types
@@ -349,11 +344,11 @@ class FieldInfo(_repr.Representation):
         ```
 
         Args:
-            annotation: The type annotation of the field.
-            default: The default value of the field.
+            annotation: フィールドの型注釈。
+            default: フィールドのデフォルト値。
 
         Returns:
-            A field object with the passed values.
+            渡された値を持つフィールド・オブジェクト。
         """
         if annotation is default:
             raise PydanticUserError(
@@ -417,12 +412,12 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def merge_field_infos(*field_infos: FieldInfo, **overrides: Any) -> FieldInfo:
-        """Merge `FieldInfo` instances keeping only explicitly set attributes.
+        """明示的に設定された属性のみを保持して`FieldInfo`インスタンスをマージします。
 
-        Later `FieldInfo` instances override earlier ones.
+        後の`FieldInfo`インスタンスは前のインスタンスを上書きします。
 
         Returns:
-            FieldInfo: A merged FieldInfo instance.
+            FieldInfo: マージされたFieldInfoインスタンス。
         """
         flattened_field_infos: list[FieldInfo] = []
         for field_info in field_infos:
@@ -475,16 +470,15 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def _from_dataclass_field(dc_field: DataclassField[Any]) -> FieldInfo:
-        """Return a new `FieldInfo` instance from a `dataclasses.Field` instance.
-
+        """`dataclasses.Field`インスタンスから新しい`FieldInfo`インスタンスを返します。
         Args:
-            dc_field: The `dataclasses.Field` instance to convert.
+            dc_field: 変換する`dataclasses.Field`インスタンスです。
 
         Returns:
-            The corresponding `FieldInfo` instance.
+            対応する`FieldInfo`インスタンス。
 
         Raises:
-            TypeError: If any of the `FieldInfo` kwargs does not match the `dataclass.Field` kwargs.
+            TypeError: `FieldInfo`kwargsのいずれかが`dataclass.Field`kwargsと一致しない場合。
         """
         default = dc_field.default
         if default is dataclasses.MISSING:
@@ -501,13 +495,13 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def _extract_metadata(annotation: type[Any] | None) -> tuple[type[Any] | None, list[Any]]:
-        """Tries to extract metadata/constraints from an annotation if it uses `Annotated`.
+        """注釈が`Annotated`を使用している場合、注釈からメタデータ/制約を抽出しようとします。
 
         Args:
-            annotation: The type hint annotation for which metadata has to be extracted.
+            annotation: メタデータを抽出する必要がある型ヒントの注釈。
 
         Returns:
-            A tuple containing the extracted metadata type and the list of extra arguments.
+            抽出されたメタデータタイプと追加引数のリストを含むタプル。
         """
         if annotation is not None:
             if _typing_extra.is_annotated(annotation):
@@ -518,14 +512,13 @@ class FieldInfo(_repr.Representation):
 
     @staticmethod
     def _collect_metadata(kwargs: dict[str, Any]) -> list[Any]:
-        """Collect annotations from kwargs.
+        """kwargsから注釈を収集します。
 
         Args:
-            kwargs: Keyword arguments passed to the function.
+            kwargs: 関数に渡されるキーワード引数。
 
         Returns:
-            A list of metadata objects - a combination of `annotated_types.BaseMetadata` and
-                `PydanticMetadata`.
+            メタデータオブジェクトのリスト-`annotated_types.BaseMetadata`と`PydanticMetadata`の組み合わせです。
         """
         metadata: list[Any] = []
         general_metadata = {}
@@ -547,7 +540,7 @@ class FieldInfo(_repr.Representation):
 
     @property
     def deprecation_message(self) -> str | None:
-        """The deprecation message to be emitted, or `None` if not set."""
+        """発行される非推奨メッセージ、または設定されていない場合は`None`。"""
         if self.deprecated is None:
             return None
         if isinstance(self.deprecated, bool):
@@ -555,17 +548,15 @@ class FieldInfo(_repr.Representation):
         return self.deprecated if isinstance(self.deprecated, str) else self.deprecated.message
 
     def get_default(self, *, call_default_factory: bool = False) -> Any:
-        """Get the default value.
+        """デフォルト値を取得します。
 
-        We expose an option for whether to call the default_factory (if present), as calling it may
-        result in side effects that we want to avoid. However, there are times when it really should
-        be called (namely, when instantiating a model via `model_construct`).
+        default_factoryを呼び出すと、回避したい副作用が発生する可能性があるため、default_factory(存在する場合)を呼び出すかどうかのオプションを公開します。ただし、実際に呼び出す必要がある場合もあります(つまり、`model_construct`を使用してモデルをインスタンス化する場合)。
 
         Args:
-            call_default_factory: Whether to call the default_factory or not. Defaults to `False`.
+            call_default_factory:default_factoryを呼び出すかどうか。デフォルトは`False`です。
 
         Returns:
-            The default value, calling the default factory if requested or `None` if not set.
+            デフォルト値。要求された場合はデフォルトのファクトリを呼び出し、設定されていない場合は`None`を呼び出します。
         """
         if self.default_factory is None:
             return _utils.smart_deepcopy(self.default)
@@ -575,25 +566,22 @@ class FieldInfo(_repr.Representation):
             return None
 
     def is_required(self) -> bool:
-        """Check if the field is required (i.e., does not have a default value or factory).
+        """フィールドが必要かどうかをチェックしてください(デフォルト値またはファクトリがないなど)。
 
         Returns:
-            `True` if the field is required, `False` otherwise.
+            フィールドが必要な場合は`True`、そうでない場合は`False`です。
         """
         return self.default is PydanticUndefined and self.default_factory is None
 
     def rebuild_annotation(self) -> Any:
-        """Attempts to rebuild the original annotation for use in function signatures.
+        """関数シグネチャで使用するために元の注釈を再構築しようとします。
 
-        If metadata is present, it adds it to the original annotation using
-        `Annotated`. Otherwise, it returns the original annotation as-is.
+        メタデータが存在する場合は、`Annotated`を使用して元の注釈に追加します。存在しない場合は、元の注釈をそのまま返します。
 
-        Note that because the metadata has been flattened, the original annotation
-        may not be reconstructed exactly as originally provided, e.g. if the original
-        type had unrecognized annotations, or was annotated with a call to `pydantic.Field`.
+        メタデータがフラット化されているため、元の型に認識されないアノテーションがあったり、`pydantic.Field`を呼び出してアノテーションが付けられたりした場合など、元のアノテーションが元のまま正確に再構築されない可能性があることに注意してください。
 
         Returns:
-            The rebuilt annotation.
+            再構築された注釈。
         """
         if not self.metadata:
             return self.annotation
@@ -602,19 +590,18 @@ class FieldInfo(_repr.Representation):
             return typing_extensions.Annotated[(self.annotation, *self.metadata)]  # type: ignore
 
     def apply_typevars_map(self, typevars_map: dict[Any, Any] | None, types_namespace: dict[str, Any] | None) -> None:
-        """Apply a `typevars_map` to the annotation.
+        """注釈に`typevars_map`を適用してください。
 
-        This method is used when analyzing parametrized generic types to replace typevars with their concrete types.
+        このメソッドは、パラメータ化されたジェネリック型を分析して、型変数を具体的な型に置き換えるときに使用されます。
 
-        This method applies the `typevars_map` to the annotation in place.
+        このメソッドは、`typevars_map`をアノテーションにインプレイスで適用します。
 
         Args:
-            typevars_map: A dictionary mapping type variables to their concrete types.
-            types_namespace (dict | None): A dictionary containing related types to the annotated type.
+            typevars_map: 型変数をその具象型にマップする辞書。
+            types_namespace(dict None): アノテーションが付けられた型に関連する型を含む辞書。
 
         See Also:
-            pydantic._internal._generics.replace_types is used for replacing the typevars with
-                their concrete types.
+            pydantic._internal._generics.replace_typesは、typevarを具象型に置き換えるために使用されます。
         """
         annotation = _typing_extra.eval_type_lenient(self.annotation, types_namespace)
         self.annotation = _generics.replace_types(annotation, typevars_map)
@@ -649,8 +636,7 @@ class FieldInfo(_repr.Representation):
 
 
 class _EmptyKwargs(typing_extensions.TypedDict):
-    """This class exists solely to ensure that type checking warns about passing `**extra` in `Field`."""
-
+    """このクラスは、型チェックが`Field`に`**extra`を渡すことについて警告することを保証するためだけに存在します。"""
 
 _DefaultValues = dict(
     default=...,
@@ -726,69 +712,58 @@ def Field(  # noqa: C901
     fail_fast: bool | None = _Unset,
     **extra: Unpack[_EmptyKwargs],
 ) -> Any:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/fields
+    """Usage docs: ../concepts/fields
 
-    Create a field for objects that can be configured.
+    設定可能なオブジェクトのフィールドを作成します。
 
-    Used to provide extra information about a field, either for the model schema or complex validation. Some arguments
-    apply only to number fields (`int`, `float`, `Decimal`) and some apply only to `str`.
+    モデルスキーマまたは複雑な検証のために、フィールドに関する追加情報を提供するために使用されます。引数の中には、数値フィールド(`int`、`float`、`Decimal`)にのみ適用されるものと、`str`にのみ適用されるものがあります。
 
     Note:
-        - Any `_Unset` objects will be replaced by the corresponding value defined in the `_DefaultValues` dictionary. If a key for the `_Unset` object is not found in the `_DefaultValues` dictionary, it will default to `None`
+        - `_Unset`オブジェクトは、`_DefaultValues`辞書で定義された対応する値に置き換えられます。`_Unset`オブジェクトのキーが`_DefaultValues`辞書で見つからない場合は、デフォルトで`None`になります。
 
     Args:
-        default: Default value if the field is not set.
-        default_factory: A callable to generate the default value, such as :func:`~datetime.utcnow`.
-        alias: The name to use for the attribute when validating or serializing by alias.
-            This is often used for things like converting between snake and camel case.
-        alias_priority: Priority of the alias. This affects whether an alias generator is used.
-        validation_alias: Like `alias`, but only affects validation, not serialization.
-        serialization_alias: Like `alias`, but only affects serialization, not validation.
-        title: Human-readable title.
-        field_title_generator: A callable that takes a field name and returns title for it.
-        description: Human-readable description.
-        examples: Example values for this field.
-        exclude: Whether to exclude the field from the model serialization.
-        discriminator: Field name or Discriminator for discriminating the type in a tagged union.
-        deprecated: A deprecation message, an instance of `warnings.deprecated` or the `typing_extensions.deprecated` backport,
-            or a boolean. If `True`, a default deprecation message will be emitted when accessing the field.
-        json_schema_extra: A dict or callable to provide extra JSON schema properties.
-        frozen: Whether the field is frozen. If true, attempts to change the value on an instance will raise an error.
-        validate_default: If `True`, apply validation to the default value every time you create an instance.
-            Otherwise, for performance reasons, the default value of the field is trusted and not validated.
-        repr: A boolean indicating whether to include the field in the `__repr__` output.
-        init: Whether the field should be included in the constructor of the dataclass.
-            (Only applies to dataclasses.)
-        init_var: Whether the field should _only_ be included in the constructor of the dataclass.
-            (Only applies to dataclasses.)
-        kw_only: Whether the field should be a keyword-only argument in the constructor of the dataclass.
-            (Only applies to dataclasses.)
-        coerce_numbers_to_str: Whether to enable coercion of any `Number` type to `str` (not applicable in `strict` mode).
-        strict: If `True`, strict validation is applied to the field.
-            See [Strict Mode](../concepts/strict_mode.md) for details.
-        gt: Greater than. If set, value must be greater than this. Only applicable to numbers.
-        ge: Greater than or equal. If set, value must be greater than or equal to this. Only applicable to numbers.
-        lt: Less than. If set, value must be less than this. Only applicable to numbers.
-        le: Less than or equal. If set, value must be less than or equal to this. Only applicable to numbers.
-        multiple_of: Value must be a multiple of this. Only applicable to numbers.
-        min_length: Minimum length for iterables.
-        max_length: Maximum length for iterables.
-        pattern: Pattern for strings (a regular expression).
-        allow_inf_nan: Allow `inf`, `-inf`, `nan`. Only applicable to numbers.
-        max_digits: Maximum number of allow digits for strings.
-        decimal_places: Maximum number of decimal places allowed for numbers.
-        union_mode: The strategy to apply when validating a union. Can be `smart` (the default), or `left_to_right`.
-            See [Union Mode](../concepts/unions.md#union-modes) for details.
-        fail_fast: If `True`, validation will stop on the first error. If `False`, all validation errors will be collected.
-            This option can be applied only to iterable types (list, tuple, set, and frozenset).
-        extra: (Deprecated) Extra fields that will be included in the JSON schema.
+        default: フィールドが設定されていない場合のデフォルト値。
+        default_factory: :func: `~datetime.utcnow`のような、デフォルト値を生成するためにコールできるもの。
+        alias: エイリアスによる検証またはシリアライズ時にアトリビュートに使用する名前。スネークとキャメルケース間の変換などによく使用されます。
+        alias_priority: 別名の優先度。別名ジェネレータを使用するかどうかに影響します。
+        validation_alias: `alias`と似ていますが、検証にのみ影響し、シリアライゼーションには影響しません。
+        serialization_alias: `alias`と似ていますが、シリアライズにのみ影響し、検証には影響しません。
+        title: 人間が読めるタイトル。
+        field_title_generator: フィールド名を受け取り、そのタイトルを返す呼び出し可能オブジェクト。
+        description: 人間が読める形式の説明。
+        examples: このフィールドの値の例。
+        exclude: モデルのシリアライゼーションからフィールドを除外するかどうか。
+        discriminator: タグ付き共用体の型を識別するためのフィールド名または識別子。
+        deprecated: 非推奨メッセージ、`warnings.deprecated`または`typing_extensions.deprecated`バックポートのインスタンス、またはブール値。`True`の場合、フィールドにアクセスするとデフォルトの非推奨メッセージが出力されます。
+        json_schema_extra: 追加のJSONスキーマ・プロパティーを提供するためのdictまたはcallable。
+        frozen: フィールドが凍結されているかどうか。TRUEの場合、インスタンスの値を変更しようとするとエラーが発生します。
+        validate_default: `True`の場合、インスタンスを作成するたびにデフォルト値に検証が適用されます。それ以外の場合は、パフォーマンス上の理由から、フィールドのデフォルト値は信頼され、検証されません。
+        repr: フィールドを`__repr__`出力に含めるかどうかを示すブール値です。
+        init: フィールドをデータクラスのコンストラクタに含めるかどうかを指定します(データクラスにのみ適用されます)。
+        init_var: データ・クラスのコンストラクタにフィールドを含めるかどうか(データ・クラスにのみ適用)。
+        kw_only: データクラスのコンストラクタで、フィールドをキーワードのみの引数にするかどうかを指定します(データクラスにのみ適用されます)。
+        coerce_numbers_to_str: `Number`型の`str`への強制を有効にするかどうか(`strict`モードでは適用されません)。
+        strict: `True`の場合、厳密な検証がフィールドに適用されます。詳細については、[Strict Mode](../concepts/strict_mode.md)を参照してください。
+        gt: より大きい。設定する場合、値はこれより大きい必要があります。数値にのみ適用できます。
+        ge: 以上。設定する場合、値はこれ以上である必要があります。数値にのみ適用できます。
+        lt: より小さい。設定する場合、値はこれより小さくする必要があります。数値にのみ適用できます。
+        le: 以下です。設定する場合、値はこれ以下である必要があります。数値にのみ適用できます。
+        multiple_of: 値はこのの倍数である必要があります。数値にのみ適用できます。
+        min_length: iterableの最小長。
+        max_length: iterableの最大長。
+        pattern: 文字列のパターン(正規表現)。
+        allow_inf_nan: `inf`、`-inf`、`nan`を許可します。数値にのみ適用されます。
+        max_digits: 文字列の最大許容桁数。
+        decimal_places: 数値の小数点以下の最大桁数。
+        union_mode: 共用体を検証するときに適用される方式。`smart`(デフォルト)または`left_to_right`のいずれかです。詳細については、[Union Mode](../concepts/unions.md#union-modes)を参照してください。
+        fail_fast: `True`の場合、検証は最初のエラーで停止します。`False`の場合、すべての検証エラーが収集されます。このオプションは、反復可能な型(list、tuple、set、frozenset)にのみ適用できます。
+        extra: (非推奨)JSONスキーマに含まれる追加フィールド。
 
             !!! warning Deprecated
-                The `extra` kwargs is deprecated. Use `json_schema_extra` instead.
+                `extra`kwargsは非推奨です。代わりに`json_schema_extra`を使用してください。
 
     Returns:
-        A new [`FieldInfo`][pydantic.fields.FieldInfo]. The return annotation is `Any` so `Field` can be used on
-            type-annotated fields without causing a type error.
+        新しい[`FieldInfo`][pydantic.fields.FieldInfo]。返される注釈は`Any`なので、型エラーを起こすことなく型注釈付きのフィールドで`Field`を使用できます。
     """
     # Check deprecated and removed params from V1. This logic should eventually be removed.
     const = extra.pop('const', None)  # type: ignore
@@ -898,16 +873,14 @@ _FIELD_ARG_NAMES.remove('extra')  # do not include the varkwargs parameter
 
 
 class ModelPrivateAttr(_repr.Representation):
-    """A descriptor for private attributes in class models.
+    """クラスモデル内のプライベート属性の記述子。
 
     !!! warning
-        You generally shouldn't be creating `ModelPrivateAttr` instances directly, instead use
-        `pydantic.fields.PrivateAttr`. (This is similar to `FieldInfo` vs. `Field`.)
+        一般的に、`ModelPrivateAttr`インスタンスを直接作成すべきではなく、代わりに`pydantic.fields.PrivateAttr`を使用してください(これは`FieldInfo`と`Field`に似ています)。
 
     Attributes:
-        default: The default value of the attribute if not provided.
-        default_factory: A callable function that generates the default value of the
-            attribute if not provided.
+        default: 属性のデフォルト値(指定されていない場合)。
+        default_factory: 指定されていない場合に属性のデフォルト値を生成する、呼び出し可能な関数。
     """
 
     __slots__ = 'default', 'default_factory'
@@ -940,14 +913,14 @@ class ModelPrivateAttr(_repr.Representation):
             set_name(cls, name)
 
     def get_default(self) -> Any:
-        """Retrieve the default value of the object.
+        """オブジェクトのデフォルト値を取得します。
 
-        If `self.default_factory` is `None`, the method will return a deep copy of the `self.default` object.
+        `self.default_factory`が`None`の場合、このメソッドは`self.default`オブジェクトのディープコピーを返します。
 
-        If `self.default_factory` is not `None`, it will call `self.default_factory` and return the value returned.
+        `self.default_factory`が`None`でない場合、`self.default_factory`を呼び出し、返された値を返します。
 
         Returns:
-            The default value of the object.
+            オブジェクトのデフォルト値。
         """
         return _utils.smart_deepcopy(self.default) if self.default_factory is None else self.default_factory()
 
@@ -964,26 +937,24 @@ def PrivateAttr(
     default_factory: typing.Callable[[], Any] | None = None,
     init: Literal[False] = False,
 ) -> Any:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/models/#private-model-attributes
+    """Usage docs: ../concepts/models/#private-model-attributes
 
-    Indicates that an attribute is intended for private use and not handled during normal validation/serialization.
+    属性がプライベートに使用され、通常の検証/シリアライゼーションでは処理されないことを示します。
 
-    Private attributes are not validated by Pydantic, so it's up to you to ensure they are used in a type-safe manner.
+    private属性はPydanticによって検証されないため、タイプセーフな方法で使用するかどうかはユーザー次第です。
 
-    Private attributes are stored in `__private_attributes__` on the model.
+    プライベート属性は、モデルの`__private_attributes__`に保存されます。
 
     Args:
-        default: The attribute's default value. Defaults to Undefined.
-        default_factory: Callable that will be
-            called when a default value is needed for this attribute.
-            If both `default` and `default_factory` are set, an error will be raised.
-        init: Whether the attribute should be included in the constructor of the dataclass. Always `False`.
+        default: 属性のデフォルト値。デフォルトは「未定義」です。
+        default_factory: この属性にデフォルト値が必要な場合に呼び出される呼び出し可能オブジェクト。`default`と`default_factory`の両方が設定されている場合、エラーが発生します。
+        init: 属性をデータクラスのコンストラクタに含めるかどうか。常に`False`です。
 
     Returns:
-        An instance of [`ModelPrivateAttr`][pydantic.fields.ModelPrivateAttr] class.
+        [`ModelPrivateAttr`][pydantic.fields.ModelPrivateAttr]クラスのインスタンスです。
 
     Raises:
-        ValueError: If both `default` and `default_factory` are set.
+        ValueError: `default`と`default_factory`の両方が設定されている場合。
     """
     if default is not PydanticUndefined and default_factory is not None:
         raise TypeError('cannot specify both default and default_factory')
@@ -996,22 +967,21 @@ def PrivateAttr(
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class ComputedFieldInfo:
-    """A container for data from `@computed_field` so that we can access it while building the pydantic-core schema.
+    """pydantic-coreスキーマを構築する際にアクセスできるように、`@computed_field`からのデータのコンテナ。
 
     Attributes:
-        decorator_repr: A class variable representing the decorator string, '@computed_field'.
-        wrapped_property: The wrapped computed field property.
-        return_type: The type of the computed field property's return value.
-        alias: The alias of the property to be used during serialization.
-        alias_priority: The priority of the alias. This affects whether an alias generator is used.
-        title: Title of the computed field to include in the serialization JSON schema.
-        field_title_generator: A callable that takes a field name and returns title for it.
-        description: Description of the computed field to include in the serialization JSON schema.
-        deprecated: A deprecation message, an instance of `warnings.deprecated` or the `typing_extensions.deprecated` backport,
-            or a boolean. If `True`, a default deprecation message will be emitted when accessing the field.
-        examples: Example values of the computed field to include in the serialization JSON schema.
-        json_schema_extra: A dict or callable to provide extra JSON schema properties.
-        repr: A boolean indicating whether to include the field in the __repr__ output.
+        decorator_repr: デコレータ文字列'@computed_field'を表すクラス変数。
+        wrapped_property: ラップされた計算結果フィールド・プロパティ。
+        return_type: 計算フィールド・プロパティの戻り値の型。
+        alias: シリアライズ中に使用されるプロパティのエイリアス。
+        alias_priority: 別名の優先度。これは、別名ジェネレータを使用するかどうかに影響します。
+        title: シリアライゼーションJSONスキーマに含める計算フィールドのタイトル。
+        field_title_generator: フィールド名を受け取り、そのタイトルを返す呼び出し可能オブジェクト。
+        description: シリアライゼーションJSONスキーマに含める計算フィールドの説明。
+        deprecated: 非推奨メッセージ、`warnings.deprecated`または`typing_extensions.deprecated`バックポートのインスタンス、またはブール値。`True`の場合、フィールドにアクセスするとデフォルトの非推奨メッセージが出力されます。
+        examples: シリアライズJSONスキーマに含める計算結果フィールドの値の例。
+        json_schema_extra: 追加のJSONスキーマ・プロパティーを提供するためのdictまたはcallable。
+        repr: __repr__出力にフィールドを含めるかどうかを示すブール値。
     """
 
     decorator_repr: ClassVar[str] = '@computed_field'
@@ -1029,7 +999,7 @@ class ComputedFieldInfo:
 
     @property
     def deprecation_message(self) -> str | None:
-        """The deprecation message to be emitted, or `None` if not set."""
+        """出力される非推奨メッセージ、または設定されていない場合は`None`。"""
         if self.deprecated is None:
             return None
         if isinstance(self.deprecated, bool):
@@ -1038,7 +1008,7 @@ class ComputedFieldInfo:
 
 
 def _wrapped_property_is_private(property_: cached_property | property) -> bool:  # type: ignore
-    """Returns true if provided property is private, False otherwise."""
+    """指定されたプロパティがプライベートの場合はtrue、それ以外の場合はfalseを返します。"""
     wrapped_name: str = ''
 
     if isinstance(property_, property):
@@ -1089,11 +1059,11 @@ def computed_field(
     repr: bool | None = None,
     return_type: Any = PydanticUndefined,
 ) -> PropertyT | typing.Callable[[PropertyT], PropertyT]:
-    """Usage docs: https://docs.pydantic.dev/2.9/concepts/fields#the-computed_field-decorator
+    """Usage docs: ../concepts/fields#the-computed_field-decorator
 
-    Decorator to include `property` and `cached_property` when serializing models or dataclasses.
+    モデルまたはデータクラスをシリアライズするときに`property`と`cached_property`を含めるデコレータ。
 
-    This is useful for fields that are computed from other fields, or for fields that are expensive to compute and should be cached.
+    これは、他のフィールドから計算されるフィールドや、計算にコストがかかり、キャッシュする必要があるフィールドに便利です。
 
     ```py
     from pydantic import BaseModel, computed_field
@@ -1111,17 +1081,15 @@ def computed_field(
     #> {'width': 3, 'length': 2, 'area': 6}
     ```
 
-    If applied to functions not yet decorated with `@property` or `@cached_property`, the function is
-    automatically wrapped with `property`. Although this is more concise, you will lose IntelliSense in your IDE,
-    and confuse static type checkers, thus explicit use of `@property` is recommended.
+    `@property`または`@cached_property`で修飾されていない関数に適用すると、その関数は自動的に`property`でラップされます。
+    これはより簡潔ですが、IDE内のIntelliSenseが失われ、静的型チェッカーが混乱するため、`@property`を明示的に使用することをお勧めします。
 
     !!! warning "Mypy Warning"
-        Even with the `@property` or `@cached_property` applied to your function before `@computed_field`,
-        mypy may throw a `Decorated property not supported` error.
-        See [mypy issue #1362](https://github.com/python/mypy/issues/1362), for more information.
-        To avoid this error message, add `# type: ignore[misc]` to the `@computed_field` line.
+        `@computed_field`の前に`@property`または`@cached_property`を関数に適用しても、mypyは`Decorated property not supported`エラーをスローすることがあります。
+        詳細については、[mypy issue #1362](https://github.com/python/mypy/issues/1362)を参照してください。
+        このエラーメッセージを回避するには、`@computed_field`行に`#type:ignore[misc]`を追加してください。
 
-        [pyright](https://github.com/microsoft/pyright) supports `@computed_field` without error.
+        [pyright](https://github.com/microsoft/pyright)はエラーなしで`@computed_field`をサポートしています。
 
     ```py
     import random
@@ -1159,9 +1127,9 @@ def computed_field(
     ```
 
     !!! warning "Overriding with `computed_field`"
-        You can't override a field from a parent class with a `computed_field` in the child class.
-        `mypy` complains about this behavior if allowed, and `dataclasses` doesn't allow this pattern either.
-        See the example below:
+        親クラスのフィールドを子クラスの`computed_field`で上書きすることはできません。
+        `mypy`は許可されていればこのふるまいは許しませんし、`dataclasses`もこのパターンを許可していません。
+        次の例を参照してください。
 
     ```py
     from pydantic import BaseModel, computed_field
@@ -1182,7 +1150,7 @@ def computed_field(
         #> ValueError("you can't override a field with a computed field")
     ```
 
-    Private properties decorated with `@computed_field` have `repr=False` by default.
+    `@computed_field`で装飾されたプライベートプロパティは、デフォルトで`repr=False`です。
 
     ```py
     from functools import cached_property
@@ -1208,27 +1176,20 @@ def computed_field(
     ```
 
     Args:
-        func: the function to wrap.
-        alias: alias to use when serializing this computed field, only used when `by_alias=True`
-        alias_priority: priority of the alias. This affects whether an alias generator is used
-        title: Title to use when including this computed field in JSON Schema
-        field_title_generator: A callable that takes a field name and returns title for it.
-        description: Description to use when including this computed field in JSON Schema, defaults to the function's
-            docstring
-        deprecated: A deprecation message (or an instance of `warnings.deprecated` or the `typing_extensions.deprecated` backport).
-            to be emitted when accessing the field. Or a boolean. This will automatically be set if the property is decorated with the
-            `deprecated` decorator.
-        examples: Example values to use when including this computed field in JSON Schema
-        json_schema_extra: A dict or callable to provide extra JSON schema properties.
-        repr: whether to include this computed field in model repr.
-            Default is `False` for private properties and `True` for public properties.
-        return_type: optional return for serialization logic to expect when serializing to JSON, if included
-            this must be correct, otherwise a `TypeError` is raised.
-            If you don't include a return type Any is used, which does runtime introspection to handle arbitrary
-            objects.
+        func: ラップする関数。
+        alias: この計算フィールドをシリアライズするときに使用するエイリアス。`by_alias=True`の場合にのみ使用されます。
+        alias_priority: 別名の優先度。これは、別名ジェネレータを使用するかどうかに影響します。
+        title: この計算フィールドをJSONスキーマに含めるときに使用するタイトル
+        field_title_generator: フィールド名を受け取り、そのタイトルを返す呼び出し可能オブジェクト。
+        description: この計算フィールドをJSONスキーマに含めるときに使用する説明。デフォルトは関数のdocstringです。
+        deprecated: 非推奨メッセージ(または`warnings.deprecated`または`typing_extensions.deprecated`バックポートのインスタンス)。フィールドにアクセスするときに発行されます。またはブール値。プロパティが`deprecated`デコレータで装飾されている場合、これは自動的に設定されます。
+        examples: この計算フィールドをJSONスキーマに含める場合に使用する値の例
+        json_schema_extra: 追加のJSONスキーマ・プロパティーを提供するためのdictまたはcallable。
+        repr: この計算済みフィールドをモデルreprに含めるかどうか。デフォルトは、プライベートプロパティの場合は`False`で、パブリックプロパティの場合は`True`です。
+        return_type: JSONへのシリアライズ時に期待されるシリアライズロジックのオプションの戻り値。これが含まれている場合は正しくなければなりません。含まれていない場合は`TypeError`が発生します。戻り値の型が含まれていない場合は、任意のオブジェクトを処理するために実行時イントロスペクションを行うAnyが使用されます。
 
     Returns:
-        A proxy wrapper for the property.
+        プロパティのプロキシラッパー。
     """
 
     def dec(f: Any) -> Any:
