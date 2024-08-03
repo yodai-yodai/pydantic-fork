@@ -638,6 +638,7 @@ class FieldInfo(_repr.Representation):
 class _EmptyKwargs(typing_extensions.TypedDict):
     """このクラスは、型チェックが`Field`に`**extra`を渡すことについて警告することを保証するためだけに存在します。"""
 
+
 _DefaultValues = dict(
     default=...,
     default_factory=None,

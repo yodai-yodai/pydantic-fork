@@ -391,6 +391,7 @@ ClickHouseDsn = Annotated[
 * ホストが必要です。
 """
 
+
 def import_email_validator() -> None:
     global email_validator
     try:
@@ -705,6 +706,8 @@ MAX_EMAIL_LENGTH = 2048
 """電子メールの最大長。
 ほとんどの実装で許可されている数と比較して、多少任意ですが非常に寛大な数です。
 """
+
+
 def validate_email(value: str) -> tuple[str, str]:
     """[email-validator](https://pypi.org/project/email-validator/)を使用した電子メールアドレスの検証。
 

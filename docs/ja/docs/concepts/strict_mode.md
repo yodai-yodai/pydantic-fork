@@ -53,7 +53,7 @@ Pydanticを使用しながらstrictモードの検証を行うには、さまざ
 * `BaseModel`、`dataclass`、または`TypedDict`のフィールドと共に使用する[Using `Field(strict=True)`](#strict-mode-with-field)
 * フィールドへの[Using `pydantic.types.Strict` as a type annotation](#strict-mode-with-annotated-strict)
   * Pydanticには、`pydantic.types.StrictInt`など、すでに`Strict`で注釈が付けられている型エイリアスがいくつか用意されています。
-* [Using `ConfigDict(strict=True)`](#strict-mode-with-ConfigDict)を使用する
+* [Using `ConfigDict(strict=True)`](#strict-mode-with-configdict)を使用する
 
 ## Type coercions in strict mode
 

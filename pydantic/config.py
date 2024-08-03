@@ -14,10 +14,10 @@ if TYPE_CHECKING:
     from ._internal._generate_schema import GenerateSchema as _GenerateSchema
     from .fields import ComputedFieldInfo, FieldInfo
 
-__all__ = ("ConfigDict", "with_config")
+__all__ = ('ConfigDict', 'with_config')
 
 
-JsonValue: TypeAlias = Union[int, float, str, bool, None, List["JsonValue"], "JsonDict"]
+JsonValue: TypeAlias = Union[int, float, str, bool, None, List['JsonValue'], 'JsonDict']
 JsonDict: TypeAlias = Dict[str, JsonValue]
 
 JsonEncoder = Callable[[Any], Any]
@@ -27,7 +27,7 @@ JsonSchemaExtraCallable: TypeAlias = Union[
     Callable[[JsonDict, Type[Any]], None],
 ]
 
-ExtraValues = Literal["allow", "ignore", "forbid"]
+ExtraValues = Literal['allow', 'ignore', 'forbid']
 
 
 class ConfigDict(TypedDict, total=False):
@@ -422,7 +422,7 @@ class ConfigDict(TypedDict, total=False):
 
     Pydanticがstrictモードとlaxモードの両方でデータを変換する方法の詳細については、[Conversion Table](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/conversion_table.md)を参照してください。
     """
-    revalidate_instances: Literal["always", "never", "subclass-instances"]
+    revalidate_instances: Literal['always', 'never', 'subclass-instances']
     """
     検証中にモデルとデータクラスをいつ、どのように再検証するか。"never"、"always"、"subclass-instances"の文字列値を受け入れます。デフォルトは"never"です。
 
@@ -546,7 +546,7 @@ class ConfigDict(TypedDict, total=False):
 
     """
 
-    ser_json_timedelta: Literal["iso8601", "float"]
+    ser_json_timedelta: Literal['iso8601', 'float']
     """
     JSONシリアライズされたタイムデルタのフォーマット。`'iso8601'`および`'float'`の文字列値を受け入れます。デフォルトは`'iso8601'`です。
 
@@ -554,7 +554,7 @@ class ConfigDict(TypedDict, total=False):
     - `'float'`はtimedeltaを合計秒数にシリアライズします。
     """
 
-    ser_json_bytes: Literal["utf8", "base64"]
+    ser_json_bytes: Literal['utf8', 'base64']
     """
     JSONシリアライズされたバイトのエンコーディング。`'utf8'`と`'base64'`の文字列値を受け入れます。
     デフォルトは`'utf8'`です。
@@ -563,7 +563,7 @@ class ConfigDict(TypedDict, total=False):
     - `'base64'`はバイトをURLセーフなbase64文字列にシリアライズします。
     """
 
-    ser_json_inf_nan: Literal["null", "constants", "strings"]
+    ser_json_inf_nan: Literal['null', 'constants', 'strings']
     """
     JSONシリアライズされたinfinityおよびNaN float値のエンコーディング。デフォルトは`'null'`です。
 
@@ -712,7 +712,7 @@ class ConfigDict(TypedDict, total=False):
         この追加の(実験的な)パラメータは、FastAPIが`TypeAdapter`に依存しているため、遅延ビルドに必要です。
     """
 
-    experimental_defer_build_mode: tuple[Literal["model", "type_adapter"], ...]
+    experimental_defer_build_mode: tuple[Literal['model', 'type_adapter'], ...]
     """
     [`defer_build`][pydantic.config.ConfigDict.defer_build]が適用される場合を制御します。デフォルトは`('model',)`です。
 
@@ -778,7 +778,7 @@ class ConfigDict(TypedDict, total=False):
     ```
     """
 
-    json_schema_mode_override: Literal["validation", "serialization", None]
+    json_schema_mode_override: Literal['validation', 'serialization', None]
     """
     `None`でない場合、関数呼び出しに渡された`mode`に関係なく、指定されたモードがJSONスキーマの生成に使用されます。デフォルトは`None`です。
 
@@ -866,7 +866,7 @@ class ConfigDict(TypedDict, total=False):
     ```
     """
 
-    regex_engine: Literal["rust-regex", "python-re"]
+    regex_engine: Literal['rust-regex', 'python-re']
     """
     パターン検証に使用される正規表現エンジン。
     デフォルトは`'rust-regex'`です。
@@ -950,7 +950,7 @@ class ConfigDict(TypedDict, total=False):
         この動作は、使用するPythonのバージョンによって異なります。
     '''
 
-    cache_strings: bool | Literal["all", "keys", "none"]
+    cache_strings: bool | Literal['all', 'keys', 'none']
     """
     新しいPythonオブジェクトの構築を回避するために文字列をキャッシュするかどうかを指定します。既定値はTrueです。
 
@@ -972,7 +972,7 @@ class ConfigDict(TypedDict, total=False):
     """
 
 
-_TypeT = TypeVar("_TypeT", bound=type)
+_TypeT = TypeVar('_TypeT', bound=type)
 
 
 def with_config(config: ConfigDict) -> Callable[[_TypeT], _TypeT]:
@@ -1008,8 +1008,8 @@ def with_config(config: ConfigDict) -> Callable[[_TypeT], _TypeT]:
 
         if is_model_class(class_):
             raise PydanticUserError(
-                f"Cannot use `with_config` on {class_.__name__} as it is a Pydantic model",
-                code="with-config-on-model",
+                f'Cannot use `with_config` on {class_.__name__} as it is a Pydantic model',
+                code='with-config-on-model',
             )
         class_.__pydantic_config__ = config
         return class_

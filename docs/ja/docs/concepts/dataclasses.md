@@ -501,7 +501,7 @@ Python stdlibの`dataclasses.dataclass`は検証ステップを実行しない�
 ## JSON dumping
 
 <!-- Pydantic dataclasses do not feature a `.model_dump_json()` function. To dump them as JSON, you will need to make use of the [RootModel](models.md#rootmodel-and-custom-root-types) as follows: -->
-Pydanticデータクラスには`.model_dump_json()`関数がありません。JSONとしてダンプするには、次のように[RootModel](models.md#RootModel-and-custom-root-types)を使用する必要があります。
+Pydanticデータクラスには`.model_dump_json()`関数がありません。JSONとしてダンプするには、次のように[RootModel](models.md#rootmodel-and-custom-root-types)を使用する必要があります。
 
 ```py output="json"
 import dataclasses

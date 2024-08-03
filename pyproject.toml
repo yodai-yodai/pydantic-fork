@@ -207,7 +207,7 @@ pydocstyle = { convention = 'google' }
 "tests/benchmarks/test_fastapi_startup_simple.py" = ['UP006', 'UP007']
 
 [tool.ruff.format]
-quote-style = 'double'
+quote-style = 'single'
 
 [tool.coverage.run]
 source = ['pydantic']

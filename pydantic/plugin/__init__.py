@@ -1,4 +1,4 @@
-"""Usage docs: https://docs.pydantic.dev/2.9/concepts/plugins#build-a-plugin
+"""Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/plugins#build-a-plugin
 
 Plugin interface for Pydantic plugins, and related types.
 """

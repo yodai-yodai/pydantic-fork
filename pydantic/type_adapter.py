@@ -285,7 +285,7 @@ class TypeAdapter(Generic[T]):
     @cached_property
     @_frame_depth(2)  # +2 for @cached_property and core_schema(self)
     def core_schema(self) -> CoreSchema:
-        """"SchemaValidatorとSchemaSerializerを構築するために使用されるpydantic-coreスキーマ。"""
+        """SchemaValidatorとSchemaSerializerを構築するために使用されるpydantic-coreスキーマ。"""
         if self._core_schema is None or isinstance(self._core_schema, _mock_val_ser.MockCoreSchema):
             self._init_core_attrs(rebuild_mocks=True)  # Do not expose MockCoreSchema from public function
         assert self._core_schema is not None and not isinstance(self._core_schema, _mock_val_ser.MockCoreSchema)

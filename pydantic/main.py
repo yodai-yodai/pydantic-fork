@@ -125,8 +125,6 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         model_computed_fields: ClassVar[dict[str, ComputedFieldInfo]]
         """計算されたフィールド名とそれに対応する`ComputedFieldInfo`オブジェクトの辞書。"""
 
-
-
         __class_vars__: ClassVar[set[str]]
         __private_attributes__: ClassVar[dict[str, ModelPrivateAttr]]
         __signature__: ClassVar[Signature]

@@ -424,8 +424,7 @@ class PydanticModelField:
         return cls(type=typ, info=info, **data)
 
     def expand_typevar_from_subtype(self, sub_type: TypeInfo, api: SemanticAnalyzerPluginInterface) -> None:
-        """属性がジェネリックスーパータイプから継承される場合に、サブタイプのコンテキストでタイプ変数を展開します。
-        """
+        """属性がジェネリックスーパータイプから継承される場合に、サブタイプのコンテキストでタイプ変数を展開します。"""
         if self.type is not None:
             with state.strict_optional_set(api.options.strict_optional):
                 self.type = map_type_from_supertype(self.type, sub_type, self.info)
@@ -1134,8 +1133,7 @@ class PydanticModelTransformer:
 
     @staticmethod
     def is_dynamic_alias_present(fields: list[PydanticModelField], has_alias_generator: bool) -> bool:
-        """モデル上のいずれかのフィールドに"動的エイリアス"(つまり、静解析中に判別できないエイリアス)があるかどうかを返します。
-        """
+        """モデル上のいずれかのフィールドに"動的エイリアス"(つまり、静的解析中に判別できないエイリアス)があるかどうかを返します。"""
         for field in fields:
             if field.has_dynamic_alias:
                 return True
@@ -1172,7 +1170,6 @@ class ModelConfigData:
 
     def update(self, config: ModelConfigData | None) -> None:
         """Pydanticモデルの構成値を更新します。"""
-
         if config is None:
             return
         for k, v in config.get_values_dict().items():

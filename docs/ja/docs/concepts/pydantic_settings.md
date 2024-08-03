@@ -109,7 +109,7 @@ print(Settings().model_dump())
 2. 環境変数名は`alias`を使用してオーバーライドされます。この場合、環境変数`my_api_key`が検証とシリアライゼーションの両方に`api_key`の代わりに使用されます。詳細については、[`Field`documentation](fields.md#field-aliases)を参照してください。
 
 <!-- 3. The `AliasChoices` class allows to have multiple environment variable names for a single field. The first environment variable that is found will be used. Check the [`AliasChoices`](alias.md#aliaspath-and-aliaschoices) for more information. -->
-3. `AliasChoices`クラスでは、1つのフィールドに対して複数の環境変数名を持つことができます。最初に見つかった環境変数が使用されます。詳細については、[`AliasChoices`](alias.md#aliaspath-and-AliasChoices)を確認してください。
+3. `AliasChoices`クラスでは、1つのフィールドに対して複数の環境変数名を持つことができます。最初に見つかった環境変数が使用されます。詳細については、[`AliasChoices`](alias.md#aliaspath-and-aliaschoices)を確認してください。
 
 <!-- 4. The `ImportString` class allows to import an object from a string. In this case, the environment variable `special_function` will be read and the function `math.cos` will be imported. -->
 4. `ImportString`クラスを使用すると、文字列からオブジェクトをインポートできます。この場合、環境変数`special_function`が読み込まれ、関数`math.cos`がインポートされます。

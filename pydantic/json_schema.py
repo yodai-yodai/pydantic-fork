@@ -1896,7 +1896,7 @@ class GenerateJsonSchema:
 
         Returns:
             正規化された名前。
-       """
+        """
         return re.sub(r'[^a-zA-Z0-9.\-_]', '_', name).replace('.', '__')
 
     def get_defs_ref(self, core_mode_ref: CoreModeRef) -> DefsRef:

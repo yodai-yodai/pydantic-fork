@@ -452,8 +452,6 @@ class ModelBeforeValidatorWithoutInfo(Protocol):
     これは、`mode='before'`で関数にinfo引数がない場合に使用されます。
     """
 
-
-
     def __call__(  # noqa: D102
         self,
         cls: Any,

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
         core_schema.ComputedField,
     ]
 
-__all__ = "GetJsonSchemaHandler", "GetCoreSchemaHandler"
+__all__ = 'GetJsonSchemaHandler', 'GetCoreSchemaHandler'
 
 
 class GetJsonSchemaHandler:
@@ -42,9 +42,7 @@ class GetJsonSchemaHandler:
         """
         raise NotImplementedError
 
-    def resolve_ref_schema(
-        self, maybe_ref_json_schema: JsonSchemaValue, /
-    ) -> JsonSchemaValue:
+    def resolve_ref_schema(self, maybe_ref_json_schema: JsonSchemaValue, /) -> JsonSchemaValue:
         """`{"$ref": ...}`スキーマの実際のスキーマを取得します。
         指定したスキーマが`$ref`スキーマでない場合は、そのまま返されます。
         つまり、この関数を呼び出す前にチェックする必要はありません。
@@ -90,9 +88,7 @@ class GetCoreSchemaHandler:
         """
         raise NotImplementedError
 
-    def resolve_ref_schema(
-        self, maybe_ref_schema: core_schema.CoreSchema, /
-    ) -> core_schema.CoreSchema:
+    def resolve_ref_schema(self, maybe_ref_schema: core_schema.CoreSchema, /) -> core_schema.CoreSchema:
         """`definition-ref`スキーマの実際のスキーマを取得します。
         指定されたスキーマが`definition-ref`スキーマでない場合は、そのまま返されます。
         つまり、この関数を呼び出す前にチェックする必要はありません。

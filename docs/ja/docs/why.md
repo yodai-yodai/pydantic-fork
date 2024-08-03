@@ -305,7 +305,7 @@ Pydanticは、スキーマを作成し、検証とシリアライズを実行す
 
 1. [`BaseModel`](concepts/models.md) &mdash; Pydantic独自のスーパークラスには、インスタンスメソッドを介して利用できる多くの共通ユーティリティがあります。
 2. [`pydantic.dataclasses.dataclass`](concepts/dataclasses.md) &mdash; データクラスの初期化時に検証を実行する標準データクラスのラッパです。
-3. [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] &mdash; 任意の型を検証とシリアライゼーションに適応させる一般的な方法です。これにより、[`TypedDict`](api/standard_library_types.md#TypedDict)や[`NamedTuple`](api/standard_library_types.md#typingnamedtuple)のような型を検証することができます。また、`int`や`timedelta` &mdash; [all types](concepts/types.md)サポートを`TypeAdapter`で使用することもできます。
+3. [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] &mdash; 任意の型を検証とシリアライゼーションに適応させる一般的な方法です。これにより、[`TypedDict`](api/standard_library_types.md#typeddict)や[`NamedTuple`](api/standard_library_types.md#typingnamedtuple)のような型を検証することができます。また、`int`や`timedelta` &mdash; [all types](concepts/types.md)サポートを`TypeAdapter`で使用することもできます。
 4. [`validate_call`](concepts/validation_decorator.md) &mdash; 関数を呼び出すときに検証を実行するデコレータです。
 
 ??? example "Example - schema based on TypedDict"

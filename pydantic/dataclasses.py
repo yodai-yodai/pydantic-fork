@@ -19,9 +19,9 @@ from .fields import Field, FieldInfo, PrivateAttr
 if TYPE_CHECKING:
     from ._internal._dataclasses import PydanticDataclass
 
-__all__ = "dataclass", "rebuild_dataclass"
+__all__ = 'dataclass', 'rebuild_dataclass'
 
-_T = TypeVar("_T")
+_T = TypeVar('_T')
 
 if sys.version_info >= (3, 10):
 
@@ -132,10 +132,8 @@ def dataclass(
     Raises:
         AssertionError: `init`が`False`でない場合、または`validate_on_init`が`False`の場合に発生します。
     """
-    assert init is False, "pydantic.dataclasses.dataclass only supports init=False"
-    assert (
-        validate_on_init is not False
-    ), "validate_on_init=False is no longer supported"
+    assert init is False, 'pydantic.dataclasses.dataclass only supports init=False'
+    assert validate_on_init is not False, 'validate_on_init=False is no longer supported'
 
     if sys.version_info >= (3, 10):
         kwargs = dict(kw_only=kw_only, slots=slots)
@@ -143,12 +141,13 @@ def dataclass(
         kwargs = {}
 
     def make_pydantic_fields_compatible(cls: type[Any]) -> None:
-        """stdlib`dataclasses`が`kw_only`のような`Field`kwargsを処理することを確認してください。そのためには、単に`x:int=pydantic.Field(.,kw_only=True)`を`x:int=dataclasses.field(default=pydantic.Field(.,kw_only=True),kw_only=True)`に変更します。
+        """stdlib`dataclasses`が`kw_only`のような`Field`kwargsを処理することを確認してください。
+        そのためには、単に`x:int=pydantic.Field(.,kw_only=True)`を`x:int=dataclasses.field(default=pydantic.Field(.,kw_only=True),kw_only=True)`に変更します。
         """
         for annotation_cls in cls.__mro__:
             # In Python < 3.9, `__annotations__` might not be present if there are no fields.
             # we therefore need to use `getattr` to avoid an `AttributeError`.
-            annotations = getattr(annotation_cls, "__annotations__", [])
+            annotations = getattr(annotation_cls, '__annotations__', [])
             for field_name in annotations:
                 field_value = getattr(cls, field_name, None)
                 # Process only if this is an instance of `FieldInfo`.
@@ -156,20 +155,20 @@ def dataclass(
                     continue
 
                 # Initialize arguments for the standard `dataclasses.field`.
-                field_args: dict = {"default": field_value}
+                field_args: dict = {'default': field_value}
 
                 # Handle `kw_only` for Python 3.10+
                 if sys.version_info >= (3, 10) and field_value.kw_only:
-                    field_args["kw_only"] = True
+                    field_args['kw_only'] = True
 
                 # Set `repr` attribute if it's explicitly specified to be not `True`.
                 if field_value.repr is not True:
-                    field_args["repr"] = field_value.repr
+                    field_args['repr'] = field_value.repr
 
                 setattr(cls, field_name, dataclasses.field(**field_args))
                 # In Python 3.8, dataclasses checks cls.__dict__['__annotations__'] for annotations,
                 # so we must make sure it's initialized before we add to it.
-                if cls.__dict__.get("__annotations__") is None:
+                if cls.__dict__.get('__annotations__') is None:
                     cls.__annotations__ = {}
                 cls.__annotations__[field_name] = annotations[field_name]
 
@@ -186,16 +185,14 @@ def dataclass(
 
         if is_model_class(cls):
             raise PydanticUserError(
-                f"Cannot create a Pydantic dataclass from {cls.__name__} as it is already a Pydantic model",
-                code="dataclass-on-model",
+                f'Cannot create a Pydantic dataclass from {cls.__name__} as it is already a Pydantic model',
+                code='dataclass-on-model',
             )
 
         original_cls = cls
 
         # if config is not explicitly provided, try to read it from the type
-        config_dict = (
-            config if config is not None else getattr(cls, "__pydantic_config__", None)
-        )
+        config_dict = config if config is not None else getattr(cls, '__pydantic_config__', None)
         config_wrapper = _config.ConfigWrapper(config_dict)
         decorators = _decorators.DecoratorInfos.build(cls)
 
@@ -252,7 +249,8 @@ if (3, 8) <= sys.version_info < (3, 11):
     # Starting in 3.11, typing.get_type_hints will not raise an error if the retrieved type hints are not callable.
 
     def _call_initvar(*args: Any, **kwargs: Any) -> NoReturn:
-        """この関数は、このmonkeypatchなしで`InitVar[int]()`を呼び出した場合に発生するエラーと可能な限り類似したエラーを発生させるだけです。全体の目的は、型指定を確実にすることだけです。型ヒントが`InitVar[<parameter>]`と評価された場合、_type_checkはエラーになりません。
+        """この関数は、このmonkeypatchなしで`InitVar[int]()`を呼び出した場合に発生するエラーと可能な限り類似したエラーを発生させるだけです。
+        全体の目的は、型指定を確実にすることだけです。型ヒントが`InitVar[<parameter>]`と評価された場合、_type_checkはエラーになりません。
         """
         raise TypeError("'InitVar' object is not callable")
 
@@ -291,21 +289,14 @@ def rebuild_dataclass(
             types_namespace: dict[str, Any] | None = _types_namespace.copy()
         else:
             if _parent_namespace_depth > 0:
-                frame_parent_ns = (
-                    _typing_extra.parent_frame_namespace(
-                        parent_depth=_parent_namespace_depth
-                    )
-                    or {}
-                )
+                frame_parent_ns = _typing_extra.parent_frame_namespace(parent_depth=_parent_namespace_depth) or {}
                 # Note: we may need to add something similar to cls.__pydantic_parent_namespace__ from BaseModel
                 #   here when implementing handling of recursive generics. See BaseModel.model_rebuild for reference.
                 types_namespace = frame_parent_ns
             else:
                 types_namespace = {}
 
-            types_namespace = _typing_extra.get_cls_types_namespace(
-                cls, types_namespace
-            )
+            types_namespace = _typing_extra.get_cls_types_namespace(cls, types_namespace)
         return _pydantic_dataclasses.complete_dataclass(
             cls,
             _config.ConfigWrapper(cls.__pydantic_config__, check=False),
@@ -324,8 +315,6 @@ def is_pydantic_dataclass(class_: type[Any], /) -> TypeGuard[type[PydanticDatacl
         クラスがpydanticデータクラスであれば`True`、そうでなければ`False`です。
     """
     try:
-        return "__pydantic_validator__" in class_.__dict__ and dataclasses.is_dataclass(
-            class_
-        )
+        return '__pydantic_validator__' in class_.__dict__ and dataclasses.is_dataclass(class_)
     except AttributeError:
         return False

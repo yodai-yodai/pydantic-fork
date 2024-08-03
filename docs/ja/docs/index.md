@@ -64,7 +64,7 @@ print(m.dimensions)
 <!-- - **Strict** and **Lax** mode &mdash; Pydantic can run in either `strict=True` mode (where data is not converted) or `strict=False` mode where Pydantic tries to coerce data to the correct type where appropriate. [Learn more…](why.md#strict-lax) -->
 - **Strict**と**Lax**モード &mdash; Pydanticは、`strict=True`モード(データが変換されない)または`strict=False`モード(Pydanticがデータを適切な型に強制的に変換しようとする)のいずれかで実行できます。[詳細はこちら](why.md#strict-lax)
 <!-- - **Dataclasses**, **TypedDicts** and more &mdash; Pydantic supports validation of many standard library types including `dataclass` and `TypedDict`. [Learn more…](why.md#typeddict) -->
-- **Dataclasses**,**TypedDitcs**など &mdash; Pydanticは`dataclass`や`TypedDict`を含む多くの標準ライブラリ型の検証をサポートしています。[詳細はこちら](why.md#typedict)
+- **Dataclasses**,**TypedDitcs**など &mdash; Pydanticは`dataclass`や`TypedDict`を含む多くの標準ライブラリ型の検証をサポートしています。[詳細はこちら](why.md#typeddict)
 <!-- - **Customisation** &mdash; Pydantic allows custom validators and serializers to alter how data is processed in many powerful ways. [Learn more…](why.md#customisation) -->
 - **カスタマイズ** &mdash; Pydanticを使用すると、カスタムバリデータとシリアライザを使用して、さまざまな強力な方法でデータの処理方法を変更できます。[詳細はこちら](why.md#customisation)
 <!-- - **Ecosystem** &mdash; around 8,000 packages on PyPI use Pydantic, including massively popular libraries like

@@ -1753,14 +1753,12 @@ class PaymentCardNumber(str):
     @classmethod
     def validate_digits(cls, card_number: str) -> None:
         """カード番号がすべて数字であることを確認します。"""
-
         if not card_number.isdigit():
             raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
     def validate_luhn_check_digit(cls, card_number: str) -> str:
         """https://en.wikipedia.org/wiki/Luhn_algorithmに基づきます。"""
-
         sum_ = int(card_number[-1])
         length = len(card_number)
         parity = length % 2

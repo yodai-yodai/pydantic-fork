@@ -28,7 +28,7 @@
 
 !!! note
     <!-- The one exception to sub-models being converted to dictionaries is that [`RootModel`](models.md#rootmodel-and-custom-root-types) and its subclasses will have the `root` field value dumped directly, without a wrapping dictionary. This is also done recursively. -->
-    辞書に変換されるサブモデルの1つの例外は、[`RootModel`](models.md#RootModel-and-custom-root-types)とそのサブクラスが、ラッピング辞書なしで直接ダンプされる`root`フィールド値を持つことです。これも再帰的に行われます。
+    辞書に変換されるサブモデルの1つの例外は、[`RootModel`](models.md#rootmodel-and-custom-root-types)とそのサブクラスが、ラッピング辞書なしで直接ダンプされる`root`フィールド値を持つことです。これも再帰的に行われます。
 
 !!! note
     <!-- You can use [computed fields](../api/fields.md#pydantic.fields.computed_field) to include `property` and `cached_property` data in the `model.model_dump(...)` output. -->
@@ -178,12 +178,12 @@ for name, value in m:
 ```
 
 <!-- Note also that [`RootModel`](models.md#rootmodel-and-custom-root-types) _does_ get converted to a dictionary with the key `'root'`. -->
-[`RootModel`](models.md#RootModel-and-custom-root-types)_does_が`'root'`キーを持つ辞書に変換されることにも注意してください。
+[`RootModel`](models.md#rootmodel-and-custom-root-types)_does_が`'root'`キーを持つ辞書に変換されることにも注意してください。
 
 ## Custom serializers
 
 <!-- Pydantic provides several [functional serializers][pydantic.functional_serializers] to customise how a model is serialized to a dictionary or JSON. -->
-Pydanticには、モデルを辞書やJSONにシリアライズする方法をカスタマイズするための[functional serializer][pydantic.functional_serializers]がいくつか用意されています。
+Pydanticには、モデルを辞書やJSONにシリアライズする方法をカスタマイズするための[functional serializers][pydantic.functional_serializers]がいくつか用意されています。
 
 - [`@field_serializer`][pydantic.functional_serializers.field_serializer]
 - [`@model_serializer`][pydantic.functional_serializers.model_serializer]
@@ -357,7 +357,7 @@ class Model(BaseModel):
 ```
 
 <!-- This trick is actually used in [`RootModel`](models.md#rootmodel-and-custom-root-types) for precisely this purpose. -->
-このトリックは、実際には[`RootModel`](models.md#RootModel-and-custom-root-types)でまさにこの目的のために使われています。
+このトリックは、実際には[`RootModel`](models.md#rootmodel-and-custom-root-types)でまさにこの目的のために使われています。
 
 ## Serializing subclasses
 

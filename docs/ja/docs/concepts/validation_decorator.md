@@ -84,7 +84,7 @@ print(find_file(this_dir, '^foobar.*', max=3))
 <!-- Type coercion like this can be extremely helpful, but also confusing or not desired.
 See [Coercion and strictness](#coercion-and-strictness) for a discussion of `@validate_call`'s limitations in this regard. -->
 このような型強制は非常に役立ちますが、混乱を招くこともあれば、望まれないこともあります。
-この点に関する`@validate_call`の制限については、[Enforcement and strictness](#enforcement-and-strictness)を参照してください。
+この点に関する`@validate_call`の制限については、[Coercion and strictness](#coercion-and-strictness)を参照してください。
 
 ## Function signatures
 

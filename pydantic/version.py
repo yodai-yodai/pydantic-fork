@@ -1,7 +1,5 @@
 """`version`モジュールは、Pydanticのバージョン情報を保持します。"""
 
-
-
 from __future__ import annotations as _annotations
 
 __all__ = 'VERSION', 'version_info'
@@ -20,8 +18,6 @@ def version_short() -> str:
 
 def version_info() -> str:
     """Pydanticとその依存関係の完全なバージョン情報を返します。"""
-
-
     import importlib.metadata as importlib_metadata
     import os
     import platform
