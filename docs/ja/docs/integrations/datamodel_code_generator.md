@@ -1,14 +1,18 @@
+{% include-markdown "../warning.md" %}
+
 # Code Generation with datamodel-code-generator
 
-The [datamodel-code-generator](https://github.com/koxudaxi/datamodel-code-generator/) project is a library and command-line utility to generate pydantic models from just about any data source, including:
+<!-- The [datamodel-code-generator](https://github.com/koxudaxi/datamodel-code-generator/) project is a library and command-line utility to generate pydantic models from just about any data source, including: -->
+[datamodel-code-generator](https://github.com/koxudaxi/datamodel-code-generator/)プロジェクトは、以下のようなあらゆるデータソースからpydanticモデルを生成するためのライブラリとコマンドラインユーティリティです。
 
 * OpenAPI 3 (YAML/JSON)
 * JSON Schema
-* JSON/YAML/CSV Data (which will be converted to JSON Schema)
-* Python dictionary (which will be converted to JSON Schema)
+* JSON/YAML/CSV Data (JSONスキーマに変換されます)
+* Python dictionary (JSONスキーマに変換されます)
 * GraphQL schema
 
-Whenever you find yourself with any data convertible JSON but without pydantic models, this tool will allow you to generate type-safe model hierarchies on demand.
+<!-- Whenever you find yourself with any data convertible JSON but without pydantic models, this tool will allow you to generate type-safe model hierarchies on demand. -->
+データ変換可能なJSONを使用していますが、pydanticモデルを使用していない場合は、このツールを使用すると、タイプセーフなモデル階層をオンデマンドで生成できます。
 
 ## Installation
 ```bash
@@ -16,7 +20,9 @@ pip install datamodel-code-generator
 ```
 
 ## Example
-In this case, datamodel-code-generator creates pydantic models from a JSON Schema file.
+<!-- In this case, datamodel-code-generator creates pydantic models from a JSON Schema file. -->
+この場合、datamodel-code-generatorはJSON Schemaファイルからpydanticモデルを作成します。
+
 ```bash
 datamodel-codegen  --input person.json --input-file-type jsonschema --output model.py
 ```
@@ -98,5 +104,5 @@ class Person(BaseModel):
     comment: Any | None = None
 ```
 
-More information can be found on the
-[official documentation](https://koxudaxi.github.io/datamodel-code-generator/)
+<!-- More information can be found on the [official documentation](https://koxudaxi.github.io/datamodel-code-generator/) -->
+詳細については、[official documentation](https://koxudaxi.github.io/datamodel-code-generator/)を参照してください。
