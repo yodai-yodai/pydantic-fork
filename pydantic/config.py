@@ -422,6 +422,7 @@ class ConfigDict(TypedDict, total=False):
 
     Pydanticがstrictモードとlaxモードの両方でデータを変換する方法の詳細については、[Conversion Table](https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/conversion_table.md)を参照してください。
     """
+
     revalidate_instances: Literal['always', 'never', 'subclass-instances']
     """
     検証中にモデルとデータクラスをいつ、どのように再検証するか。"never"、"always"、"subclass-instances"の文字列値を受け入れます。デフォルトは"never"です。
@@ -976,7 +977,7 @@ _TypeT = TypeVar('_TypeT', bound=type)
 
 
 def with_config(config: ConfigDict) -> Callable[[_TypeT], _TypeT]:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/config/#configuration-with-dataclass-from-the-standard-library-or-typeddict
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/config/#configuration-with-dataclass-from-the-standard-library-or-typeddict
 
     標準ライブラリの`TypedDict`または`dataclass`に[Pydantic configuration](config.md)を設定するための便利なデコレータです。
 

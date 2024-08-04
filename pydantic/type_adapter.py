@@ -140,7 +140,7 @@ def _frame_depth(
 
 @final
 class TypeAdapter(Generic[T]):
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/type_adapter/
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/type_adapter
 
     タイプアダプタは、Pythonタイプに基づいて検証とシリアライゼーションを実行する柔軟な方法を提供します。
 
@@ -357,7 +357,7 @@ class TypeAdapter(Generic[T]):
     def validate_json(
         self, data: str | bytes, /, *, strict: bool | None = None, context: dict[str, Any] | None = None
     ) -> T:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/json/#json-parsing
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/json/#json-parsing
 
         JSON文字列またはバイトをモデルに対して検証します。
 
@@ -468,7 +468,7 @@ class TypeAdapter(Generic[T]):
         serialize_as_any: bool = False,
         context: dict[str, Any] | None = None,
     ) -> bytes:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/json/#json-serialization
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/json/#json-serialization
 
         適応型のインスタンスをJSONにシリアライズします。
 

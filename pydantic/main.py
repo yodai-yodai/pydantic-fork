@@ -78,7 +78,7 @@ _object_setattr = _model_construction.object_setattr
 
 
 class BaseModel(metaclass=_model_construction.ModelMetaclass):
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/models/
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/models
 
     Pydanticモデルを作成するための基本クラス。
 
@@ -287,7 +287,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         return m
 
     def model_copy(self, *, update: dict[str, Any] | None = None, deep: bool = False) -> Self:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/serialization/#model_copy
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/serialization/#model_copy
 
         モデルのコピーを返します。
 
@@ -328,7 +328,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         warnings: bool | Literal['none', 'warn', 'error'] = True,
         serialize_as_any: bool = False,
     ) -> dict[str, Any]:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/serialization/#modelmodel_dump
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/serialization/#modelmodel_dump
 
         モデルのディクショナリ表現を生成します。オプションで、含めるフィールドまたは除外するフィールドを指定します。
 
@@ -380,7 +380,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         warnings: bool | Literal['none', 'warn', 'error'] = True,
         serialize_as_any: bool = False,
     ) -> str:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/serialization/#modelmodel_dump_json
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/serialization/#modelmodel_dump_json
 
         Pydanticの`to_json`メソッドを使用してモデルのJSON表現を生成します。
 
@@ -564,7 +564,7 @@ class BaseModel(metaclass=_model_construction.ModelMetaclass):
         strict: bool | None = None,
         context: Any | None = None,
     ) -> Self:
-        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/json/#json-parsing
+        """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/json/#json-parsing
 
         指定されたJSONデータをPydanticモデルに対して検証します。
 
@@ -1443,7 +1443,7 @@ def create_model(  # noqa: C901
     __slots__: tuple[str, ...] | None = None,
     **field_definitions: Any,
 ) -> type[ModelT]:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/models/#dynamic-model-creation
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/models/#dynamic-model-creation
 
     新しいPydanticモデルを動的に作成して返します。言い換えれば、`create_model`は[`BaseModel`][pydantic.BaseModel]のサブクラスを動的に作成します。
 

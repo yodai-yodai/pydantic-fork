@@ -32,7 +32,7 @@ def validate_call(
     config: ConfigDict | None = None,
     validate_return: bool = False,
 ) -> AnyCallableT | Callable[[AnyCallableT], AnyCallableT]:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/validation_decorator/
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/validation_decorator/
 
     引数およびオプションで戻り値を検証する関数を囲むデコレートラッパーを返します。
 

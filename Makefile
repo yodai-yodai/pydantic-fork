@@ -132,7 +132,7 @@ docs:
 .PHONY: docs-ja  ## Generate the docs
 docs-ja:
 	rm -rf site/*
-	cd docs/ja;	pdm run mkdocs build --no-strict --site-dir '../../site'
+	cd docs/ja;	pdm run mkdocs build --no-strict --site-dir '../../site' --verbose
 
 .PHONY: help  ## Display this message
 help:

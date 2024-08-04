@@ -1,4 +1,4 @@
-"""エイリアス構成のサポート。"""
+"""エイリアス構成のサポート."""
 
 from __future__ import annotations
 
@@ -14,12 +14,12 @@ __all__ = ('AliasGenerator', 'AliasPath', 'AliasChoices')
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasPath:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/alias#aliaspath-and-aliaschoices
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/alias#aliaspath-and-aliaschoices
 
     エイリアスを作成するために`validation_alias`によって使用されるデータクラス。
 
     Attributes:
-        path:文字列または整数のエイリアスのリスト。
+        path: 文字列または整数のエイリアスのリスト。
     """
 
     path: list[int | str]
@@ -31,7 +31,7 @@ class AliasPath:
         """引数を文字列または整数のエイリアスのリストに変換します。
 
         Returns:
-            別名のリスト。
+            別名のリスト.
         """
         return self.path
 
@@ -55,12 +55,12 @@ class AliasPath:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasChoices:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/alias#aliaspath-and-aliaschoices
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/alias#aliaspath-and-aliaschoices
 
     エイリアスを作成するために`validation_alias`によって使用されるデータクラス。
 
     Attributes:
-        choices:文字列または`AliasPath`を含むリスト。
+        choices: 文字列または`AliasPath`を含むリスト。
     """
 
     choices: list[str | AliasPath]
@@ -85,7 +85,7 @@ class AliasChoices:
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasGenerator:
-    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/pydantic-docs-ja/alias#using-an-aliasgenerator
+    """Usage docs: https://yodai-yodai.github.io/translated/pydantic-docs-ja/concepts/alias#using-an-aliasgenerator
 
     さまざまなエイリアスを簡単に作成するために`alias_generator`が使用するデータクラスです。
 
@@ -105,10 +105,10 @@ class AliasGenerator:
         allowed_types: tuple[type[str] | type[AliasPath] | type[AliasChoices], ...],
         field_name: str,
     ) -> str | AliasPath | AliasChoices | None:
-        """指定された種類のエイリアスを生成します。エイリアスジェネレータがNoneの場合は、Noneを返します。
+        """指定された種類のエイリアスを生成します.エイリアスジェネレータがNoneの場合は、Noneを返します。
 
         Raises:
-            TypeError:エイリアスジェネレータが無効な型を生成した場合。
+            TypeError: エイリアスジェネレータが無効な型を生成した場合。
         """
         alias = None
         if alias_generator := getattr(self, alias_kind):
