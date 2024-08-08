@@ -29,4 +29,4 @@ PyCharmのJetBrains Plugins Repositoryでは、pydantic統合の改善が提供�
   * リファクタリング-`__init__`キーワード引数の名前を変更すると、フィールド名が更新され、サブクラスとスーパークラスに影響します。
 
 <!-- More information can be found on the [official plugin page](https://plugins.jetbrains.com/plugin/12861-pydantic) and [Github repository](https://github.com/koxudaxi/pydantic-pycharm-plugin). -->
-詳細については、[公式プラグインページ](https://plugins.jetbrains.com/plugin/12861-pydantic)および[Githubリポジトリ](https://github.com/koxudaxi/pydantic-pycharm-plugin)を参照してください。
+詳細については、[official plugin page](https://plugins.jetbrains.com/plugin/12861-pydantic)および[Github repository](https://github.com/koxudaxi/pydantic-pycharm-plugin)を参照してください。

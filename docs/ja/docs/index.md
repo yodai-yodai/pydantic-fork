@@ -75,8 +75,9 @@ _FastAPI_,_hugggingface_,_Django Ninja_,_SQLModel_,_LangChain_.[詳細はこち�
 - **実戦テスト済み** &mdash; Pydanticは7,000万回/月以上ダウンロードされ、すべてのFAANG企業とNASDAQの上位25社のうち20社で使用されています。Pydanticで何かをしようとしているのであれば、おそらく他の誰かがすでにそれをしています。
 [Learn more…](why.md#using-pydantic)
 
-[Installing Pydantic](install.md) is as simple as: `pip install pydantic`
-[Installing Pydantic](install.md)とてもシンプルです: `pip install pydantic`
+<!-- [Installing Pydantic](install.md) is as simple as: `pip install pydantic` -->
+
+インストールはとてもシンプルです。 [Installing Pydantic](install.md) : `pip install pydantic`
 
 
 ## Pydantic examples
@@ -122,29 +123,29 @@ print(user.model_dump())  # (10)!
 """
 ```
 
-<!-- 1. `id` is of type `int`; the annotation-only declaration tells Pydantic that this field is required. Strings, bytes, or floats will be coerced to ints if possible; otherwise an exception will be raised. -->
 1. `id`は`int`型です。注釈のみの宣言は、このフィールドが必須であることをPydanticに伝えます。文字列、バイト、または浮動小数点は、可能であればintに強制されます。そうでない場合は例外が発生します。
-<!-- 2. `name` is a string; because it has a default, it is not required. -->
 2. `name`は文字列です。デフォルトがあるので、必須ではありません。
-<!-- 3. `signup_ts` is a `datetime` field that is required, but the value `None` may be provided; -->
 3. `signup_ts`は`datetime`フィールドで必須ですが、値`None`を指定することもできます。
-PydanticはUNIXのタイムスタンプint(例えば`1496498400`)か、日付と時刻を表す文字列を処理します。
-  <!-- Pydantic will process either a unix timestamp int (e.g. `1496498400`) or a string representing the date and time. -->
   PydanticはUNIXのタイムスタンプint(例えば`1496498400`)か、日付と時刻を表す文字列を処理します。
-<!-- 4. `tastes` is a dictionary with string keys and positive integer values. The `PositiveInt` type is shorthand for `Annotated[int, annotated_types.Gt(0)]`. -->
 4. `taste`は文字列キーと正の整数値を持つ辞書です。`PositiveInt`型は`Annotated[int, annotated_types.Gt(0)]`の省略形です。
-<!-- 5. The input here is an ISO8601 formatted datetime, Pydantic will convert it to a `datetime` object. -->
 5. ここでの入力はISO8601フォーマットのdatetimeで、Pydanticはこれを`datetime`オブジェクトに変換します。
-<!-- 6. The key here is `bytes`, but Pydantic will take care of coercing it to a string. -->
 6. ここで重要なのは`bytes`ですが、Pydanticはこれを文字列に強制的に変換します。
-<!-- 7. Similarly, Pydantic will coerce the string `'1'` to an integer `1`. -->
 7. 同様に、Pydanticは文字列"1"を整数"1"に強制的に変換します。
-<!-- 8. Here we create instance of `User` by passing our external data to `User` as keyword arguments -->
 8. ここでは、外部データをキーワード引数として`User`に渡すことによって`User`のインスタンスを作成します。
-<!-- 9. We can access fields as attributes of the model -->
 9. モデルの属性としてフィールドにアクセスできます。
-<!-- 10. We can convert the model to a dictionary with `model_dump()` -->
 10. モデルを辞書に変換するには`model_dump()`を使用します。
+
+<!-- 1. `id` is of type `int`; the annotation-only declaration tells Pydantic that this field is required. Strings, bytes, or floats will be coerced to ints if possible; otherwise an exception will be raised. -->
+<!-- 2. `name` is a string; because it has a default, it is not required. -->
+<!-- 3. `signup_ts` is a `datetime` field that is required, but the value `None` may be provided; -->
+<!-- Pydantic will process either a unix timestamp int (e.g. `1496498400`) or a string representing the date and time. -->
+<!-- 4. `tastes` is a dictionary with string keys and positive integer values. The `PositiveInt` type is shorthand for `Annotated[int, annotated_types.Gt(0)]`. -->
+<!-- 5. The input here is an ISO8601 formatted datetime, Pydantic will convert it to a `datetime` object. -->
+<!-- 6. The key here is `bytes`, but Pydantic will take care of coercing it to a string. -->
+<!-- 7. Similarly, Pydantic will coerce the string `'1'` to an integer `1`. -->
+<!-- 8. Here we create instance of `User` by passing our external data to `User` as keyword arguments -->
+<!-- 9. We can access fields as attributes of the model -->
+<!-- 10. We can convert the model to a dictionary with `model_dump()` -->
 
 <!-- If validation fails, Pydantic will raise an error with a breakdown of what was wrong: -->
 検証が失敗した場合、Pydanticは何が間違っていたかの詳細を示すエラーを発生させます:
@@ -188,10 +189,11 @@ except ValidationError as e:
     """
 ```
 
-<!-- 1. The input data is wrong here &mdash; `id` is not a valid integer, and `signup_ts` is missing -->
 1. 入力データが間違っています&mdash;`id`は有効な整数ではなく、`signup_ts`がありません。
-<!-- 2. `User(...)` will raise a `ValidationError` with a list of errors -->
 2. `User(...)`はエラーのリストと共に`ValidationError`を発生させます。
+
+<!-- 1. The input data is wrong here &mdash; `id` is not a valid integer, and `signup_ts` is missing -->
+<!-- 2. `User(...)` will raise a `ValidationError` with a list of errors -->
 
 ## Who is using Pydantic?
 
