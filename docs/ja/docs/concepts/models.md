@@ -1074,8 +1074,9 @@ assert error.model_dump() == {
 }
 ```
 
-Here's another example of the above behavior, enumerating all permutations regarding bound specification and generic type parametrization:
-上記の動作の別の例として、境界仕様とジェネリック型のパラメータ化に関するすべての順列を列挙します。
+<!-- Here's another example of the above behavior, enumerating all permutations regarding bound specification and generic type parametrization: -->
+
+上記の動作の別の例として、境界仕様とジェネリック型のパラメータ化に関するすべての順列を列挙します:
 
 ```py
 from typing import Generic
@@ -1209,10 +1210,12 @@ print(ItemHolder[IntItem](**loaded_data).model_dump())  # (2)!
 #> {'item': {'value': 1}}
 ```
 
-<!-- 1. When the generic isn't parametrized, the input data is validated against the generic bound. Given that `ItemBase` has no fields, the `item` field information is lost. -->
 1. ジェネリックがパラメータ化されていない場合、入力データはジェネリック境界に対して検証されます。`ItemBase`にフィールドがない場合、`item`フィールドの情報は失われます。
-<!-- 2. In this case, the runtime type information is provided explicitly via the generic parametrization, so the input data is validated against the `IntItem` class and the serialization output matches what's expected. -->
+
 2. この場合、実行時の型情報は一般的なパラメータ化によって明示的に提供されるため、入力データは`IntItem`クラスに対して検証され、シリアライゼーションの出力は期待されたものと一致します。
+
+<!-- 1. When the generic isn't parametrized, the input data is validated against the generic bound. Given that `ItemBase` has no fields, the `item` field information is lost. -->
+<!-- 2. In this case, the runtime type information is provided explicitly via the generic parametrization, so the input data is validated against the `IntItem` class and the serialization output matches what's expected. -->
 
 ## Dynamic model creation
 
